@@ -1,3 +1,6 @@
+import useMap from "@/hooks/useMap";
+
 export default function Home() {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
+  useMap();
+  return <div id="map" className="w-[800px] h-[800px]"></div>;
 }
