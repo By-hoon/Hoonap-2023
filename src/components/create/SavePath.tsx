@@ -1,5 +1,5 @@
 import useMap from "@/hooks/useMap";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 
 interface SavePathProps {
   path: {
@@ -17,7 +17,13 @@ interface SavePathProps {
 }
 
 const SavePath = ({ path, setPath }: SavePathProps) => {
-  useMap();
+  const { targetPath } = useMap();
+
+  useEffect(() => {
+    if (targetPath) {
+      setPath(path.concat(targetPath));
+    }
+  }, [targetPath]);
 
   return <div id="map" className="w-[400px] h-[400px]"></div>;
 };

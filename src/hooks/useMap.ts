@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 function useMap() {
   const [myLocation, setMyLocation] = useState<{ latitude: number; longitude: number } | string>("");
+  const [targetPath, setTargetPath] = useState<{ latitude: number; longitude: number }>();
 
   const mapRef = useRef<HTMLElement | null | any>(null);
 
@@ -27,11 +28,16 @@ function useMap() {
         center: new naver.maps.LatLng(currentPosition[0], currentPosition[1]),
         zoomControl: true,
       });
+
+      naver.maps.Event.addListener(mapRef.current, "click", function (e) {
+        setTargetPath({ latitude: e.coord.lat(), longitude: e.coord.lng() });
+      });
     }
   }, [myLocation]);
 
   return {
     myLocation,
+    targetPath,
   };
 }
 
