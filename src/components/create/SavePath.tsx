@@ -19,13 +19,33 @@ interface SavePathProps {
 const SavePath = ({ path, setPath }: SavePathProps) => {
   const { targetPath } = useMap();
 
+  const deletePath = (index: number) => {
+    const newPath = [...path];
+    newPath.splice(index, 1);
+    setPath(newPath);
+  };
+
   useEffect(() => {
     if (targetPath) {
       setPath(path.concat(targetPath));
     }
   }, [targetPath]);
-
-  return <div id="map" className="w-[400px] h-[400px]"></div>;
+  console.log(path);
+  return (
+    <div>
+      <div id="map" className="w-[400px] h-[400px]"></div>
+      <div>
+        {path.map((p, index) => (
+          <div key={index}>
+            <div>
+              <div>{index + 1}번 좌표</div>
+              <button onClick={() => deletePath(index)}>삭제</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default SavePath;
