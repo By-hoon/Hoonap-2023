@@ -17,7 +17,7 @@ interface SavePathProps {
 }
 
 const SavePath = ({ path, setPath }: SavePathProps) => {
-  const { targetPath } = useMap();
+  const { targetPath, setMarker } = useMap();
 
   const deletePath = (index: number) => {
     const newPath = [...path];
@@ -30,7 +30,7 @@ const SavePath = ({ path, setPath }: SavePathProps) => {
       setPath(path.concat(targetPath));
     }
   }, [targetPath]);
-  console.log(path);
+
   return (
     <div>
       <div id="map" className="w-[400px] h-[400px]"></div>
@@ -38,7 +38,9 @@ const SavePath = ({ path, setPath }: SavePathProps) => {
         {path.map((p, index) => (
           <div key={index}>
             <div>
-              <div>{index + 1}번 좌표</div>
+              <div onClick={() => setMarker({ latitude: p.latitude, longitude: p.longitude })}>
+                {index + 1}번 좌표
+              </div>
               <button onClick={() => deletePath(index)}>삭제</button>
             </div>
           </div>
