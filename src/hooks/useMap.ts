@@ -5,8 +5,6 @@ function useMap() {
   const [targetPath, setTargetPath] = useState<{ latitude: number; longitude: number }>();
   const [marker, setMarker] = useState<{ latitude: number; longitude: number }>();
 
-  let map: any = "";
-
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -25,7 +23,7 @@ function useMap() {
     if (typeof myLocation !== "string") {
       let currentPosition = [myLocation.latitude, myLocation.longitude];
 
-      map = new naver.maps.Map("map", {
+      const map = new naver.maps.Map("map", {
         center: new naver.maps.LatLng(currentPosition[0], currentPosition[1]),
         zoomControl: true,
       });
@@ -33,18 +31,15 @@ function useMap() {
       naver.maps.Event.addListener(map, "click", function (e) {
         setTargetPath({ latitude: e.coord.lat(), longitude: e.coord.lng() });
       });
-    }
-  }, [myLocation]);
 
-  useEffect(() => {
-    if (marker) {
-      new naver.maps.Marker({
-        position: new naver.maps.LatLng(marker.latitude, marker.longitude),
-        map,
-      });
+      if (marker) {
+        new naver.maps.Marker({
+          position: new naver.maps.LatLng(marker.latitude, marker.longitude),
+          map,
+        });
+      }
     }
-    console.log("rr");
-  }, [marker]);
+  }, [myLocation, marker]);
 
   return {
     myLocation,
