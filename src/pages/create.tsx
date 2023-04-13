@@ -1,8 +1,9 @@
+import SaveImage from "@/components/create/SaveImage";
 import SavePath from "@/components/create/SavePath";
 import { useEffect, useState } from "react";
 
 export default function Create() {
-  const [part, setPart] = useState("path");
+  const [part, setPart] = useState("image");
   const [path, setPath] = useState<Array<{ latitude: number; longitude: number }>>([]);
 
   const partRender = () => {
@@ -11,7 +12,7 @@ export default function Create() {
         return <SavePath path={path} setPath={setPath} />;
       }
       case "image": {
-        return <>{/* 사진 업로드 */}</>;
+        return <SaveImage />;
       }
       case "story": {
         return <>{/* 내용 입력 */}</>;
