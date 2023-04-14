@@ -1,14 +1,19 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
 import Image from "next/image";
 
-const SaveImage = () => {
+interface SaveImageProps {
+  images: FileList | undefined;
+  setImage: Dispatch<SetStateAction<FileList | undefined>>;
+}
+
+const SaveImage = ({ images, setImage }: SaveImageProps) => {
   const [previewImages, setPreviewImages] = useState<string[]>([]);
 
   const uploadImage = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (e.currentTarget.files !== null) {
       const fileBlobs = e.currentTarget.files;
-      encodeFileToBase64(fileBlobs);
+      setImage(fileBlobs);
     }
   };
 
@@ -17,12 +22,24 @@ const SaveImage = () => {
     setPreviewImages((prevImages) => prevImages.concat(filesArray));
   };
 
+  useEffect(() => {
+    if (images) {
+      encodeFileToBase64(images);
+    }
+  }, [images]);
+
   return (
     <div>
       <input type="file" accept="image/*" multiple onChange={uploadImage} />
       {previewImages.map((imageUrl, index) => (
         <div key={index}>
-          <Image src={imageUrl} alt="preview-image" width={150} height={150} />
+          <Image
+            src={imageUrl}
+            alt="preview-image"
+            width={150}
+            height={150}
+            style={{ width: 150, height: 150 }}
+          />
         </div>
       ))}
     </div>
