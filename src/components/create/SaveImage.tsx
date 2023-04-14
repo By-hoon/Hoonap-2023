@@ -11,22 +11,31 @@ const SaveImage = ({ images, setImage }: SaveImageProps) => {
 
   const uploadImage = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    if (e.currentTarget.files !== null) {
-      const fileBlobs = e.currentTarget.files;
+    if (e.currentTarget.files === null) return;
+
+    const fileBlobs = e.currentTarget.files;
+
+    encodeFileToBase64(fileBlobs);
+
+    if (images === undefined) {
       setImage(fileBlobs);
+      return;
     }
+
+    const dataTranster = new DataTransfer();
+    const newImages = [...Array.from(images), ...Array.from(fileBlobs)];
+
+    newImages.forEach((file) => {
+      dataTranster.items.add(file);
+    });
+
+    setImage(dataTranster.files);
   };
 
   const encodeFileToBase64 = (fileBlobs: FileList) => {
     const filesArray = Array.from(fileBlobs).map((file) => URL.createObjectURL(file));
     setPreviewImages((prevImages) => prevImages.concat(filesArray));
   };
-
-  useEffect(() => {
-    if (images) {
-      encodeFileToBase64(images);
-    }
-  }, [images]);
 
   return (
     <div>
