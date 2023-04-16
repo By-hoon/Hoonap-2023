@@ -1,10 +1,10 @@
 import SaveImage from "@/components/create/SaveImage";
 import SavePath from "@/components/create/SavePath";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import Image from "next/image";
 
 export default function Create() {
-  const [part, setPart] = useState("image");
+  const [part, setPart] = useState("path");
   const [path, setPath] = useState<Array<{ latitude: number; longitude: number }>>([]);
   const [images, setImage] = useState<FileList>();
   const [previewImages, setPreviewImages] = useState<string[]>([]);
@@ -38,6 +38,19 @@ export default function Create() {
         return (
           <div>
             <div>
+              {previewImages.map((imageUrl, index) => (
+                <figure key={index}>
+                  <Image
+                    src={imageUrl}
+                    alt="preview-image"
+                    width={50}
+                    height={50}
+                    style={{ width: 50, height: 50 }}
+                  />
+                </figure>
+              ))}
+            </div>
+            <div>
               <input
                 type="text"
                 value={title}
@@ -50,7 +63,7 @@ export default function Create() {
               <input
                 type="text"
                 value={story}
-                placeholder="사진이 담고 있는 이야기를 들려주세요."
+                placeholder="사진들이 담고 있는 이야기를 들려주세요."
                 onChange={changeStory}
                 required
               />
