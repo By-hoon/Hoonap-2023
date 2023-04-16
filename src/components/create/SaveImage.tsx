@@ -5,11 +5,11 @@ import Image from "next/image";
 interface SaveImageProps {
   images: FileList | undefined;
   setImage: Dispatch<SetStateAction<FileList | undefined>>;
+  previewImages: string[];
+  setPreviewImages: Dispatch<SetStateAction<string[]>>;
 }
 
-const SaveImage = ({ images, setImage }: SaveImageProps) => {
-  const [previewImages, setPreviewImages] = useState<string[]>([]);
-
+const SaveImage = ({ images, setImage, previewImages, setPreviewImages }: SaveImageProps) => {
   const uploadImage = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (e.currentTarget.files === null) return;
