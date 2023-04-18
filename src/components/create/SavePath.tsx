@@ -30,7 +30,7 @@ const SavePath = ({ paths, setPaths }: SavePathProps) => {
 
   return (
     <div>
-      <Map paths={paths} setTargetPath={setTargetPath} />
+      <Map paths={paths} setPaths={setPaths} setTargetPath={setTargetPath} />
     </div>
   );
 };

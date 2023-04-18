@@ -1,18 +1,32 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Listener, Container as MapDiv, NaverMap, Polygon, useNavermaps } from "react-naver-maps";
+import { Listener, Container as MapDiv, Marker, NaverMap, Polygon, useNavermaps } from "react-naver-maps";
 
 interface MapProps {
   paths: {
     latitude: number;
     longitude: number;
   }[];
+  setPaths: Dispatch<
+    SetStateAction<
+      {
+        latitude: number;
+        longitude: number;
+      }[]
+    >
+  >;
   setTargetPath: Dispatch<SetStateAction<{ latitude: number; longitude: number } | undefined>>;
 }
 
-export default function Map({ paths, setTargetPath }: MapProps) {
+export default function Map({ paths, setPaths, setTargetPath }: MapProps) {
   const [myLocation, setMyLocation] = useState<{ latitude: number; longitude: number } | string>("");
 
   const navermaps = useNavermaps();
+
+  const deletePaths = (index: number) => {
+    const newPaths = [...paths];
+    newPaths.splice(index, 1);
+    setPaths(newPaths);
+  };
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -50,6 +64,13 @@ export default function Map({ paths, setTargetPath }: MapProps) {
             strokeOpacity={0.6}
             strokeWeight={3}
           />
+          {paths.map((path, index) => (
+            <Marker
+              key={index}
+              position={new navermaps.LatLng(path.latitude, path.longitude)}
+              onClick={() => deletePaths(index)}
+            />
+          ))}
         </NaverMap>
       ) : null}
     </MapDiv>
