@@ -1,15 +1,15 @@
 import dynamic from "next/dynamic";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
 
 interface SavePathProps {
-  path: {
+  paths: {
     latitude: number;
     longitude: number;
   }[];
-  setPath: Dispatch<
+  setPaths: Dispatch<
     SetStateAction<
       {
         latitude: number;
@@ -19,10 +19,18 @@ interface SavePathProps {
   >;
 }
 
-const SavePath = ({ path, setPath }: SavePathProps) => {
+const SavePath = ({ paths, setPaths }: SavePathProps) => {
+  const [targetPath, setTargetPath] = useState<{ latitude: number; longitude: number }>();
+
+  useEffect(() => {
+    if (targetPath) {
+      setPaths(paths.concat(targetPath));
+    }
+  }, [targetPath]);
+
   return (
     <div>
-      <Map />
+      <Map paths={paths} setTargetPath={setTargetPath} />
     </div>
   );
 };

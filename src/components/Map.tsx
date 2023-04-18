@@ -1,7 +1,15 @@
-import { useEffect, useState } from "react";
-import { Container as MapDiv, NaverMap, useNavermaps } from "react-naver-maps";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Listener, Container as MapDiv, NaverMap, Polygon, useNavermaps } from "react-naver-maps";
 
-export default function Map() {
+interface MapProps {
+  paths: {
+    latitude: number;
+    longitude: number;
+  }[];
+  setTargetPath: Dispatch<SetStateAction<{ latitude: number; longitude: number } | undefined>>;
+}
+
+export default function Map({ paths, setTargetPath }: MapProps) {
   const [myLocation, setMyLocation] = useState<{ latitude: number; longitude: number } | string>("");
 
   const navermaps = useNavermaps();
@@ -29,7 +37,20 @@ export default function Map() {
         <NaverMap
           defaultCenter={new navermaps.LatLng(myLocation.latitude, myLocation.longitude)}
           defaultZoom={15}
-        ></NaverMap>
+        >
+          <Listener
+            type="click"
+            listener={(e) => setTargetPath({ latitude: e.coord.lat(), longitude: e.coord.lng() })}
+          />
+          <Polygon
+            paths={[paths.map((path) => new navermaps.LatLng(path.latitude, path.longitude))]}
+            fillColor="#ff0000"
+            fillOpacity={0.3}
+            strokeColor="#ff0000"
+            strokeOpacity={0.6}
+            strokeWeight={3}
+          />
+        </NaverMap>
       ) : null}
     </MapDiv>
   );
