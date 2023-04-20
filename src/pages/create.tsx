@@ -37,6 +37,10 @@ export default function Create() {
     if (part === "image") changePart("story");
   };
 
+  const createStory = () => {
+    console.log(paths, images, title, story);
+  };
+
   const partRender = () => {
     switch (part) {
       case "path": {
@@ -96,9 +100,21 @@ export default function Create() {
   return (
     <div>
       <div>
-        <button onClick={() => changePart("path")}>위치</button>
-        <button onClick={() => changePart("image")}>사진</button>
-        <button onClick={() => changePart("story")}>스토리</button>
+        <div>
+          <button onClick={() => changePart("path")}>위치</button>
+          <button onClick={() => changePart("image")}>사진</button>
+          <button onClick={() => changePart("story")}>스토리</button>
+        </div>
+        <div>
+          <button
+            onClick={createStory}
+            disabled={
+              paths.length === 0 || previewImages.length === 0 || title === "" || story === "" ? true : false
+            }
+          >
+            생성
+          </button>
+        </div>
       </div>
       {partRender()}
       <div>
