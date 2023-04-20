@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function Create() {
   const [part, setPart] = useState("path");
-  const [path, setPath] = useState<Array<{ latitude: number; longitude: number }>>([]);
+  const [paths, setPaths] = useState<Array<{ latitude: number; longitude: number }>>([]);
   const [images, setImage] = useState<FileList>();
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [title, setTitle] = useState("");
@@ -22,7 +22,7 @@ export default function Create() {
   const partRender = () => {
     switch (part) {
       case "path": {
-        return <SavePath path={path} setPath={setPath} />;
+        return <SavePath paths={paths} setPaths={setPaths} />;
       }
       case "image": {
         return (
