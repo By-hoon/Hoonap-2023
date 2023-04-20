@@ -19,6 +19,24 @@ export default function Create() {
     setStory(e.target.value);
   }, []);
 
+  const changePart = (newPart: string) => {
+    if (newPart === "story") {
+      if (previewImages.length === 0) {
+        alert("스토리 작성은 이미지 입력 후 가능합니다.");
+        return;
+      }
+    }
+    setPart(newPart);
+  };
+  const goPreviousPart = () => {
+    if (part === "image") changePart("path");
+    if (part === "story") changePart("image");
+  };
+  const goNextPart = () => {
+    if (part === "path") changePart("image");
+    if (part === "image") changePart("story");
+  };
+
   const partRender = () => {
     switch (part) {
       case "path": {
@@ -75,5 +93,22 @@ export default function Create() {
     return null;
   };
 
-  return <div>{partRender()}</div>;
+  return (
+    <div>
+      <div>
+        <button onClick={() => changePart("path")}>위치</button>
+        <button onClick={() => changePart("image")}>사진</button>
+        <button onClick={() => changePart("story")}>스토리</button>
+      </div>
+      {partRender()}
+      <div>
+        <button onClick={goPreviousPart} disabled={part === "path" ? true : false}>
+          이전
+        </button>
+        <button onClick={goNextPart} disabled={part === "story" ? true : false}>
+          다음
+        </button>
+      </div>
+    </div>
+  );
 }
