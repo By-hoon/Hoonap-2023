@@ -2,6 +2,7 @@ import SaveImage from "@/components/create/SaveImage";
 import SavePath from "@/components/create/SavePath";
 import { useCallback, useState } from "react";
 import Image from "next/image";
+import Title from "@/components/common/Title";
 
 export default function Create() {
   const [part, setPart] = useState("path");
@@ -99,11 +100,13 @@ export default function Create() {
 
   return (
     <div>
+      <Title title="스토리 생성" />
       <div>
         <div>
           <button onClick={() => changePart("path")}>위치</button>
           <button onClick={() => changePart("image")}>사진</button>
           <button onClick={() => changePart("story")}>스토리</button>
+          <Title title="입력" />
         </div>
         <div>
           <button
