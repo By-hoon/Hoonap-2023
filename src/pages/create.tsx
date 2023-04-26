@@ -3,6 +3,8 @@ import SavePath from "@/components/create/SavePath";
 import { useCallback, useState } from "react";
 import Image from "next/image";
 import Title from "@/components/common/Title";
+import addData from "@/firebase/firestore/addData";
+import addFile from "@/firebase/storage/addFile";
 
 export default function Create() {
   const [part, setPart] = useState("path");
@@ -38,8 +40,32 @@ export default function Create() {
     if (part === "image") changePart("story");
   };
 
-  const createStory = () => {
-    console.log(paths, images, title, story);
+  const createStory = async () => {
+    if (paths.length === 0 || !images || title === "" || story === "") return;
+
+    const fileUrls: (string | null)[] = [];
+
+    const imagesArr = [...Array.from(images)];
+
+    for (let i = 0; i < imagesArr.length; i++) {
+      const fileName = crypto.randomUUID();
+      const { fileUrl, error } = await addFile(imagesArr[i], `story/${fileName}`);
+      // TODO: 오류처리 추가
+      fileUrls.push(fileUrl);
+    }
+
+    const data = {
+      paths,
+      images: fileUrls,
+      title,
+      story,
+    };
+
+    const { result, error } = await addData("stories", data);
+
+    if (error) {
+      return console.log(error);
+    }
   };
 
   const partRender = () => {
@@ -109,14 +135,7 @@ export default function Create() {
           <Title title="입력" />
         </div>
         <div>
-          <button
-            onClick={createStory}
-            disabled={
-              paths.length === 0 || previewImages.length === 0 || title === "" || story === "" ? true : false
-            }
-          >
-            생성
-          </button>
+          <button onClick={createStory}>생성</button>
         </div>
       </div>
       {partRender()}
