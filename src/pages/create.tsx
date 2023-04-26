@@ -5,6 +5,7 @@ import Image from "next/image";
 import Title from "@/components/common/Title";
 import addData from "@/firebase/firestore/addData";
 import addFile from "@/firebase/storage/addFile";
+import deleteFile from "@/firebase/storage/deleteFile";
 
 export default function Create() {
   const [part, setPart] = useState("path");
@@ -40,19 +41,39 @@ export default function Create() {
     if (part === "image") changePart("story");
   };
 
-  const createStory = async () => {
-    if (paths.length === 0 || !images || title === "" || story === "") return;
+  const addFiles = async (files: FileList) => {
+    const fileUrls: string[] = [];
 
-    const fileUrls: (string | null)[] = [];
-
-    const imagesArr = [...Array.from(images)];
+    const imagesArr = [...Array.from(files)];
 
     for (let i = 0; i < imagesArr.length; i++) {
       const fileName = crypto.randomUUID();
+
       const { fileUrl, error } = await addFile(imagesArr[i], `story/${fileName}`);
-      // TODO: 오류처리 추가
-      fileUrls.push(fileUrl);
+      if (error) {
+        await deleteFiles(fileUrls);
+        console.log(error);
+        return false;
+      }
+      if (fileUrl !== null) {
+        fileUrls.push(fileUrl);
+      }
     }
+    return fileUrls;
+  };
+
+  const deleteFiles = async (fileUrls: string[]) => {
+    for (let i = 0; i < fileUrls.length; i++) {
+      await deleteFile(fileUrls[i]);
+    }
+  };
+
+  const createStory = async () => {
+    if (paths.length === 0 || !images || title === "" || story === "") return;
+
+    const fileUrls = await addFiles(images);
+
+    if (!fileUrls) return;
 
     const data = {
       paths,
@@ -64,6 +85,7 @@ export default function Create() {
     const { result, error } = await addData("stories", data);
 
     if (error) {
+      await deleteFiles(fileUrls);
       return console.log(error);
     }
   };
