@@ -6,14 +6,10 @@ const db = getFirestore(firebase_app);
 export default async function getData(name: string) {
   let colRef = collection(db, name);
 
-  let result = null;
-  let error = null;
-
   try {
-    result = await getDocs(colRef);
-  } catch (e) {
-    error = e;
+    return await getDocs(colRef);
+  } catch (error) {
+    console.log(error);
+    return false;
   }
-
-  return { result, error };
 }

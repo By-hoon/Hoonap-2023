@@ -9,12 +9,13 @@ const List = (stories: DocumentData[]) => {
 export default List;
 
 export const getServerSideProps = async () => {
-  const { result, error } = await getData("stories");
+  const result = await getData("stories");
   const stories: DocumentData[] = [];
 
-  result?.forEach((e) => {
-    stories.push(e.data());
-  });
+  if (result)
+    result.forEach((e) => {
+      stories.push(e.data());
+    });
 
   return {
     props: {

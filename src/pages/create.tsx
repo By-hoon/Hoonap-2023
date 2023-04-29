@@ -49,15 +49,12 @@ export default function Create() {
     for (let i = 0; i < imagesArr.length; i++) {
       const fileName = crypto.randomUUID();
 
-      const { fileUrl, error } = await addFile(imagesArr[i], `story/${fileName}`);
-      if (error) {
+      const result = await addFile(imagesArr[i], `story/${fileName}`);
+      if (!result) {
         await deleteFiles(fileUrls);
-        console.log(error);
         return false;
       }
-      if (fileUrl !== null) {
-        fileUrls.push(fileUrl);
-      }
+      fileUrls.push(result);
     }
     return fileUrls;
   };
@@ -82,11 +79,10 @@ export default function Create() {
       story,
     };
 
-    const { result, error } = await addData("stories", data);
+    const result = await addData("stories", data);
 
-    if (error) {
+    if (!result) {
       await deleteFiles(fileUrls);
-      return console.log(error);
     }
   };
 
