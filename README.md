@@ -17,14 +17,24 @@
 ```bash
 src
 ├── components
+│   ├── common
+│   │   └── Title.tsx
 │   ├── create
 │   │   ├── SaveImage.tsx
 │   │   └── SavePath.tsx
-│   └── UploadVideo.tsx
-├── hooks
-│   └── useMap.ts
+│   └── Map.tsx
+├── firebase
+│   ├── firestore
+│   │   ├── addData.ts
+│   │   └── getData.ts
+│   ├── storage
+│   │   ├── addFile.ts
+│   │   └── deleteFile.ts
+│   └── config.ts
 ├── pages
 │   ├── api
+│   ├── story
+│   │   └── list.tsx
 │   ├── _app.tsx
 │   ├── _document.tsx
 │   ├── create.tsx
@@ -42,6 +52,6 @@ src
 - 게시물 작성
   - 위치 지정(naver map api)
   - 사진 등록
-  - 사진 정보 입력
-
-<br>
+  - 스토리 작성
+- 게시물 목록
+  <br>
