@@ -14,13 +14,18 @@ interface MapProps {
       }[]
     >
   >;
-  setTargetPath: Dispatch<SetStateAction<{ latitude: number; longitude: number } | undefined>>;
 }
 
-export default function Map({ paths, setPaths, setTargetPath }: MapProps) {
+export default function Map({ paths, setPaths }: MapProps) {
   const [myLocation, setMyLocation] = useState<{ latitude: number; longitude: number } | string>("");
 
   const navermaps = useNavermaps();
+
+  const addPaths = (path: { latitude: number; longitude: number }) => {
+    const newPaths = [...paths];
+    newPaths.push(path);
+    setPaths(newPaths);
+  };
 
   const deletePaths = (index: number) => {
     const newPaths = [...paths];
@@ -54,7 +59,7 @@ export default function Map({ paths, setPaths, setTargetPath }: MapProps) {
         >
           <Listener
             type="click"
-            listener={(e) => setTargetPath({ latitude: e.coord.lat(), longitude: e.coord.lng() })}
+            listener={(e) => addPaths({ latitude: e.coord.lat(), longitude: e.coord.lng() })}
           />
           <Polygon
             paths={[paths.map((path) => new navermaps.LatLng(path.latitude, path.longitude))]}

@@ -20,17 +20,9 @@ interface SavePathProps {
 }
 
 const SavePath = ({ paths, setPaths }: SavePathProps) => {
-  const [targetPath, setTargetPath] = useState<{ latitude: number; longitude: number }>();
-
-  useEffect(() => {
-    if (targetPath) {
-      setPaths(paths.concat(targetPath));
-    }
-  }, [targetPath]);
-
   return (
     <div>
-      <Map paths={paths} setPaths={setPaths} setTargetPath={setTargetPath} />
+      <Map paths={paths} setPaths={setPaths} />
     </div>
   );
 };
