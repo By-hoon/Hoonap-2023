@@ -21,6 +21,34 @@ export default function Map({ paths, setPaths }: MapProps) {
 
   const navermaps = useNavermaps();
 
+  const convertToLatLng = (
+    target: {
+      latitude: number;
+      longitude: number;
+    }[]
+  ) => {
+    return target.map((path) => new navermaps.LatLng(path.latitude, path.longitude));
+  };
+
+  const convertToPolygons = (
+    target: {
+      latitude: number;
+      longitude: number;
+    }[]
+  ) => {
+    const polygons: { latitude: number; longitude: number }[][] = [];
+    let currentPaths: { latitude: number; longitude: number }[] = [];
+    target.forEach((path) => {
+      if (path.latitude === 0) {
+        polygons.push([...currentPaths]);
+        currentPaths = [];
+        return;
+      }
+      currentPaths.push(path);
+    });
+    return polygons;
+  };
+
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -37,25 +65,16 @@ export default function Map({ paths, setPaths }: MapProps) {
       longitude: 127.1222903,
     });
   }, []);
+
   const mapChildRender = () => {
     switch (setPaths) {
       case undefined: {
-        const polygons: { latitude: number; longitude: number }[][] = [];
-        let polyPaths: { latitude: number; longitude: number }[] = [];
-        paths.forEach((path) => {
-          if (path.latitude === 0) {
-            polygons.push([...polyPaths]);
-            polyPaths = [];
-            return;
-          }
-          polyPaths.push(path);
-        });
         return (
           <>
-            {polygons.map((polygon, index) => (
+            {convertToPolygons(paths).map((polygon, index) => (
               <Polygon
                 key={index}
-                paths={[polygon.map((path) => new navermaps.LatLng(path.latitude, path.longitude))]}
+                paths={[convertToLatLng(polygon)]}
                 fillColor="#ff0000"
                 fillOpacity={0.3}
                 strokeColor="#ff0000"
@@ -85,7 +104,7 @@ export default function Map({ paths, setPaths }: MapProps) {
               listener={(e) => addPaths({ latitude: e.coord.lat(), longitude: e.coord.lng() })}
             />
             <Polygon
-              paths={[paths.map((path) => new navermaps.LatLng(path.latitude, path.longitude))]}
+              paths={[convertToLatLng(paths)]}
               fillColor="#ff0000"
               fillOpacity={0.3}
               strokeColor="#ff0000"
