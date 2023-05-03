@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Listener, Container as MapDiv, Marker, NaverMap, Polygon, useNavermaps } from "react-naver-maps";
+import useMyLocation from "./hooks/useMyLocation";
 
 interface MapProps {
   paths: {
@@ -17,8 +18,7 @@ interface MapProps {
 }
 
 export default function Map({ paths, setPaths }: MapProps) {
-  const [myLocation, setMyLocation] = useState<{ latitude: number; longitude: number } | string>("");
-
+  const { myLocation } = useMyLocation();
   const navermaps = useNavermaps();
 
   const convertToLatLng = (
@@ -48,23 +48,6 @@ export default function Map({ paths, setPaths }: MapProps) {
     });
     return polygons;
   };
-
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        setMyLocation({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        });
-      });
-      return;
-    }
-    window.alert("현재 위치를 알 수 없습니다. 기본 위치로 지정합니다.");
-    setMyLocation({
-      latitude: 37.4862618,
-      longitude: 127.1222903,
-    });
-  }, []);
 
   const mapChildRender = () => {
     switch (setPaths) {
