@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Listener, Container as MapDiv, Marker, NaverMap, Polygon, useNavermaps } from "react-naver-maps";
-import useMyLocation from "./hooks/useMyLocation";
+import useMyLocation from "@/hooks/useMyLocation";
 
 interface MapProps {
   paths: {
