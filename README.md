@@ -24,6 +24,10 @@ src
 │   │   └── SavePath.tsx
 │   └── Map.tsx
 ├── firebase
+│   ├── auth
+│   │   ├── getUser.ts
+│   │   ├── signIn.ts
+│   │   └── signUp.ts
 │   ├── firestore
 │   │   ├── addData.ts
 │   │   └── getData.ts
@@ -31,14 +35,17 @@ src
 │   │   ├── addFile.ts
 │   │   └── deleteFile.ts
 │   └── config.ts
+└── hooks
+│   └── useMyLocation.ts
 ├── pages
-│   ├── api
 │   ├── story
 │   │   └── list.tsx
 │   ├── _app.tsx
 │   ├── _document.tsx
 │   ├── create.tsx
-│   └── index.tsx
+│   ├── index.tsx
+│   ├── login.tsx
+│   └── signup.tsx
 └── styles
 │   └── globals.css
 ```
@@ -48,6 +55,9 @@ src
 > ## 구현 기능 목록
 
 <br>
+
+- 회원가입
+- 로그인
 
 - 게시물 작성
   - 위치 지정(naver map api)
