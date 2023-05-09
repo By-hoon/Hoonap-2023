@@ -6,6 +6,9 @@ import Title from "@/components/common/Title";
 import addData from "@/firebase/firestore/addData";
 import addFile from "@/firebase/storage/addFile";
 import deleteFile from "@/firebase/storage/deleteFile";
+import setData from "@/firebase/firestore/setData";
+import getUser from "@/firebase/auth/getUser";
+import getDocument from "@/firebase/firestore/getDocument";
 
 export default function Create() {
   const [part, setPart] = useState("path");
@@ -65,6 +68,25 @@ export default function Create() {
     }
   };
 
+  const getUserData = async (userId: string, storyId: string) => {
+    const userData = await getDocument("users", userId);
+    if (userData) {
+      return { storyIds: [...userData.storyIds, storyId] };
+    }
+    return { storyIds: [storyId] };
+  };
+
+  const saveUser = async (storyId: string) => {
+    const user = getUser();
+    if (!user) return false;
+
+    const userId = user.uid;
+
+    const userData = await getUserData(userId, storyId);
+
+    return await setData("users", userId, userData);
+  };
+
   const createStory = async () => {
     if (paths.length === 0 || !images || title === "" || story === "") return;
 
@@ -83,7 +105,10 @@ export default function Create() {
 
     if (!result) {
       await deleteFiles(fileUrls);
+      return;
     }
+
+    const userResult = await saveUser(result.id);
   };
 
   const partRender = () => {
