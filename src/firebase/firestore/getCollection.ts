@@ -3,7 +3,7 @@ import { getFirestore, collection, getDocs } from "firebase/firestore";
 
 const db = getFirestore(firebase_app);
 
-export default async function getData(name: string) {
+export default async function getCollection(name: string) {
   let colRef = collection(db, name);
 
   try {

@@ -1,4 +1,4 @@
-import getData from "@/firebase/firestore/getData";
+import getCollection from "@/firebase/firestore/getCollection";
 import { DocumentData } from "firebase/firestore";
 import dynamic from "next/dynamic";
 const Map = dynamic(() => import("@/components/Map"), {
@@ -38,7 +38,7 @@ const List = ({ stories }: ListProps) => {
 export default List;
 
 export const getServerSideProps = async () => {
-  const result = await getData("stories");
+  const result = await getCollection("stories");
   const stories: DocumentData = [];
 
   if (result)
