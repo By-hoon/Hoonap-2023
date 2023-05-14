@@ -1,54 +1,23 @@
-import getCollection from "@/firebase/firestore/getCollection";
-import { DocumentData } from "firebase/firestore";
+import { GetServerSidePropsContext } from "next/types";
 import dynamic from "next/dynamic";
+import checkUser from "@/firebase/auth/checkUser";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
 
-interface ListProps {
-  stories: DocumentData[];
-}
-
-const List = ({ stories }: ListProps) => {
-  const editPaths = () => {
-    const polyPaths: {
-      latitude: number;
-      longitude: number;
-    }[] = [];
-
-    stories.forEach((story) => {
-      story.paths.forEach((path: { latitude: number; longitude: number }) => {
-        polyPaths.push(path);
-      });
-      polyPaths.push({
-        latitude: 0,
-        longitude: 0,
-      });
-    });
-    return polyPaths;
-  };
-  editPaths();
-  return (
-    <div>
-      <Map paths={editPaths()} />
-    </div>
-  );
+const List = () => {
+  return <div>{/* <Map paths={} /> */}</div>;
 };
 
 export default List;
 
-export const getServerSideProps = async () => {
-  const result = await getCollection("stories");
-  const stories: DocumentData = [];
-
-  if (result)
-    result.forEach((e) => {
-      stories.push(e.data());
-    });
-
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const uid = await checkUser(context);
+  if (!uid)
+    return {
+      props: {} as never,
+    };
   return {
-    props: {
-      stories,
-    },
+    props: { uid },
   };
 };

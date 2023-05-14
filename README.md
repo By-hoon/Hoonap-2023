@@ -25,15 +25,19 @@ src
 │   └── Map.tsx
 ├── firebase
 │   ├── auth
+│   │   ├── checkUser.ts
 │   │   ├── getUser.ts
 │   │   ├── signIn.ts
 │   │   └── signUp.ts
 │   ├── firestore
 │   │   ├── addData.ts
-│   │   └── getData.ts
+│   │   ├── getCollection.ts
+│   │   ├── getDocument.ts
+│   │   └── setData.ts
 │   ├── storage
 │   │   ├── addFile.ts
 │   │   └── deleteFile.ts
+│   ├── adminConfig.ts
 │   └── config.ts
 └── hooks
 │   └── useMyLocation.ts
