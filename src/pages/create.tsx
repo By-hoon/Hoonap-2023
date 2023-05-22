@@ -9,8 +9,10 @@ import deleteFile from "@/firebase/storage/deleteFile";
 import setData from "@/firebase/firestore/setData";
 import getUser from "@/firebase/auth/getUser";
 import getDocument from "@/firebase/firestore/getDocument";
+import { GetServerSidePropsContext } from "next/types";
+import checkUser from "@/firebase/auth/checkUser";
 
-export default function Create() {
+export default function Create({ uid }: { uid: string }) {
   const [part, setPart] = useState("path");
   const [paths, setPaths] = useState<Array<{ latitude: number; longitude: number }>>([]);
   const [images, setImage] = useState<FileList>();
@@ -77,14 +79,9 @@ export default function Create() {
   };
 
   const saveUser = async (storyId: string) => {
-    const user = getUser();
-    if (!user) return false;
+    const userData = await getUserData(uid, storyId);
 
-    const userId = user.uid;
-
-    const userData = await getUserData(userId, storyId);
-
-    return await setData("users", userId, userData);
+    return await setData("users", uid, userData);
   };
 
   const createStory = async () => {
@@ -99,6 +96,7 @@ export default function Create() {
       images: fileUrls,
       title,
       story,
+      userId: uid,
     };
 
     const result = await addData("stories", data);
@@ -110,7 +108,6 @@ export default function Create() {
 
     const userResult = await saveUser(result.id);
   };
-
   const partRender = () => {
     switch (part) {
       case "path": {
@@ -193,3 +190,14 @@ export default function Create() {
     </div>
   );
 }
+
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const uid = await checkUser(context);
+  if (!uid)
+    return {
+      props: {} as never,
+    };
+  return {
+    props: { uid },
+  };
+};
