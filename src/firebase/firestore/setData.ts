@@ -5,9 +5,10 @@ const db = getFirestore(firebase_app);
 
 export default async function setData(colllection: string, id: string, data: {}) {
   try {
-    return await setDoc(doc(db, colllection, id), data, {
+    await setDoc(doc(db, colllection, id), data, {
       merge: true,
     });
+    return true;
   } catch (error) {
     console.log(error);
     return false;
