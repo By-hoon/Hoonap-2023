@@ -91,7 +91,9 @@ export default function Create({ uid }: { uid: string }) {
 
     if (!fileUrls) return;
 
-    const data = {
+    const storyId = crypto.randomUUID();
+
+    const storyData = {
       paths,
       images: fileUrls,
       title,
@@ -99,14 +101,16 @@ export default function Create({ uid }: { uid: string }) {
       userId: uid,
     };
 
-    const result = await addData("stories", data);
+    const storyResult = await setData("stories", storyId, storyData);
+    const pathResult = await setData("paths", storyId, { paths, userId: uid });
+    const imageResult = await setData("images", storyId, { fileUrls, userId: uid });
 
-    if (!result) {
+    if (!storyResult || !pathResult || !imageResult) {
       await deleteFiles(fileUrls);
       return;
     }
 
-    const userResult = await saveUser(result.id);
+    const userResult = await saveUser(storyId);
   };
   const partRender = () => {
     switch (part) {
