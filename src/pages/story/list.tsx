@@ -2,6 +2,7 @@ import { GetServerSidePropsContext } from "next/types";
 import dynamic from "next/dynamic";
 import checkUser from "@/firebase/auth/checkUser";
 import getDocument from "@/firebase/firestore/getDocument";
+import MapOption from "@/components/list/MapOption";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
@@ -22,7 +23,9 @@ const List = ({ pathsArray }: { pathsArray: { latitude: number; longitude: numbe
   };
   return (
     <div>
-      <Map paths={editPaths()} />
+      <Map>
+        <MapOption paths={editPaths()} />
+      </Map>
     </div>
   );
 };
