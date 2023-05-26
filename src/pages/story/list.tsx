@@ -8,23 +8,10 @@ const Map = dynamic(() => import("@/components/Map"), {
 });
 
 const List = ({ pathsArray }: { pathsArray: { latitude: number; longitude: number }[][] }) => {
-  const editPaths = () => {
-    const polyPaths: { latitude: number; longitude: number }[] = [];
-    pathsArray.forEach((paths) => {
-      paths.forEach((path) => {
-        polyPaths.push(path);
-      });
-      polyPaths.push({
-        latitude: 0,
-        longitude: 0,
-      });
-    });
-    return polyPaths;
-  };
   return (
     <div>
       <Map>
-        <MapOption paths={editPaths()} />
+        <MapOption paths={pathsArray} />
       </Map>
     </div>
   );
