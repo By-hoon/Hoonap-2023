@@ -1,3 +1,4 @@
+import { convertToLatLng } from "@/utils/util";
 import { Dispatch, SetStateAction } from "react";
 import { Listener, Marker, Polygon, useNavermaps } from "react-naver-maps";
 
@@ -8,10 +9,6 @@ interface MapOptionProps {
 
 export default function MapOption({ paths, setPaths }: MapOptionProps) {
   const navermaps = useNavermaps();
-
-  const convertToLatLng = (target: { latitude: number; longitude: number }[]) => {
-    return target.map((path) => new navermaps.LatLng(path.latitude, path.longitude));
-  };
 
   const addPaths = (path: { latitude: number; longitude: number }) => {
     const newPaths = [...paths];
