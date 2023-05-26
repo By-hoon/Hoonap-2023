@@ -3,16 +3,24 @@ import dynamic from "next/dynamic";
 import checkUser from "@/firebase/auth/checkUser";
 import getDocument from "@/firebase/firestore/getDocument";
 import MapOption from "@/components/list/MapOption";
+import Preview from "@/components/story/Preview";
+import { useState } from "react";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
 
-const List = ({ pathsArray }: { pathsArray: { latitude: number; longitude: number }[][] }) => {
+interface ListProps {
+  pathObjects: { pathArray: { latitude: number; longitude: number }[]; storyId: string }[];
+}
+
+const List = ({ pathObjects }: ListProps) => {
+  const [currentStoryId, setCurrentStoryId] = useState<string | undefined>();
   return (
     <div>
       <Map>
-        <MapOption paths={pathsArray} />
+        <MapOption pathObjects={pathObjects} setCurrentStoryId={setCurrentStoryId} />
       </Map>
+      {currentStoryId ? <Preview currentStoryId={currentStoryId} /> : null}
     </div>
   );
 };
@@ -30,16 +38,17 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     return {
       props: {} as never,
     };
-  const pathsArray: { latitude: number; longitude: number }[][] = [];
+  const pathObjects: { pathArray: { latitude: number; longitude: number }[]; storyId: string }[] = [];
+  const storyIds: string[] = [];
 
   const promises = usersResult.storyIds.map(async (storyId: string) => {
     const pathsResult = await getDocument("paths", storyId);
     if (!pathsResult) return;
-    pathsArray.push(pathsResult.paths);
+    pathObjects.push({ pathArray: pathsResult.paths, storyId });
   });
 
   await Promise.all(promises);
   return {
-    props: { pathsArray },
+    props: { pathObjects },
   };
 };
