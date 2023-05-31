@@ -37,7 +37,7 @@ const StoryDetail = ({ title, story, images }: StoryDetailProps) => {
 export default StoryDetail;
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const storyId = context.query.id as string;
+  const storyId = context.query.storyId as string;
   const result = await getDocument("stories", storyId);
   if (!result) return;
 

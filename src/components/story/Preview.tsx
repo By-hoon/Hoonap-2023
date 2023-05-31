@@ -2,6 +2,7 @@ import getDocument from "@/firebase/firestore/getDocument";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import getUser from "@/firebase/auth/getUser";
+import Link from "next/link";
 
 interface PreviewProps {
   currentStoryId: string;
@@ -22,7 +23,6 @@ const Preview = ({ currentStoryId }: PreviewProps) => {
   };
   const getUserData = () => {
     const userData = getUser();
-    console.log(userData);
     if (!userData) return;
     setUser(userData.email ? userData.email : "unknown");
   };
@@ -53,6 +53,17 @@ const Preview = ({ currentStoryId }: PreviewProps) => {
             />
           </figure>
         ))}
+      </div>
+      <div>
+        <Link
+          href={{
+            pathname: "/story/detail",
+            query: { storyId: currentStoryId },
+          }}
+          as="/story/detail"
+        >
+          자세히
+        </Link>
       </div>
     </div>
   );
