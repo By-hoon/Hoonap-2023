@@ -12,6 +12,21 @@ interface StoryDetailProps {
 const StoryDetail = ({ title, story, images }: StoryDetailProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const preImage = () => {
+    if (currentIndex === 0) {
+      setCurrentIndex(images.length - 1);
+      return;
+    }
+    setCurrentIndex((c) => c - 1);
+  };
+  const nextImage = () => {
+    if (currentIndex === images.length - 1) {
+      setCurrentIndex(0);
+      return;
+    }
+    setCurrentIndex((c) => c + 1);
+  };
+
   return (
     <div>
       <div>
@@ -24,6 +39,10 @@ const StoryDetail = ({ title, story, images }: StoryDetailProps) => {
             height={300}
             style={{ width: 300, height: 300 }}
           />
+          <div className="flex">
+            <figcaption onClick={preImage}>이전</figcaption>
+            <figcaption onClick={nextImage}>다음</figcaption>
+          </div>
         </figure>
       </div>
       <div>
