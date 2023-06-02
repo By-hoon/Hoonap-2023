@@ -20,9 +20,16 @@ src
 │   ├── common
 │   │   └── Title.tsx
 │   ├── create
+│   │   ├── MapOption.tsx
 │   │   ├── SaveImage.tsx
 │   │   └── SavePath.tsx
+│   ├── list
+│   │   └── MapOption.tsx
+│   ├── story
+│   │   └── Preview.tsx
 │   └── Map.tsx
+└── context
+│   └── authProvoider.ts
 ├── firebase
 │   ├── auth
 │   │   ├── checkUser.ts
@@ -43,6 +50,7 @@ src
 │   └── useMyLocation.ts
 ├── pages
 │   ├── story
+│   │   ├── detail.ts
 │   │   └── list.tsx
 │   ├── _app.tsx
 │   ├── _document.tsx
@@ -52,6 +60,8 @@ src
 │   └── signup.tsx
 └── styles
 │   └── globals.css
+└── utils
+│   └── util.ts
 ```
 
 <br>
@@ -68,4 +78,7 @@ src
   - 사진 등록
   - 스토리 작성
 - 게시물 목록
+  - 지도에서 다각형 클릭
+  - 스토리 미리보기
+- 게시물 상세정보
   <br>
