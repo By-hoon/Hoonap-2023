@@ -1,6 +1,12 @@
+import MapOption from "@/components/user/MapOption";
 import getDocument from "@/firebase/firestore/getDocument";
+import Image from "next/image";
 import { DocumentData } from "firebase/firestore";
 import { GetServerSidePropsContext } from "next";
+import dynamic from "next/dynamic";
+const Map = dynamic(() => import("@/components/Map"), {
+  ssr: false,
+});
 
 interface UserDetailProps {
   paths: [{ latitude: number; longitude: number }[]];
@@ -8,8 +14,30 @@ interface UserDetailProps {
 }
 
 const UserDetail = ({ paths, images }: UserDetailProps) => {
-  console.log(paths, images);
-  return <div>사용자 정보</div>;
+  return (
+    <div>
+      <div>
+        <Map>
+          <MapOption paths={paths} />
+        </Map>
+      </div>
+      <div className="flex">
+        {images.map((image, index) =>
+          image.urls.map((imageUrl) => (
+            <figure key={imageUrl}>
+              <Image
+                src={imageUrl}
+                alt="preview-image"
+                width={150}
+                height={150}
+                style={{ width: 150, height: 150 }}
+              />
+            </figure>
+          ))
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default UserDetail;
