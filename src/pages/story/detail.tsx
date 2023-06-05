@@ -2,14 +2,16 @@ import { useState } from "react";
 import Image from "next/image";
 import getDocument from "@/firebase/firestore/getDocument";
 import { GetServerSidePropsContext } from "next";
+import Link from "next/link";
 
 interface StoryDetailProps {
   title: string;
   story: string;
   images: string[];
+  userId: string;
 }
 
-const StoryDetail = ({ title, story, images }: StoryDetailProps) => {
+const StoryDetail = ({ title, story, images, userId }: StoryDetailProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const preImage = () => {
@@ -30,7 +32,18 @@ const StoryDetail = ({ title, story, images }: StoryDetailProps) => {
   return (
     <div>
       <div>
-        <div>디테일</div>
+        <Link
+          href={{
+            pathname: "/user/detail",
+            query: { userId: userId },
+          }}
+          as="/user/detail"
+        >
+          사용자 정보
+          {/* 닉네임 추가 시 닉네임으로 변경 */}
+        </Link>
+      </div>
+      <div>
         <figure>
           <Image
             src={images[currentIndex]}
@@ -61,6 +74,6 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   if (!result) return;
 
   return {
-    props: { title: result.title, story: result.story, images: result.images },
+    props: { title: result.title, story: result.story, images: result.images, userId: result.userId },
   };
 };
