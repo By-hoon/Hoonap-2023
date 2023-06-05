@@ -4,6 +4,7 @@ import Image from "next/image";
 import { DocumentData } from "firebase/firestore";
 import { GetServerSidePropsContext } from "next";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
@@ -22,16 +23,24 @@ const UserDetail = ({ paths, images }: UserDetailProps) => {
         </Map>
       </div>
       <div className="flex">
-        {images.map((image, index) =>
+        {images.map((image) =>
           image.urls.map((imageUrl) => (
             <figure key={imageUrl}>
-              <Image
-                src={imageUrl}
-                alt="preview-image"
-                width={150}
-                height={150}
-                style={{ width: 150, height: 150 }}
-              />
+              <Link
+                href={{
+                  pathname: "/story/detail",
+                  query: { storyId: image.id },
+                }}
+                as="/story/detail"
+              >
+                <Image
+                  src={imageUrl}
+                  alt="preview-image"
+                  width={150}
+                  height={150}
+                  style={{ width: 150, height: 150 }}
+                />
+              </Link>
             </figure>
           ))
         )}
