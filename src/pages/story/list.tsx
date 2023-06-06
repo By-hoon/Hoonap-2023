@@ -11,16 +11,17 @@ const Map = dynamic(() => import("@/components/Map"), {
 
 interface ListProps {
   pathObjects: { pathArray: { latitude: number; longitude: number }[]; storyId: string }[];
+  userId: string;
 }
 
-const List = ({ pathObjects }: ListProps) => {
+const List = ({ pathObjects, userId }: ListProps) => {
   const [currentStoryId, setCurrentStoryId] = useState<string | undefined>();
   return (
     <div>
       <Map>
         <MapOption pathObjects={pathObjects} setCurrentStoryId={setCurrentStoryId} />
       </Map>
-      {currentStoryId ? <Preview currentStoryId={currentStoryId} /> : null}
+      {currentStoryId ? <Preview currentStoryId={currentStoryId} userId={userId} /> : null}
     </div>
   );
 };
@@ -28,12 +29,12 @@ const List = ({ pathObjects }: ListProps) => {
 export default List;
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const uid = await checkUser(context);
-  if (!uid)
+  const userId = await checkUser(context);
+  if (!userId)
     return {
       props: {} as never,
     };
-  const usersResult = await getDocument("users", uid);
+  const usersResult = await getDocument("users", userId);
   if (!usersResult)
     return {
       props: {} as never,
@@ -49,6 +50,6 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
   await Promise.all(promises);
   return {
-    props: { pathObjects },
+    props: { pathObjects, userId },
   };
 };

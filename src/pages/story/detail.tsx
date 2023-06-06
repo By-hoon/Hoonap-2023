@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import getDocument from "@/firebase/firestore/getDocument";
 import { GetServerSidePropsContext } from "next";
@@ -13,6 +13,7 @@ interface StoryDetailProps {
 
 const StoryDetail = ({ title, story, images, userId }: StoryDetailProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [user, setUser] = useState("");
 
   const preImage = () => {
     if (currentIndex === 0) {
@@ -28,6 +29,18 @@ const StoryDetail = ({ title, story, images, userId }: StoryDetailProps) => {
     }
     setCurrentIndex((c) => c + 1);
   };
+  const getUserData = async () => {
+    const result = await getDocument("users", userId);
+    if (!result) {
+      setUser("unknown");
+      return;
+    }
+    setUser(result.nickname);
+  };
+
+  useEffect(() => {
+    getUserData();
+  }, []);
 
   return (
     <div>
@@ -39,8 +52,7 @@ const StoryDetail = ({ title, story, images, userId }: StoryDetailProps) => {
           }}
           as="/user/detail"
         >
-          사용자 정보
-          {/* 닉네임 추가 시 닉네임으로 변경 */}
+          {user}
         </Link>
       </div>
       <div>

@@ -6,9 +6,10 @@ import Link from "next/link";
 
 interface PreviewProps {
   currentStoryId: string;
+  userId: string;
 }
 
-const Preview = ({ currentStoryId }: PreviewProps) => {
+const Preview = ({ currentStoryId, userId }: PreviewProps) => {
   const [title, setTitle] = useState("");
   const [story, setStory] = useState("");
   const [images, setImages] = useState<string[]>([]);
@@ -21,10 +22,13 @@ const Preview = ({ currentStoryId }: PreviewProps) => {
     setTitle(result.title);
     setStory(result.story);
   };
-  const getUserData = () => {
-    const userData = getUser();
-    if (!userData) return;
-    setUser(userData.email ? userData.email : "unknown");
+  const getUserData = async () => {
+    const result = await getDocument("users", userId);
+    if (!result) {
+      setUser("unknown");
+      return;
+    }
+    setUser(result.nickname);
   };
   useEffect(() => {
     getStory();
@@ -36,7 +40,15 @@ const Preview = ({ currentStoryId }: PreviewProps) => {
 
   return (
     <div>
-      <div>{user}</div>
+      <Link
+        href={{
+          pathname: "/user/detail",
+          query: { userId: userId },
+        }}
+        as="/user/detail"
+      >
+        {user}
+      </Link>
       <div>
         <div>{title}</div>
         <div>{story}</div>
