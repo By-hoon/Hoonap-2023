@@ -11,6 +11,7 @@ import getUser from "@/firebase/auth/getUser";
 import getDocument from "@/firebase/firestore/getDocument";
 import { GetServerSidePropsContext } from "next/types";
 import checkUser from "@/firebase/auth/checkUser";
+import { useRouter } from "next/router";
 
 export default function Create({ uid }: { uid: string }) {
   const [part, setPart] = useState("path");
@@ -19,6 +20,8 @@ export default function Create({ uid }: { uid: string }) {
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [title, setTitle] = useState("");
   const [story, setStory] = useState("");
+
+  const router = useRouter();
 
   const changeTitle = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -72,9 +75,8 @@ export default function Create({ uid }: { uid: string }) {
 
   const getUserData = async (userId: string, storyId: string) => {
     const userData = await getDocument("users", userId);
-    if (userData) {
-      return { storyIds: [...userData.storyIds, storyId] };
-    }
+    if (!userData) return { storyIds: [storyId] };
+    if (userData.storyIds) return { storyIds: [...userData.storyIds, storyId] };
     return { storyIds: [storyId] };
   };
 
@@ -111,7 +113,11 @@ export default function Create({ uid }: { uid: string }) {
     }
 
     const userResult = await saveUser(storyId);
+    // TODO: userResult false 시, 저장한 스토리들 삭제
+
+    router.push("/story/list");
   };
+
   const partRender = () => {
     switch (part) {
       case "path": {

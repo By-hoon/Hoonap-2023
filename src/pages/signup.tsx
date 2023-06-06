@@ -1,11 +1,13 @@
 import Title from "@/components/common/Title";
 import signUp from "@/firebase/auth/signUp";
+import setData from "@/firebase/firestore/setData";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [nickname, setNickname] = useState("");
 
   const router = useRouter();
 
@@ -15,10 +17,16 @@ const Signup = () => {
   const changePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
+  const changeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNickname(e.target.value);
+  };
 
   const trySignUp = async () => {
-    const result = await signUp(email, password);
-    if (!result) return;
+    const userData = await signUp(email, password);
+    if (!userData) return;
+    const userId = userData.user.uid;
+    const addResult = await setData("users", userId, { nickname: nickname });
+    if (!addResult) return;
     router.push("/");
   };
 
@@ -40,6 +48,15 @@ const Signup = () => {
           value={password}
           placeholder="비밀번호를 입력해 주세요"
           onChange={changePassword}
+          required
+        />
+      </div>
+      <div>
+        <input
+          type="text"
+          value={nickname}
+          placeholder="닉네임을 입력해 주세요"
+          onChange={changeNickname}
           required
         />
       </div>
