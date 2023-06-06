@@ -22,6 +22,10 @@ const Login = () => {
     router.push("/");
   };
 
+  const goSignUp = () => {
+    router.push("/signup");
+  };
+
   return (
     <div>
       <Title title="로그인" />
@@ -43,7 +47,12 @@ const Login = () => {
           required
         />
       </div>
-      <button onClick={tryLogin}>로그인</button>
+      <div>
+        <button onClick={tryLogin}>로그인</button>
+      </div>
+      <div>
+        <button onClick={goSignUp}>회원가입</button>
+      </div>
     </div>
   );
 };
