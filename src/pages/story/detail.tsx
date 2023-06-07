@@ -3,6 +3,7 @@ import Image from "next/image";
 import getDocument from "@/firebase/firestore/getDocument";
 import { GetServerSidePropsContext } from "next";
 import Link from "next/link";
+import useUser from "@/hooks/useUser";
 
 interface StoryDetailProps {
   title: string;
@@ -13,7 +14,7 @@ interface StoryDetailProps {
 
 const StoryDetail = ({ title, story, images, userId }: StoryDetailProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [user, setUser] = useState("");
+  const { nickname } = useUser(userId);
 
   const preImage = () => {
     if (currentIndex === 0) {
@@ -29,18 +30,6 @@ const StoryDetail = ({ title, story, images, userId }: StoryDetailProps) => {
     }
     setCurrentIndex((c) => c + 1);
   };
-  const getUserData = async () => {
-    const result = await getDocument("users", userId);
-    if (!result) {
-      setUser("unknown");
-      return;
-    }
-    setUser(result.nickname);
-  };
-
-  useEffect(() => {
-    getUserData();
-  }, []);
 
   return (
     <div>
@@ -52,7 +41,7 @@ const StoryDetail = ({ title, story, images, userId }: StoryDetailProps) => {
           }}
           as="/user/detail"
         >
-          {user}
+          {nickname}
         </Link>
       </div>
       <div>

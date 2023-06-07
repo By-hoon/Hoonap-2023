@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import getUser from "@/firebase/auth/getUser";
 import Link from "next/link";
+import useUser from "@/hooks/useUser";
 
 interface PreviewProps {
   currentStoryId: string;
@@ -13,7 +14,7 @@ const Preview = ({ currentStoryId, userId }: PreviewProps) => {
   const [title, setTitle] = useState("");
   const [story, setStory] = useState("");
   const [images, setImages] = useState<string[]>([]);
-  const [user, setUser] = useState("");
+  const { nickname } = useUser(userId);
 
   const getStory = async () => {
     const result = await getDocument("stories", currentStoryId);
@@ -22,21 +23,10 @@ const Preview = ({ currentStoryId, userId }: PreviewProps) => {
     setTitle(result.title);
     setStory(result.story);
   };
-  const getUserData = async () => {
-    const result = await getDocument("users", userId);
-    if (!result) {
-      setUser("unknown");
-      return;
-    }
-    setUser(result.nickname);
-  };
+
   useEffect(() => {
     getStory();
   }, [currentStoryId]);
-
-  useEffect(() => {
-    getUserData();
-  }, []);
 
   return (
     <div>
@@ -47,7 +37,7 @@ const Preview = ({ currentStoryId, userId }: PreviewProps) => {
         }}
         as="/user/detail"
       >
-        {user}
+        {nickname}
       </Link>
       <div>
         <div>{title}</div>
