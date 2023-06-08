@@ -5,6 +5,7 @@ import { DocumentData } from "firebase/firestore";
 import { GetServerSidePropsContext } from "next";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import useUser from "@/hooks/useUser";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
@@ -12,15 +13,21 @@ const Map = dynamic(() => import("@/components/Map"), {
 interface UserDetailProps {
   paths: [{ latitude: number; longitude: number }[]];
   images: { urls: string[]; id: string }[];
+  userId: string;
 }
 
-const UserDetail = ({ paths, images }: UserDetailProps) => {
+const UserDetail = ({ paths, images, userId }: UserDetailProps) => {
+  const { nickname } = useUser(userId);
+
   return (
     <div>
       <div>
         <Map>
           <MapOption paths={paths} />
         </Map>
+      </div>
+      <div>
+        <div>{nickname}</div>
       </div>
       <div className="flex">
         {images.map((image) =>
@@ -69,6 +76,6 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   await Promise.all(promises);
 
   return {
-    props: { paths: paths, images: images },
+    props: { paths, images, userId },
   };
 };
