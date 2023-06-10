@@ -1,7 +1,9 @@
 import doSignOut from "@/firebase/auth/signOut";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const Header = () => {
+  const router = useRouter();
   return (
     <div>
       <div>
@@ -14,7 +16,14 @@ const Header = () => {
       </div>
       <div>
         <div>프로필</div>
-        <div onClick={doSignOut}>로그아웃</div>
+        <div
+          onClick={() => {
+            doSignOut();
+            router.replace("/login");
+          }}
+        >
+          로그아웃
+        </div>
       </div>
       <div>
         <Link href="/create">생성</Link>
