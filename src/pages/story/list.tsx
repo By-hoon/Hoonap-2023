@@ -1,25 +1,62 @@
-import { GetServerSidePropsContext } from "next/types";
 import dynamic from "next/dynamic";
-import checkUser from "@/firebase/auth/checkUser";
 import getDocument from "@/firebase/firestore/getDocument";
 import MapOption from "@/components/list/MapOption";
 import Preview from "@/components/story/Preview";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import getUser from "@/firebase/auth/getUser";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useRouter } from "next/router";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
 
-interface ListProps {
-  pathObjects: { pathArray: { latitude: number; longitude: number }[]; storyId: string }[];
-  userId: string;
-}
+type pathObjects = { pathArray: { latitude: number; longitude: number }[]; storyId: string }[];
 
-const List = ({ pathObjects, userId }: ListProps) => {
+const List = () => {
   const [currentStoryId, setCurrentStoryId] = useState<string | undefined>();
+  const [paths, setPaths] = useState<pathObjects>([]);
+  const [userId, setUserId] = useState("");
+
+  const router = useRouter();
+
+  const getUserResult = async () => {
+    const usersResult = await getDocument("users", userId);
+    return usersResult ? usersResult : false;
+  };
+  const getPathData = async () => {
+    const usersResult = await getUserResult();
+    if (!usersResult) return console.log("user result error");
+
+    const pathObjects: pathObjects = [];
+    const promises = usersResult.storyIds.map(async (storyId: string) => {
+      const pathsResult = await getDocument("paths", storyId);
+      if (!pathsResult) return;
+      pathObjects.push({ pathArray: pathsResult.paths, storyId });
+    });
+
+    await Promise.all(promises);
+    setPaths(pathObjects);
+  };
+
+  useEffect(() => {
+    if (userId !== "") getPathData();
+  }, [userId]);
+
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        router.push("/login");
+        return;
+      }
+      setUserId(user.uid);
+    });
+  }, []);
+
   return (
     <div>
       <Map>
-        <MapOption pathObjects={pathObjects} setCurrentStoryId={setCurrentStoryId} />
+        <MapOption paths={paths} setCurrentStoryId={setCurrentStoryId} />
       </Map>
       {currentStoryId ? <Preview currentStoryId={currentStoryId} userId={userId} /> : null}
     </div>
@@ -27,29 +64,3 @@ const List = ({ pathObjects, userId }: ListProps) => {
 };
 
 export default List;
-
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const userId = await checkUser(context);
-  if (!userId)
-    return {
-      props: {} as never,
-    };
-  const usersResult = await getDocument("users", userId);
-  if (!usersResult)
-    return {
-      props: {} as never,
-    };
-  const pathObjects: { pathArray: { latitude: number; longitude: number }[]; storyId: string }[] = [];
-  const storyIds: string[] = [];
-
-  const promises = usersResult.storyIds.map(async (storyId: string) => {
-    const pathsResult = await getDocument("paths", storyId);
-    if (!pathsResult) return;
-    pathObjects.push({ pathArray: pathsResult.paths, storyId });
-  });
-
-  await Promise.all(promises);
-  return {
-    props: { pathObjects, userId },
-  };
-};
