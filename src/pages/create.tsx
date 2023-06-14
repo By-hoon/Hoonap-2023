@@ -203,10 +203,7 @@ export default function Create({ uid }: { uid: string }) {
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const uid = await checkUser(context);
-  if (!uid)
-    return {
-      props: {} as never,
-    };
+  if (!uid) return { notFound: true };
   return {
     props: { uid },
   };

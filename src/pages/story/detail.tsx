@@ -72,7 +72,7 @@ export default StoryDetail;
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const storyId = context.query.storyId as string;
   const result = await getDocument("stories", storyId);
-  if (!result) return;
+  if (!result) return { notFound: true };
 
   return {
     props: { title: result.title, story: result.story, images: result.images, userId: result.userId },

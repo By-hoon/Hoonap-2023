@@ -61,7 +61,7 @@ export default UserDetail;
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const userId = context.query.userId as string;
   const userStoryResult = await getDocument("users", userId);
-  if (!userStoryResult) return;
+  if (!userStoryResult) return { notFound: true };
 
   const paths: [{ latitude: number; longitude: number }[]] = [[]];
   const images: { urls: string[]; id: string }[] = [];
