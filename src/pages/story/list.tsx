@@ -3,7 +3,6 @@ import getDocument from "@/firebase/firestore/getDocument";
 import MapOption from "@/components/list/MapOption";
 import Preview from "@/components/story/Preview";
 import { useEffect, useState } from "react";
-import getUser from "@/firebase/auth/getUser";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/router";
 const Map = dynamic(() => import("@/components/Map"), {
@@ -53,6 +52,7 @@ const List = () => {
     });
   }, []);
 
+  if (userId === "") return;
   return (
     <div>
       <Map>
