@@ -3,6 +3,7 @@ import { GetServerSidePropsContext } from "next/types";
 import nookies from "nookies";
 import Header from "@/components/common/Header";
 import Link from "next/link";
+import Layout from "@/components/common/Layout";
 
 export default function Home({ loggedIn, uid }: { loggedIn: boolean; uid: string }) {
   if (!loggedIn)
@@ -15,11 +16,7 @@ export default function Home({ loggedIn, uid }: { loggedIn: boolean; uid: string
       </div>
     );
 
-  return (
-    <div>
-      <Header />
-    </div>
-  );
+  return <Layout>Home</Layout>;
 }
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {

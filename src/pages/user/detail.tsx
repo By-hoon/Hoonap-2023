@@ -6,6 +6,7 @@ import { GetServerSidePropsContext } from "next";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import useUser from "@/hooks/useUser";
+import Layout from "@/components/common/Layout";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
@@ -20,7 +21,7 @@ const UserDetail = ({ paths, images, userId }: UserDetailProps) => {
   const { nickname } = useUser(userId);
 
   return (
-    <div>
+    <Layout>
       <div>
         <Map>
           <MapOption paths={paths} />
@@ -52,7 +53,7 @@ const UserDetail = ({ paths, images, userId }: UserDetailProps) => {
           ))
         )}
       </div>
-    </div>
+    </Layout>
   );
 };
 

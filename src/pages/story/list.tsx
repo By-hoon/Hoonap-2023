@@ -5,6 +5,7 @@ import Preview from "@/components/story/Preview";
 import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/router";
+import Layout from "@/components/common/Layout";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
@@ -54,12 +55,12 @@ const List = () => {
 
   if (userId === "") return;
   return (
-    <div>
+    <Layout>
       <Map>
         <MapOption paths={paths} setCurrentStoryId={setCurrentStoryId} />
       </Map>
       {currentStoryId ? <Preview currentStoryId={currentStoryId} userId={userId} /> : null}
-    </div>
+    </Layout>
   );
 };
 

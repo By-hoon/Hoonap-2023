@@ -4,6 +4,7 @@ import getDocument from "@/firebase/firestore/getDocument";
 import { GetServerSidePropsContext } from "next";
 import Link from "next/link";
 import useUser from "@/hooks/useUser";
+import Layout from "@/components/common/Layout";
 
 interface StoryDetailProps {
   title: string;
@@ -32,7 +33,7 @@ const StoryDetail = ({ title, story, images, userId }: StoryDetailProps) => {
   };
 
   return (
-    <div>
+    <Layout>
       <div>
         <Link
           href={{
@@ -63,7 +64,7 @@ const StoryDetail = ({ title, story, images, userId }: StoryDetailProps) => {
         <div>{title}</div>
         <div>{story}</div>
       </div>
-    </div>
+    </Layout>
   );
 };
 
