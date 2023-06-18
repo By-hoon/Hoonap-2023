@@ -18,6 +18,8 @@
 src
 ├── components
 │   ├── common
+│   │   ├── Header.tsx
+│   │   ├── Layout.tsx
 │   │   └── Title.tsx
 │   ├── create
 │   │   ├── MapOption.tsx
@@ -27,6 +29,8 @@ src
 │   │   └── MapOption.tsx
 │   ├── story
 │   │   └── Preview.tsx
+│   ├── user
+│   │   └── MapOption.tsx
 │   └── Map.tsx
 └── context
 │   └── authProvoider.ts
@@ -35,6 +39,7 @@ src
 │   │   ├── checkUser.ts
 │   │   ├── getUser.ts
 │   │   ├── signIn.ts
+│   │   ├── signOut.ts
 │   │   └── signUp.ts
 │   ├── firestore
 │   │   ├── addData.ts
@@ -47,13 +52,17 @@ src
 │   ├── adminConfig.ts
 │   └── config.ts
 └── hooks
-│   └── useMyLocation.ts
+│   ├── useMyLocation.ts
+│   └── useUser.ts
 ├── pages
 │   ├── story
 │   │   ├── detail.ts
 │   │   └── list.tsx
+│   ├── user
+│   │   └── detail.tsx
 │   ├── _app.tsx
 │   ├── _document.tsx
+│   ├── 404.tsx
 │   ├── create.tsx
 │   ├── index.tsx
 │   ├── login.tsx
@@ -71,7 +80,7 @@ src
 <br>
 
 - 회원가입
-- 로그인
+- 로그인, 로그아웃
 
 - 게시물 작성
   - 위치 지정(naver map api)
@@ -81,4 +90,6 @@ src
   - 지도에서 다각형 클릭
   - 스토리 미리보기
 - 게시물 상세정보
+- 사용자 상세정보
+- 에러 페이지
   <br>
