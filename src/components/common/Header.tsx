@@ -2,12 +2,14 @@ import doSignOut from "@/firebase/auth/signOut";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 
 const Header = () => {
   const [mounted, setMounted] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
+
+  const headerRef = useRef<HTMLInputElement>(null);
 
   const router = useRouter();
   const isMobile = useMediaQuery({
@@ -21,6 +23,19 @@ const Header = () => {
     setShowSidebar(false);
   };
 
+  const onClickOutSide = (e: any) => {
+    if (showSidebar && headerRef.current && !headerRef.current.contains(e.target)) {
+      closeSidebar();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", onClickOutSide);
+    return () => {
+      document.removeEventListener("click", onClickOutSide);
+    };
+  });
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -29,7 +44,7 @@ const Header = () => {
   if (isMobile)
     return (
       <div>
-        <div>
+        <div ref={headerRef}>
           <div onClick={openSidebar}>
             <Icon icon="material-symbols:menu-rounded" />
           </div>
