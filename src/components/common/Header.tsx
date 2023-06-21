@@ -2,10 +2,11 @@ import doSignOut from "@/firebase/auth/signOut";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 
 const Header = () => {
+  const [mounted, setMounted] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
 
   const router = useRouter();
@@ -20,6 +21,11 @@ const Header = () => {
     setShowSidebar(false);
   };
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return;
   if (isMobile)
     return (
       <div>
