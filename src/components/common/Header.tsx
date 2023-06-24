@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "react-responsive";
+import Loading from "./Loading";
 
 const Header = () => {
   const [mounted, setMounted] = useState(false);
@@ -40,7 +41,7 @@ const Header = () => {
     setMounted(true);
   }, []);
 
-  if (!mounted) return;
+  if (!mounted) return <></>;
   if (isMobile)
     return (
       <div>
