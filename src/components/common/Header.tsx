@@ -8,8 +8,10 @@ import { useMediaQuery } from "react-responsive";
 const Header = () => {
   const [mounted, setMounted] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const sidebarRef = useRef<HTMLInputElement>(null);
+  const profileMenuRef = useRef<HTMLInputElement>(null);
 
   const router = useRouter();
   const isMobile = useMediaQuery({
@@ -22,10 +24,16 @@ const Header = () => {
   const closeSidebar = () => {
     setShowSidebar(false);
   };
+  const controllProfileMenu = () => {
+    setShowProfileMenu((c) => !c);
+  };
 
   const onClickOutSide = (e: any) => {
     if (showSidebar && sidebarRef.current && !sidebarRef.current.contains(e.target)) {
       closeSidebar();
+    }
+    if (showProfileMenu && profileMenuRef.current && !profileMenuRef.current.contains(e.target)) {
+      controllProfileMenu();
     }
   };
 
@@ -102,18 +110,23 @@ const Header = () => {
         </div>
       </div>
       <div className="flex items-center">
-        <div className="relative flex  font-semibold text-[18px] mr-[30px]">
-          <div className="cursor-pointer">프로필</div>
-          <div className="absolute top-[30px] left-[-12px] w-[80px] h-[60px] text-center font-normal text-[15px] bg-white rounded-[6px] shadow-basic p-[3px]">
-            <div
-              onClick={() => {
-                doSignOut();
-                router.replace("/login");
-              }}
-            >
-              로그아웃
-            </div>
+        <div ref={profileMenuRef} className="relative flex  font-semibold text-[18px] mr-[30px]">
+          <div className="cursor-pointer" onClick={controllProfileMenu}>
+            프로필
           </div>
+          {showProfileMenu ? (
+            <div className="absolute top-[30px] left-[-12px] w-[80px] h-[60px] text-center font-normal text-[15px] bg-white rounded-[6px] shadow-basic p-[3px]">
+              <div
+                className="cursor-pointer"
+                onClick={() => {
+                  doSignOut();
+                  router.replace("/login");
+                }}
+              >
+                로그아웃
+              </div>
+            </div>
+          ) : null}
         </div>
         <div className="flex justify-center items-center w-[65px] h-[40px] font-medium text-[16px] text-white rounded-[5px] bg-bc">
           <Link href="/create">생성</Link>
