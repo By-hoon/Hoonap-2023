@@ -4,13 +4,12 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "react-responsive";
-import Loading from "./Loading";
 
 const Header = () => {
   const [mounted, setMounted] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
 
-  const headerRef = useRef<HTMLInputElement>(null);
+  const sidebarRef = useRef<HTMLInputElement>(null);
 
   const router = useRouter();
   const isMobile = useMediaQuery({
@@ -25,7 +24,7 @@ const Header = () => {
   };
 
   const onClickOutSide = (e: any) => {
-    if (showSidebar && headerRef.current && !headerRef.current.contains(e.target)) {
+    if (showSidebar && sidebarRef.current && !sidebarRef.current.contains(e.target)) {
       closeSidebar();
     }
   };
@@ -45,7 +44,7 @@ const Header = () => {
   if (isMobile)
     return (
       <div>
-        <div ref={headerRef}>
+        <div ref={sidebarRef}>
           <div onClick={openSidebar}>
             <Icon icon="material-symbols:menu-rounded" />
           </div>
@@ -87,28 +86,38 @@ const Header = () => {
     );
 
   return (
-    <div>
-      <div>
-        <Link href="/">Hoonap</Link>
-      </div>
-      <div>
-        <div>
-          <Link href="/story/list">스토리</Link>
+    <div className="flex justify-between w-100% max-w-[1200px] h-[70px] px-[10px] border-b-2 border-bs">
+      <div className="flex">
+        <div className="pt-[12px]">
+          <Link href="/" className="font-extrabold text-[24px]">
+            Hoonap
+          </Link>
+        </div>
+        <div className="flex items-center w-[120px] font-semibold text-[18px] ml-[20px]">
+          <div>
+            <Link href="/story/list" className="hover:text-bc">
+              스토리
+            </Link>
+          </div>
         </div>
       </div>
-      <div>
-        <div>프로필</div>
-        <div
-          onClick={() => {
-            doSignOut();
-            router.replace("/login");
-          }}
-        >
-          로그아웃
+      <div className="flex items-center">
+        <div className="relative flex  font-semibold text-[18px] mr-[30px]">
+          <div className="cursor-pointer">프로필</div>
+          <div className="absolute top-[30px] left-[-12px] w-[80px] h-[60px] text-center font-normal text-[15px] bg-white rounded-[6px] shadow-basic p-[3px]">
+            <div
+              onClick={() => {
+                doSignOut();
+                router.replace("/login");
+              }}
+            >
+              로그아웃
+            </div>
+          </div>
         </div>
-      </div>
-      <div>
-        <Link href="/create">생성</Link>
+        <div className="flex justify-center items-center w-[65px] h-[40px] font-medium text-[16px] text-white rounded-[5px] bg-bc">
+          <Link href="/create">생성</Link>
+        </div>
       </div>
     </div>
   );
