@@ -2,16 +2,14 @@ import SaveImage from "@/components/create/SaveImage";
 import SavePath from "@/components/create/SavePath";
 import { useCallback, useState } from "react";
 import Image from "next/image";
-import Title from "@/components/common/Title";
-import addData from "@/firebase/firestore/addData";
 import addFile from "@/firebase/storage/addFile";
 import deleteFile from "@/firebase/storage/deleteFile";
 import setData from "@/firebase/firestore/setData";
-import getUser from "@/firebase/auth/getUser";
 import getDocument from "@/firebase/firestore/getDocument";
 import { GetServerSidePropsContext } from "next/types";
 import checkUser from "@/firebase/auth/checkUser";
 import { useRouter } from "next/router";
+import Layout from "@/components/common/Layout";
 
 export default function Create({ uid }: { uid: string }) {
   const [part, setPart] = useState("path");
@@ -175,29 +173,31 @@ export default function Create({ uid }: { uid: string }) {
   };
 
   return (
-    <div>
-      <Title title="스토리 생성" />
-      <div>
-        <div>
-          <button onClick={() => changePart("path")}>위치</button>
-          <button onClick={() => changePart("image")}>사진</button>
-          <button onClick={() => changePart("story")}>스토리</button>
-          <Title title="입력" />
+    <Layout>
+      <div className="p-[10px]">
+        <div className="grid grid-cols-[minmax(470px,_1fr)_1fr]">
+          <div className="relative after:block after:pb-[100%]">{partRender()}</div>
+          <div className="p-[15px]">
+            <div>
+              <button onClick={() => changePart("path")}>위치</button>
+              <button onClick={() => changePart("image")}>사진</button>
+              <button onClick={() => changePart("story")}>스토리</button>
+            </div>
+            <div>
+              <button onClick={createStory}>생성</button>
+            </div>
+          </div>
         </div>
         <div>
-          <button onClick={createStory}>생성</button>
+          <button onClick={goPreviousPart} disabled={part === "path" ? true : false}>
+            이전
+          </button>
+          <button onClick={goNextPart} disabled={part === "story" ? true : false}>
+            다음
+          </button>
         </div>
       </div>
-      {partRender()}
-      <div>
-        <button onClick={goPreviousPart} disabled={part === "path" ? true : false}>
-          이전
-        </button>
-        <button onClick={goNextPart} disabled={part === "story" ? true : false}>
-          다음
-        </button>
-      </div>
-    </div>
+    </Layout>
   );
 }
 
