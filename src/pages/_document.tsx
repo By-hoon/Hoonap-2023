@@ -12,7 +12,7 @@ export default class CustomDocument extends Document {
             src={`https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.NEXT_PUBLIC_MAP_KEY}`}
           />
         </Head>
-        <body>
+        <body className="w-[100%] md:max-w-[1200px] mx-auto md:mt-[70px]">
           <Main />
         </body>
         <NextScript />
