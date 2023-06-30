@@ -10,6 +10,7 @@ import { GetServerSidePropsContext } from "next/types";
 import checkUser from "@/firebase/auth/checkUser";
 import { useRouter } from "next/router";
 import Layout from "@/components/common/Layout";
+import { Icon } from "@iconify/react";
 
 export default function Create({ uid }: { uid: string }) {
   const [part, setPart] = useState("path");
@@ -175,16 +176,36 @@ export default function Create({ uid }: { uid: string }) {
   return (
     <Layout>
       <div className="p-[10px]">
-        <div className="grid grid-cols-[minmax(470px,_1fr)_1fr]">
+        <div className="grid grid-cols-[minmax(420px,_5fr)_3fr]">
           <div className="relative after:block after:pb-[100%]">{partRender()}</div>
           <div className="p-[15px]">
-            <div>
-              <button onClick={() => changePart("path")}>위치</button>
-              <button onClick={() => changePart("image")}>사진</button>
-              <button onClick={() => changePart("story")}>스토리</button>
-            </div>
-            <div>
-              <button onClick={createStory}>생성</button>
+            <div className="flex flex-wrap content-center p-[20px] pl-[40px] h-[90%]">
+              <div className="flex w-[100%] font-semibold text-[20px] my-[10px] pl-[10px]">
+                <div className="flex items-center text-[28px] mr-[10px]">
+                  <Icon icon="bx:map" />
+                </div>
+                <button onClick={() => changePart("path")}>위치</button>
+              </div>
+              <div className="flex w-[100%] font-semibold text-[20px] my-[10px] pl-[10px]">
+                <div className="flex items-center text-[28px] mr-[10px]">
+                  <Icon icon="icon-park-outline:add-pic" />
+                </div>
+                <button onClick={() => changePart("image")}>사진</button>
+              </div>
+              <div className="flex w-[100%] font-semibold text-[20px] my-[10px] pl-[10px]">
+                <div className="flex items-center text-[28px] mr-[10px]">
+                  <Icon icon="eos-icons:content-new" />
+                </div>
+                <button onClick={() => changePart("story")}>스토리</button>
+              </div>
+              <div className="w-[100%] text-center mt-[45px]">
+                <button
+                  className="text-[19px] font-semibold bg-bc text-white px-[38px] py-[15px] rounded-[12px]"
+                  onClick={createStory}
+                >
+                  스토리 생성
+                </button>
+              </div>
             </div>
           </div>
         </div>
