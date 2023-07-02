@@ -180,23 +180,44 @@ export default function Create({ uid }: { uid: string }) {
           <div className="relative after:block after:pb-[100%]">{partRender()}</div>
           <div className="p-[15px]">
             <div className="flex flex-wrap content-center p-[20px] pl-[40px] h-[90%]">
-              <div className="flex w-[100%] font-semibold text-[20px] my-[10px] pl-[10px]">
-                <div className="flex items-center text-[28px] mr-[10px]">
-                  <Icon icon="bx:map" />
+              <div className="flex w-[100%]">
+                <div className="flex font-semibold text-[20px] my-[10px] pl-[10px] hover:text-bc">
+                  <div className="flex items-center text-[28px] mr-[10px]">
+                    <Icon icon="bx:map" />
+                  </div>
+                  <button onClick={() => changePart("path")}>위치</button>
                 </div>
-                <button onClick={() => changePart("path")}>위치</button>
+                {paths.length !== 0 ? (
+                  <div className="flex items-center text-green-500 ml-[10px]">
+                    <Icon icon="fluent-mdl2:completed-solid" />
+                  </div>
+                ) : null}
               </div>
-              <div className="flex w-[100%] font-semibold text-[20px] my-[10px] pl-[10px]">
-                <div className="flex items-center text-[28px] mr-[10px]">
-                  <Icon icon="icon-park-outline:add-pic" />
+              <div className="flex w-[100%]">
+                <div className="flex font-semibold text-[20px] my-[10px] pl-[10px] hover:text-bc">
+                  <div className="flex items-center text-[28px] mr-[10px]">
+                    <Icon icon="icon-park-outline:add-pic" />
+                  </div>
+                  <button onClick={() => changePart("image")}>사진</button>
                 </div>
-                <button onClick={() => changePart("image")}>사진</button>
+                {images ? (
+                  <div className="flex items-center text-green-500 ml-[10px]">
+                    <Icon icon="fluent-mdl2:completed-solid" />
+                  </div>
+                ) : null}
               </div>
-              <div className="flex w-[100%] font-semibold text-[20px] my-[10px] pl-[10px]">
-                <div className="flex items-center text-[28px] mr-[10px]">
-                  <Icon icon="eos-icons:content-new" />
+              <div className="flex w-[100%]">
+                <div className="flex font-semibold text-[20px] my-[10px] pl-[10px] hover:text-bc">
+                  <div className="flex items-center text-[28px] mr-[10px]">
+                    <Icon icon="eos-icons:content-new" />
+                  </div>
+                  <button onClick={() => changePart("story")}>스토리</button>
                 </div>
-                <button onClick={() => changePart("story")}>스토리</button>
+                {story !== "" && title !== "" ? (
+                  <div className="flex items-center text-green-500 ml-[10px]">
+                    <Icon icon="fluent-mdl2:completed-solid" />
+                  </div>
+                ) : null}
               </div>
               <div className="w-[100%] text-center mt-[45px]">
                 <button
@@ -209,11 +230,11 @@ export default function Create({ uid }: { uid: string }) {
             </div>
           </div>
         </div>
-        <div>
-          <button onClick={goPreviousPart} disabled={part === "path" ? true : false}>
+        <div className="text-[20px] font-semibold text-center">
+          <button className="mx-[10px]" onClick={goPreviousPart} disabled={part === "path" ? true : false}>
             이전
           </button>
-          <button onClick={goNextPart} disabled={part === "story" ? true : false}>
+          <button className="mx-[10px]" onClick={goNextPart} disabled={part === "story" ? true : false}>
             다음
           </button>
         </div>
