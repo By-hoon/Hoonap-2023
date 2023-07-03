@@ -23,6 +23,7 @@
     "react-dom": "18.2.0",
     "react-naver-maps": "^0.1.2",
     "react-responsive": "^9.0.2",
+    "tailwind-scrollbar-hide": "^1.1.7",
     "typescript": "5.0.2"
   },
   "devDependencies": {
