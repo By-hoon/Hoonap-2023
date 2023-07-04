@@ -2,16 +2,15 @@ import SaveImage from "@/components/create/SaveImage";
 import SavePath from "@/components/create/SavePath";
 import { useCallback, useState } from "react";
 import Image from "next/image";
-import Title from "@/components/common/Title";
-import addData from "@/firebase/firestore/addData";
 import addFile from "@/firebase/storage/addFile";
 import deleteFile from "@/firebase/storage/deleteFile";
 import setData from "@/firebase/firestore/setData";
-import getUser from "@/firebase/auth/getUser";
 import getDocument from "@/firebase/firestore/getDocument";
 import { GetServerSidePropsContext } from "next/types";
 import checkUser from "@/firebase/auth/checkUser";
 import { useRouter } from "next/router";
+import Layout from "@/components/common/Layout";
+import { Icon } from "@iconify/react";
 
 export default function Create({ uid }: { uid: string }) {
   const [part, setPart] = useState("path");
@@ -27,7 +26,7 @@ export default function Create({ uid }: { uid: string }) {
     setTitle(e.target.value);
   }, []);
 
-  const changeStory = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const changeStory = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setStory(e.target.value);
   }, []);
 
@@ -135,37 +134,42 @@ export default function Create({ uid }: { uid: string }) {
       }
       case "story": {
         return (
-          <div>
-            <div>
+          <div className="absolute w-[100%] h-[100%] mx-auto my-0 p-[15px]">
+            <div className="h-[60%] p-[20px] flex flex-wrap justify-between overflow-y-scroll scrollbar-hide">
               {previewImages.map((imageUrl, index) => (
-                <figure key={index}>
+                <figure
+                  key={index}
+                  className="relative w-[150px] h-[150px] rounded-[10px] border-2 my-[10px] p-[5px]"
+                >
                   <Image
+                    className="w-[100%] h-[100%] !relative object-contain"
                     src={imageUrl}
                     alt="preview-image"
-                    width={50}
-                    height={50}
-                    style={{ width: 50, height: 50 }}
+                    fill
                   />
                 </figure>
               ))}
             </div>
-            <div>
-              <input
-                type="text"
-                value={title}
-                placeholder="게시물에게 제목을 지어주세요."
-                onChange={changeTitle}
-                required
-              />
-            </div>
-            <div>
-              <input
-                type="text"
-                value={story}
-                placeholder="사진들이 담고 있는 이야기를 들려주세요."
-                onChange={changeStory}
-                required
-              />
+            <div className="min-w-[420px] max-w-[550px] h-[40%] mx-auto my-0 p-[10px] flex flex-wrap content-between">
+              <div className="w-[100%] border-2 border-bc p-[10px] rounded-[15px]">
+                <input
+                  className="w-[100%] focus:outline-none"
+                  type="text"
+                  value={title}
+                  placeholder="게시물에게 제목을 지어주세요."
+                  onChange={changeTitle}
+                  required
+                />
+              </div>
+              <div className="w-[100%] h-[70%] border-2 border-bc p-[10px] rounded-[15px]">
+                <textarea
+                  className="w-[100%] !h-[100%] focus:outline-none resize-none"
+                  value={story}
+                  placeholder="사진들이 담고 있는 이야기를 들려주세요."
+                  onChange={changeStory}
+                  required
+                />
+              </div>
             </div>
           </div>
         );
@@ -175,29 +179,72 @@ export default function Create({ uid }: { uid: string }) {
   };
 
   return (
-    <div>
-      <Title title="스토리 생성" />
-      <div>
-        <div>
-          <button onClick={() => changePart("path")}>위치</button>
-          <button onClick={() => changePart("image")}>사진</button>
-          <button onClick={() => changePart("story")}>스토리</button>
-          <Title title="입력" />
+    <Layout>
+      <div className="p-[10px]">
+        <div className="grid grid-cols-[minmax(420px,_5fr)_3fr]">
+          <div className="relative after:block after:pb-[100%]">{partRender()}</div>
+          <div className="p-[15px]">
+            <div className="flex flex-wrap content-center p-[20px] pl-[40px] h-[90%]">
+              <div className="flex w-[100%]">
+                <div className="flex font-semibold text-[20px] my-[10px] pl-[10px] hover:text-bc">
+                  <div className="flex items-center text-[28px] mr-[10px]">
+                    <Icon icon="bx:map" />
+                  </div>
+                  <button onClick={() => changePart("path")}>위치</button>
+                </div>
+                {paths.length !== 0 ? (
+                  <div className="flex items-center text-green-500 ml-[10px]">
+                    <Icon icon="fluent-mdl2:completed-solid" />
+                  </div>
+                ) : null}
+              </div>
+              <div className="flex w-[100%]">
+                <div className="flex font-semibold text-[20px] my-[10px] pl-[10px] hover:text-bc">
+                  <div className="flex items-center text-[28px] mr-[10px]">
+                    <Icon icon="icon-park-outline:add-pic" />
+                  </div>
+                  <button onClick={() => changePart("image")}>사진</button>
+                </div>
+                {images ? (
+                  <div className="flex items-center text-green-500 ml-[10px]">
+                    <Icon icon="fluent-mdl2:completed-solid" />
+                  </div>
+                ) : null}
+              </div>
+              <div className="flex w-[100%]">
+                <div className="flex font-semibold text-[20px] my-[10px] pl-[10px] hover:text-bc">
+                  <div className="flex items-center text-[28px] mr-[10px]">
+                    <Icon icon="eos-icons:content-new" />
+                  </div>
+                  <button onClick={() => changePart("story")}>스토리</button>
+                </div>
+                {story !== "" && title !== "" ? (
+                  <div className="flex items-center text-green-500 ml-[10px]">
+                    <Icon icon="fluent-mdl2:completed-solid" />
+                  </div>
+                ) : null}
+              </div>
+              <div className="w-[100%] text-center mt-[45px]">
+                <button
+                  className="text-[19px] font-semibold bg-bc text-white px-[38px] py-[15px] rounded-[12px]"
+                  onClick={createStory}
+                >
+                  스토리 생성
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div>
-          <button onClick={createStory}>생성</button>
+        <div className="text-[20px] font-semibold text-center">
+          <button className="mx-[10px]" onClick={goPreviousPart} disabled={part === "path" ? true : false}>
+            이전
+          </button>
+          <button className="mx-[10px]" onClick={goNextPart} disabled={part === "story" ? true : false}>
+            다음
+          </button>
         </div>
       </div>
-      {partRender()}
-      <div>
-        <button onClick={goPreviousPart} disabled={part === "path" ? true : false}>
-          이전
-        </button>
-        <button onClick={goNextPart} disabled={part === "story" ? true : false}>
-          다음
-        </button>
-      </div>
-    </div>
+    </Layout>
   );
 }
 

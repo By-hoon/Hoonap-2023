@@ -54,22 +54,36 @@ const SaveImage = ({ images, setImage, previewImages, setPreviewImages }: SaveIm
   };
 
   return (
-    <div>
-      <input type="file" accept="image/*" multiple onChange={uploadImage} />
-      {previewImages.map((imageUrl, index) => (
-        <figure key={index}>
-          <Image
-            src={imageUrl}
-            alt="preview-image"
-            width={150}
-            height={150}
-            style={{ width: 150, height: 150 }}
-          />
-          <div>
-            <Icon icon="ant-design:delete-filled" onClick={() => deleteImage(index)} />
+    <div className="absolute w-[100%] h-[100%] mx-auto my-0 p-[15px]">
+      <div className="h-[85%] p-[20px] flex flex-wrap justify-between overflow-y-scroll scrollbar-hide">
+        {previewImages.map((imageUrl, index) => (
+          <figure
+            key={index}
+            className="relative w-[200px] h-[200px] rounded-[10px] border-2 my-[10px] p-[5px]"
+          >
+            <Image
+              className="w-[100%] h-[100%] !relative object-contain"
+              src={imageUrl}
+              alt="preview-image"
+              fill
+            />
+            <div
+              className="absolute top-0 left-0 flex justify-center items-center w-[100%] h-[100%] rounded-[10px] cursor-pointer"
+              onClick={() => deleteImage(index)}
+            >
+              <Icon icon="ant-design:delete-filled" className="text-[30px] text-white" />
+            </div>
+          </figure>
+        ))}
+      </div>
+      <div>
+        <label htmlFor="preview">
+          <div className="flex justify-center items-center w-[130px] h-[50px] mx-auto my-[20px] bg-bc text-white text-[18px] font-semibold rounded-[10px] cursor-pointer">
+            사진 업로드
           </div>
-        </figure>
-      ))}
+        </label>
+        <input id="preview" className="hidden" type="file" accept="image/*" multiple onChange={uploadImage} />
+      </div>
     </div>
   );
 };

@@ -12,7 +12,7 @@ interface SavePathProps {
 
 const SavePath = ({ paths, setPaths }: SavePathProps) => {
   return (
-    <div>
+    <div className="absolute w-[100%] h-[100%] mx-auto my-0 p-[15px]">
       <Map>
         <MapOption paths={paths} setPaths={setPaths} />
       </Map>
