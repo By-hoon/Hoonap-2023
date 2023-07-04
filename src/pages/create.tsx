@@ -26,7 +26,7 @@ export default function Create({ uid }: { uid: string }) {
     setTitle(e.target.value);
   }, []);
 
-  const changeStory = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const changeStory = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setStory(e.target.value);
   }, []);
 
@@ -134,37 +134,42 @@ export default function Create({ uid }: { uid: string }) {
       }
       case "story": {
         return (
-          <div>
-            <div>
+          <div className="absolute w-[100%] h-[100%] mx-auto my-0 p-[15px]">
+            <div className="h-[60%] p-[20px] flex flex-wrap justify-between overflow-y-scroll scrollbar-hide">
               {previewImages.map((imageUrl, index) => (
-                <figure key={index}>
+                <figure
+                  key={index}
+                  className="relative w-[150px] h-[150px] rounded-[10px] border-2 my-[10px] p-[5px]"
+                >
                   <Image
+                    className="w-[100%] h-[100%] !relative object-contain"
                     src={imageUrl}
                     alt="preview-image"
-                    width={50}
-                    height={50}
-                    style={{ width: 50, height: 50 }}
+                    fill
                   />
                 </figure>
               ))}
             </div>
-            <div>
-              <input
-                type="text"
-                value={title}
-                placeholder="게시물에게 제목을 지어주세요."
-                onChange={changeTitle}
-                required
-              />
-            </div>
-            <div>
-              <input
-                type="text"
-                value={story}
-                placeholder="사진들이 담고 있는 이야기를 들려주세요."
-                onChange={changeStory}
-                required
-              />
+            <div className="min-w-[420px] max-w-[550px] h-[40%] mx-auto my-0 p-[10px] flex flex-wrap content-between">
+              <div className="w-[100%] border-2 border-bc p-[10px] rounded-[15px]">
+                <input
+                  className="w-[100%] focus:outline-none"
+                  type="text"
+                  value={title}
+                  placeholder="게시물에게 제목을 지어주세요."
+                  onChange={changeTitle}
+                  required
+                />
+              </div>
+              <div className="w-[100%] h-[70%] border-2 border-bc p-[10px] rounded-[15px]">
+                <textarea
+                  className="w-[100%] !h-[100%] focus:outline-none resize-none"
+                  value={story}
+                  placeholder="사진들이 담고 있는 이야기를 들려주세요."
+                  onChange={changeStory}
+                  required
+                />
+              </div>
             </div>
           </div>
         );
