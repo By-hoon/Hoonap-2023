@@ -56,10 +56,18 @@ const List = () => {
   if (userId === "") return;
   return (
     <Layout>
-      <Map>
-        <MapOption paths={paths} setCurrentStoryId={setCurrentStoryId} />
-      </Map>
-      {currentStoryId ? <Preview currentStoryId={currentStoryId} userId={userId} /> : null}
+      <div className="p-[10px]">
+        <div className="grid grid-cols-[minmax(420px,_1fr)_1fr]">
+          <div className="relative after:block after:pb-[100%] p-[15px]">
+            <Map>
+              <MapOption paths={paths} setCurrentStoryId={setCurrentStoryId} />
+            </Map>
+          </div>
+          <div className="p-[15px]">
+            {currentStoryId ? <Preview currentStoryId={currentStoryId} userId={userId} /> : null}
+          </div>
+        </div>
+      </div>
     </Layout>
   );
 };
