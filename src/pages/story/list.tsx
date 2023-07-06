@@ -58,12 +58,14 @@ const List = () => {
     <Layout>
       <div className="p-[10px]">
         <div className="grid grid-cols-[minmax(420px,_1fr)_1fr]">
-          <div className="relative after:block after:pb-[100%] p-[15px]">
-            <Map>
-              <MapOption paths={paths} setCurrentStoryId={setCurrentStoryId} />
-            </Map>
+          <div className="relative after:block after:pb-[100%]">
+            <div className="absolute w-[100%] h-[100%] mx-auto my-0 p-[15px]">
+              <Map>
+                <MapOption paths={paths} setCurrentStoryId={setCurrentStoryId} />
+              </Map>
+            </div>
           </div>
-          <div className="p-[15px]">
+          <div className="flex items-center p-[15px]">
             {currentStoryId ? <Preview currentStoryId={currentStoryId} userId={userId} /> : null}
           </div>
         </div>

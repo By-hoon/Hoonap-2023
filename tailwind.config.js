@@ -9,6 +9,7 @@ module.exports = {
       },
       boxShadow: {
         basic: "0px 3px 10px 0px rgba(0, 0, 0, 0.3)",
+        underblue: "0px 25px 20px -15px #00a8ff, 0px 0px 10px 0px rgb(0 0 0 / 0.1)",
       },
     },
   },
