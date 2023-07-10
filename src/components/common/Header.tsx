@@ -61,6 +61,9 @@ const Header = () => {
       case "/story/list": {
         return <Title title={title.stories} />;
       }
+      case "/gallery": {
+        return <Title title={title.gallery} />;
+      }
       default:
         return null;
     }
@@ -120,10 +123,15 @@ const Header = () => {
               Hoonap
             </Link>
           </div>
-          <div className="flex items-center w-[120px] font-semibold text-[18px] ml-[20px]">
+          <div className="flex justify-between items-center w-[120px] font-semibold text-[18px] ml-[20px]">
             <div>
               <Link href="/story/list" className="hover:text-bc">
                 스토리
+              </Link>
+            </div>
+            <div>
+              <Link href="/gallery" className="hover:text-bc">
+                갤러리
               </Link>
             </div>
           </div>
