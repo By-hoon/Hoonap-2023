@@ -2,40 +2,28 @@ import doSignOut from "@/firebase/auth/signOut";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import Title from "./Title";
 import { title } from "@/shared/constants";
+import useClickOutside from "@/hooks/useClickOutside";
 
 const Header = () => {
   const [mounted, setMounted] = useState(false);
-  const [showSidebar, setShowSidebar] = useState(false);
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
-
-  const sidebarRef = useRef<HTMLInputElement>(null);
-  const profileMenuRef = useRef<HTMLInputElement>(null);
+  const { show: showSidebar, ref: sidebarRef, onClickTarget: onClickSidebar } = useClickOutside();
+  const { show: showProfileMenu, ref: profileMenuRef, onClickTarget: onClickProfileMenu } = useClickOutside();
 
   const router = useRouter();
   const isMobile = useMediaQuery({
     query: "(max-width: 768px)",
   });
 
-  const openSidebar = () => {
-    setShowSidebar(true);
-  };
-  const closeSidebar = () => {
-    setShowSidebar(false);
-  };
-  const controllProfileMenu = () => {
-    setShowProfileMenu((c) => !c);
-  };
-
   const onClickOutSide = (e: any) => {
     if (showSidebar && sidebarRef.current && !sidebarRef.current.contains(e.target)) {
-      closeSidebar();
+      onClickSidebar();
     }
     if (showProfileMenu && profileMenuRef.current && !profileMenuRef.current.contains(e.target)) {
-      controllProfileMenu();
+      onClickProfileMenu();
     }
   };
 
@@ -74,7 +62,7 @@ const Header = () => {
     return (
       <div>
         <div ref={sidebarRef}>
-          <div onClick={openSidebar}>
+          <div onClick={onClickSidebar}>
             <Icon icon="material-symbols:menu-rounded" />
           </div>
           {showSidebar ? (
@@ -82,7 +70,7 @@ const Header = () => {
               {/* 그림자 배경용 div */}
               <div>
                 <div>
-                  <Icon icon="material-symbols:close" onClick={closeSidebar} />
+                  <Icon icon="material-symbols:close" onClick={onClickSidebar} />
                 </div>
                 <div>
                   <Link href="/">Hoonap</Link>
@@ -139,7 +127,7 @@ const Header = () => {
         <div className="flex items-end font-semibold text-[18px] px-[10px] pb-[10px]">{titleRender()}</div>
         <div className="flex items-center">
           <div ref={profileMenuRef} className="relative flex  font-semibold text-[18px] mr-[30px]">
-            <div className="cursor-pointer" onClick={controllProfileMenu}>
+            <div className="cursor-pointer" onClick={onClickProfileMenu}>
               프로필
             </div>
             {showProfileMenu ? (
