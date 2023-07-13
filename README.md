@@ -20,6 +20,7 @@ src
 │   ├── common
 │   │   ├── Header.tsx
 │   │   ├── Layout.tsx
+│   │   ├── Loading.tsx
 │   │   └── Title.tsx
 │   ├── create
 │   │   ├── MapOption.tsx
@@ -52,6 +53,7 @@ src
 │   ├── adminConfig.ts
 │   └── config.ts
 └── hooks
+│   ├── useClickOutside.ts
 │   ├── useMyLocation.ts
 │   └── useUser.ts
 ├── pages
@@ -64,9 +66,12 @@ src
 │   ├── _document.tsx
 │   ├── 404.tsx
 │   ├── create.tsx
+│   ├── gallery.tsx
 │   ├── index.tsx
 │   ├── login.tsx
 │   └── signup.tsx
+└── shared
+│   └── constants.ts
 └── styles
 │   └── globals.css
 └── utils
@@ -90,6 +95,7 @@ src
   - 지도에서 다각형 클릭
   - 스토리 미리보기
 - 게시물 상세정보
+- 갤러리(이미지 목록)
 - 사용자 상세정보
 - 에러 페이지
   <br>
