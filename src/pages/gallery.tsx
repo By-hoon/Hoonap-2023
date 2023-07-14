@@ -5,10 +5,12 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Preview from "@/components/story/Preview";
+import { Icon } from "@iconify/react";
 
 const Gallery = () => {
   const [images, setImages] = useState<{ url: string; userId: string; id: string }[]>([]);
   const [current, setCurrent] = useState<{ url: string; userId: string; id: string }>();
+
   const router = useRouter();
 
   const getImageData = async () => {
@@ -39,6 +41,28 @@ const Gallery = () => {
   return (
     <Layout>
       <div>
+        {current ? (
+          <div>
+            <Icon
+              icon="ep:close-bold"
+              onClick={() => {
+                setCurrent(undefined);
+              }}
+            />
+            <figure>
+              <Image
+                src={current.url}
+                alt="preview-image"
+                width={450}
+                height={450}
+                style={{ width: 450, height: 450 }}
+              />
+            </figure>
+            <div>
+              <Preview currentStoryId={current.id} userId={current.userId} />
+            </div>
+          </div>
+        ) : null}
         <div>
           {images.map((imageObj, index) => (
             <figure key={index}>
@@ -55,22 +79,6 @@ const Gallery = () => {
             </figure>
           ))}
         </div>
-        {current ? (
-          <div className="border-2">
-            <figure>
-              <Image
-                src={current.url}
-                alt="preview-image"
-                width={450}
-                height={450}
-                style={{ width: 450, height: 450 }}
-              />
-            </figure>
-            <div>
-              <Preview currentStoryId={current.id} userId={current.userId} />
-            </div>
-          </div>
-        ) : null}
       </div>
     </Layout>
   );
