@@ -134,7 +134,7 @@ export default function Create({ uid }: { uid: string }) {
       }
       case "story": {
         return (
-          <div className="absolute w-[100%] h-[100%] mx-auto my-0 p-[15px]">
+          <div className="main-absolute">
             <div className="h-[60%] p-[20px] flex flex-wrap justify-between overflow-y-scroll scrollbar-hide">
               {previewImages.map((imageUrl, index) => (
                 <figure
@@ -182,7 +182,7 @@ export default function Create({ uid }: { uid: string }) {
     <Layout>
       <div className="p-[10px]">
         <div className="grid grid-cols-[minmax(420px,_5fr)_3fr]">
-          <div className="relative after:block after:pb-[100%]">{partRender()}</div>
+          <div className="main-relative">{partRender()}</div>
           <div className="p-[15px]">
             <div className="flex flex-wrap content-center p-[20px] pl-[40px] h-[90%]">
               <div className="flex w-[100%]">

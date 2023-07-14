@@ -58,8 +58,8 @@ const List = () => {
     <Layout>
       <div className="p-[10px]">
         <div className="grid grid-cols-[minmax(420px,_1fr)_1fr]">
-          <div className="relative after:block after:pb-[100%]">
-            <div className="absolute w-[100%] h-[100%] mx-auto my-0 p-[15px]">
+          <div className="main-relative">
+            <div className="main-absolute">
               <Map>
                 <MapOption paths={paths} setCurrentStoryId={setCurrentStoryId} />
               </Map>
