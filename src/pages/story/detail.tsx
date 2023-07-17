@@ -35,7 +35,7 @@ const StoryDetail = ({ title, story, images, userId }: StoryDetailProps) => {
 
   return (
     <Layout>
-      <div className="md:grid md:grid-cols-[1fr_300px] min-w-[300px] md:mt-[95px] md:mx-[30px] border rounded-[5px] overflow-hidden">
+      <div className="md:grid md:grid-cols-[1fr_300px] min-w-[300px] max-w-[964px] md:mt-[95px] md:mx-[30px] lg:mx-auto border rounded-[5px] overflow-hidden">
         <div className="main-relative">
           <figure className="main-absolute p-0 bg-black">
             <Image
