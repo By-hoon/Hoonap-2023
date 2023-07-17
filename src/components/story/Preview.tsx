@@ -1,7 +1,6 @@
 import getDocument from "@/firebase/firestore/getDocument";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import getUser from "@/firebase/auth/getUser";
 import Link from "next/link";
 import useUser from "@/hooks/useUser";
 
@@ -11,8 +10,6 @@ interface PreviewProps {
 }
 
 const Preview = ({ currentStoryId, userId }: PreviewProps) => {
-  const [title, setTitle] = useState("");
-  const [story, setStory] = useState("");
   const [images, setImages] = useState<string[]>([]);
   const { nickname } = useUser(userId);
 
@@ -20,8 +17,6 @@ const Preview = ({ currentStoryId, userId }: PreviewProps) => {
     const result = await getDocument("stories", currentStoryId);
     if (!result) return;
     setImages(result.images);
-    setTitle(result.title);
-    setStory(result.story);
   };
 
   useEffect(() => {
@@ -29,34 +24,35 @@ const Preview = ({ currentStoryId, userId }: PreviewProps) => {
   }, [currentStoryId]);
 
   return (
-    <div>
-      <Link
-        href={{
-          pathname: "/user/detail",
-          query: { userId: userId },
-        }}
-        as="/user/detail"
-      >
-        {nickname}
-      </Link>
-      <div>
-        <div>{title}</div>
-        <div>{story}</div>
+    <div className="w-[100%] rounded-[7px] shadow-underblue overflow-hidden">
+      <div className="h-[50px] flex items-end text-[18px]">
+        <Link
+          className="ml-[20px]"
+          href={{
+            pathname: "/user/detail",
+            query: { userId: userId },
+          }}
+          as="/user/detail"
+        >
+          {nickname}
+        </Link>
       </div>
-      <div>
+      <div className="h-[290px] flex flex-wrap overflow-y-scroll scrollbar-hide p-[5px]">
         {images.map((imageUrl, index) => (
-          <figure key={index}>
+          <figure
+            className="w-[100px] h-[100px] rounded-[5px] border-2 mx-[5px] my-[10px] p-[5px]"
+            key={index}
+          >
             <Image
               src={imageUrl}
               alt="preview-image"
-              width={150}
-              height={150}
-              style={{ width: 150, height: 150 }}
+              className="w-[100%] h-[100%] !relative object-contain"
+              fill
             />
           </figure>
         ))}
       </div>
-      <div>
+      <div className="h-[50px] flex justify-center items-center text-white font-semibold bg-bc">
         <Link
           href={{
             pathname: "/story/detail",
@@ -64,7 +60,7 @@ const Preview = ({ currentStoryId, userId }: PreviewProps) => {
           }}
           as="/story/detail"
         >
-          자세히
+          스토리 보러가기
         </Link>
       </div>
     </div>

@@ -54,7 +54,7 @@ const SaveImage = ({ images, setImage, previewImages, setPreviewImages }: SaveIm
   };
 
   return (
-    <div className="absolute w-[100%] h-[100%] mx-auto my-0 p-[15px]">
+    <div className="main-absolute">
       <div className="h-[85%] p-[20px] flex flex-wrap justify-between overflow-y-scroll scrollbar-hide">
         {previewImages.map((imageUrl, index) => (
           <figure

@@ -56,10 +56,20 @@ const List = () => {
   if (userId === "") return;
   return (
     <Layout>
-      <Map>
-        <MapOption paths={paths} setCurrentStoryId={setCurrentStoryId} />
-      </Map>
-      {currentStoryId ? <Preview currentStoryId={currentStoryId} userId={userId} /> : null}
+      <div className="p-[10px]">
+        <div className="grid grid-cols-[minmax(420px,_1fr)_1fr]">
+          <div className="main-relative">
+            <div className="main-absolute">
+              <Map>
+                <MapOption paths={paths} setCurrentStoryId={setCurrentStoryId} />
+              </Map>
+            </div>
+          </div>
+          <div className="flex items-center p-[15px]">
+            {currentStoryId ? <Preview currentStoryId={currentStoryId} userId={userId} /> : null}
+          </div>
+        </div>
+      </div>
     </Layout>
   );
 };

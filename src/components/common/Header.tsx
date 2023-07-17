@@ -103,7 +103,7 @@ const Header = () => {
     );
 
   return (
-    <div className="fixed top-0 left-0 w-[100%] h-[70px] px-[10px] border-b-2 border-bs">
+    <div className="fixed top-0 left-0 w-[100%] h-[70px] px-[10px] border-b-2 border-bs bg-white z-[100]">
       <div className="flex justify-between max-w-[1200px] h-[100%] mx-auto my-0">
         <div className="flex">
           <div className="pt-[12px]">
