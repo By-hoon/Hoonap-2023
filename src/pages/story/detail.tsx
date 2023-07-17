@@ -52,6 +52,15 @@ const StoryDetail = ({ title, story, images, userId }: StoryDetailProps) => {
                 <Icon icon="icon-park-solid:right-c" />
               </figcaption>
             </div>
+            <div className="absolute bottom-[10px] left-0 w-full z-20 flex justify-center">
+              {images.map((image, index) => (
+                <div
+                  key={image}
+                  className={`w-[8px] h-[8px] bg-white rounded-[50%] mx-[2px]
+                  ${currentIndex === index ? "opacity-100" : "opacity-40"}`}
+                />
+              ))}
+            </div>
           </figure>
         </div>
         <div>
