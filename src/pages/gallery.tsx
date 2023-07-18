@@ -40,38 +40,43 @@ const Gallery = () => {
 
   return (
     <Layout>
-      <div>
+      <div className="p-[10px]">
         {current ? (
-          <div>
-            <Icon
-              icon="ep:close-bold"
-              onClick={() => {
-                setCurrent(undefined);
-              }}
-            />
-            <figure>
-              <Image
-                src={current.url}
-                alt="preview-image"
-                width={450}
-                height={450}
-                style={{ width: 450, height: 450 }}
+          <div className="relative grid grid-cols-[minmax(420px,_1fr)_1fr]">
+            <div className="absolute top-0 right-0">
+              <Icon
+                icon="ep:close-bold"
+                onClick={() => {
+                  setCurrent(undefined);
+                }}
               />
-            </figure>
-            <div>
+            </div>
+            <div className="main-relative">
+              <figure className="main-absolute">
+                <Image
+                  src={current.url}
+                  alt="preview-image"
+                  className="w-full h-full !relative object-contain"
+                  fill
+                />
+              </figure>
+            </div>
+            <div className="flex items-center p-[15px]">
               <Preview currentStoryId={current.id} userId={current.userId} />
             </div>
           </div>
         ) : null}
-        <div>
+        <div
+          className={`flex items-center p-[15px] 
+          ${current ? "h-[200px] overflow-y-scroll scrollbar-hide" : ""}`}
+        >
           {images.map((imageObj, index) => (
-            <figure key={index}>
+            <figure className="w-[150px] h-[150px] mx-[10px] rounded-[8px] overflow-hidden" key={index}>
               <Image
                 src={imageObj.url}
                 alt="preview-image"
-                width={150}
-                height={150}
-                style={{ width: 150, height: 150 }}
+                className="w-full h-full !relative object-contain"
+                fill
                 onClick={() => {
                   setCurrent(imageObj);
                 }}
