@@ -1,18 +1,19 @@
 import { convertToLatLng } from "@/utils/util";
-import { Dispatch, SetStateAction } from "react";
-import { Listener, Polygon } from "react-naver-maps";
+import { Polygon, useNavermaps } from "react-naver-maps";
 
 interface MapOptionProps {
   paths: [{ latitude: number; longitude: number }[]];
 }
 
 export default function MapOption({ paths }: MapOptionProps) {
+  const navermaps = useNavermaps();
+
   return (
     <>
       {paths.map((path, index) => (
         <Polygon
           key={index}
-          paths={[convertToLatLng(path)]}
+          paths={[convertToLatLng(navermaps, path)]}
           fillColor="#ff0000"
           fillOpacity={0.3}
           strokeColor="#ff0000"

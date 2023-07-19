@@ -29,7 +29,7 @@ export default function MapOption({ paths, setPaths }: MapOptionProps) {
         listener={(e) => addPaths({ latitude: e.coord.lat(), longitude: e.coord.lng() })}
       />
       <Polygon
-        paths={[convertToLatLng(paths)]}
+        paths={[convertToLatLng(navermaps, paths)]}
         fillColor="#ff0000"
         fillOpacity={0.3}
         strokeColor="#ff0000"
