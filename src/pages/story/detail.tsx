@@ -1,22 +1,43 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import getDocument from "@/firebase/firestore/getDocument";
-import { GetServerSidePropsContext } from "next";
 import Link from "next/link";
-import useUser from "@/hooks/useUser";
 import Layout from "@/components/common/Layout";
 import { Icon } from "@iconify/react";
+import { useRouter } from "next/router";
 
-interface StoryDetailProps {
-  title: string;
-  story: string;
-  images: string[];
-  userId: string;
-}
-
-const StoryDetail = ({ title, story, images, userId }: StoryDetailProps) => {
+const StoryDetail = () => {
+  const [title, setTitle] = useState("");
+  const [story, setStory] = useState("");
+  const [images, setImages] = useState<string[]>([]);
+  const [userId, setUserId] = useState("");
+  const [nickname, setNickname] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { nickname } = useUser(userId);
+
+  const router = useRouter();
+  const { storyId } = router.query;
+
+  const getStories = async () => {
+    const result = await getDocument("stories", storyId as string);
+
+    if (!result) return;
+
+    setTitle(result.title);
+    setStory(result.story);
+    setImages(result.images);
+    setUserId(result.userId);
+
+    getUserNickname(result.userId);
+  };
+
+  const getUserNickname = async (userId: string) => {
+    const result = await getDocument("users", userId);
+    if (!result) {
+      setNickname("unknown");
+      return;
+    }
+    setNickname(result.nickname);
+  };
 
   const preImage = () => {
     if (currentIndex === 0) {
@@ -33,17 +54,23 @@ const StoryDetail = ({ title, story, images, userId }: StoryDetailProps) => {
     setCurrentIndex((c) => c + 1);
   };
 
+  useEffect(() => {
+    getStories();
+  }, []);
+
   return (
     <Layout>
       <div className="md:grid md:grid-cols-[1fr_300px] min-w-[300px] max-w-[964px] md:mt-[95px] md:mx-[30px] lg:mx-auto border rounded-[5px] overflow-hidden">
         <div className="main-relative">
           <figure className="main-absolute p-0 bg-black">
-            <Image
-              src={images[currentIndex]}
-              alt="detail-image"
-              className="w-full h-full !relative object-contain"
-              fill
-            />
+            {images.length !== 0 ? (
+              <Image
+                src={images[currentIndex]}
+                alt="detail-image"
+                className="w-full h-full !relative object-contain"
+                fill
+              />
+            ) : null}
             {images.length > 1 ? (
               <div>
                 <div className="flex justify-between w-full absolute top-[50%] left-[0] translate-y-[-50%] text-[28px] text-white opacity-60 px-[10px]">
@@ -92,13 +119,3 @@ const StoryDetail = ({ title, story, images, userId }: StoryDetailProps) => {
 };
 
 export default StoryDetail;
-
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const storyId = context.query.storyId as string;
-  const result = await getDocument("stories", storyId);
-  if (!result) return { notFound: true };
-
-  return {
-    props: { title: result.title, story: result.story, images: result.images, userId: result.userId },
-  };
-};
