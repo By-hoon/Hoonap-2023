@@ -25,8 +25,8 @@ export default function Home({ loggedIn, uid }: { loggedIn: boolean; uid: string
 
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
+      setLoading(true);
       if (user) {
-        setLoading(true);
         setIsLoggedIn(true);
       }
     });
