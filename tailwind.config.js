@@ -5,6 +5,8 @@ module.exports = {
     extend: {
       colors: {
         bc: "#00a8ff",
+        bcd: "#0086cc",
+        bcvl: "#f0f9ff",
         bs: "#7f8fa6",
       },
       boxShadow: {
