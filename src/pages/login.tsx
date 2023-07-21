@@ -34,7 +34,7 @@ const Login = () => {
         <div className="mb-[20px] px-[10px]">
           <div className="text-[20px]">아이디</div>
           <input
-            className="w-full my-[5px] pt-[10px] pb-[15px] outline-0 border-b border-bs focus:border-bc focus:bg-bcvl"
+            className="input-templete"
             type="text"
             value={email}
             placeholder="아이디를 입력해 주세요"
@@ -45,7 +45,7 @@ const Login = () => {
         <div className="mb-[20px] px-[10px]">
           <div className="text-[20px]">비밀번호</div>
           <input
-            className="w-full my-[5px] pt-[10px] pb-[15px] outline-0 border-b border-bs focus:border-bc focus:bg-bcvl"
+            className="input-templete"
             type="password"
             value={password}
             placeholder="비밀번호를 입력해 주세요"
@@ -55,11 +55,7 @@ const Login = () => {
         </div>
         <div className="text-center mb-[20px]">
           <div>
-            <input
-              className="cursor-pointer text-[16px] text-white bg-bc rounded-[4px] px-[16px] py-[9px] hover:bg-bcd"
-              type="submit"
-              value="로그인"
-            />
+            <input className="submit-button" type="submit" value="로그인" />
           </div>
           <div className="text-[17px] mt-[10px] hover:text-bcd">
             <button onClick={goSignUp}>아직 회원이 아니신가요? →</button>
