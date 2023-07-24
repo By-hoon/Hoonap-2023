@@ -40,13 +40,14 @@ const Preview = ({ currentStoryId, userId }: PreviewProps) => {
       <div className="h-[290px] flex flex-wrap overflow-y-scroll scrollbar-hide p-[5px]">
         {images.map((imageUrl, index) => (
           <figure
-            className="w-[100px] h-[100px] rounded-[5px] border-2 mx-[5px] my-[10px] p-[5px]"
+            className="relative w-[100px] h-[100px] rounded-[5px] border-2 mx-[5px] my-[10px] p-[5px]"
             key={index}
           >
             <Image
               src={imageUrl}
               alt="preview-image"
-              className="w-[100%] h-[100%] !relative object-contain"
+              className="!relative object-contain"
+              sizes="(max-width: 768px) 50vw, 100vw"
               fill
             />
           </figure>

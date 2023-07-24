@@ -67,7 +67,8 @@ const StoryDetail = () => {
               <Image
                 src={images[currentIndex]}
                 alt="detail-image"
-                className="w-full h-full !relative object-contain"
+                className="!relative object-contain"
+                sizes="(max-width: 768px) 50vw, 100vw"
                 fill
               />
             ) : null}

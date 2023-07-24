@@ -56,7 +56,8 @@ const Gallery = () => {
                 <Image
                   src={current.url}
                   alt="preview-image"
-                  className="w-full h-full !relative object-contain"
+                  className="!relative object-contain"
+                  sizes="(max-width: 768px) 50vw, 100vw"
                   fill
                 />
               </figure>
@@ -71,11 +72,15 @@ const Gallery = () => {
           ${current ? "h-[200px] overflow-y-scroll scrollbar-hide" : ""}`}
         >
           {images.map((imageObj, index) => (
-            <figure className="w-[150px] h-[150px] mx-[10px] rounded-[8px] overflow-hidden" key={index}>
+            <figure
+              className="relative w-[150px] h-[150px] mx-[10px] rounded-[8px] overflow-hidden"
+              key={index}
+            >
               <Image
                 src={imageObj.url}
                 alt="preview-image"
-                className="w-full h-full !relative object-contain"
+                className="!relative object-contain"
+                sizes="(max-width: 768px) 50vw, 100vw"
                 fill
                 onClick={() => {
                   setCurrent(imageObj);

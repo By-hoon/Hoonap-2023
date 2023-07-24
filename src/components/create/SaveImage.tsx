@@ -62,9 +62,10 @@ const SaveImage = ({ images, setImage, previewImages, setPreviewImages }: SaveIm
             className="relative w-[200px] h-[200px] rounded-[10px] border-2 my-[10px] p-[5px]"
           >
             <Image
-              className="w-[100%] h-[100%] !relative object-contain"
+              className="!relative object-contain"
               src={imageUrl}
               alt="preview-image"
+              sizes="(max-width: 768px) 50vw, 100vw"
               fill
             />
             <div

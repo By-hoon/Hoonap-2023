@@ -142,9 +142,10 @@ export default function Create({ uid }: { uid: string }) {
                   className="relative w-[150px] h-[150px] rounded-[10px] border-2 my-[10px] p-[5px]"
                 >
                   <Image
-                    className="w-[100%] h-[100%] !relative object-contain"
+                    className="!relative object-contain"
                     src={imageUrl}
                     alt="preview-image"
+                    sizes="(max-width: 768px) 50vw, 100vw"
                     fill
                   />
                 </figure>
