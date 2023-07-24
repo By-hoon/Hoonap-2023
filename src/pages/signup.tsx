@@ -36,7 +36,7 @@ const Signup = () => {
 
   return (
     <div className="max-w-[425px] min-w-[320px] mx-auto p-[5px]">
-      <Title title="회원가입" />
+<div className="text-[24px] text-bc px-[10px] py-[7px] mb-[40px] border-b border-bs">회원가입</div>
       <form onSubmit={trySignUp}>
         <div className="mb-[20px] px-[10px]">
           <div className="text-[20px]">아이디</div>
