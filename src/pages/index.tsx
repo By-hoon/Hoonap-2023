@@ -7,6 +7,7 @@ import signIn from "@/firebase/auth/signIn";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { isExp } from "@/utils/util";
 
 export default function Home({ loggedIn, uid }: { loggedIn: boolean; uid: string }) {
   const [isLoggedIn, setIsLoggedIn] = useState(loggedIn);
@@ -15,7 +16,10 @@ export default function Home({ loggedIn, uid }: { loggedIn: boolean; uid: string
   const router = useRouter();
 
   const tryLoginTestAccount = async () => {
-    const result = await signIn("test@test.com", "test123");
+    const result = await signIn(
+      `${process.env.NEXT_PUBLIC_EXPERIENCE_AUTH_ID}`,
+      `${process.env.NEXT_PUBLIC_EXPERIENCE_AUTH_PASSWORD}`
+    );
     if (!result) return;
     router.replace("/");
   };
@@ -33,6 +37,13 @@ export default function Home({ loggedIn, uid }: { loggedIn: boolean; uid: string
   }, []);
 
   if (!loading) return <></>;
+
+  if (isExp(uid))
+    return (
+      <Layout>
+        <div>체험 안내사항</div>
+      </Layout>
+    );
 
   if (!isLoggedIn)
     return (
