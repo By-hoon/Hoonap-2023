@@ -28,6 +28,11 @@ const List = () => {
     if (!usersResult) return console.log("user result error");
 
     const pathObjects: pathObjects = [];
+
+    if (!usersResult.storyIds) {
+      alert("게시된 스토리가 없습니다.");
+      return;
+    }
     const promises = usersResult.storyIds.map(async (storyId: string) => {
       const pathsResult = await getDocument("paths", storyId);
       if (!pathsResult) return;
