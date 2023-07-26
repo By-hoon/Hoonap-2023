@@ -11,6 +11,7 @@ import checkUser from "@/firebase/auth/checkUser";
 import { useRouter } from "next/router";
 import Layout from "@/components/common/Layout";
 import { Icon } from "@iconify/react";
+import { isExp } from "@/utils/util";
 
 export default function Create({ uid }: { uid: string }) {
   const [part, setPart] = useState("path");
@@ -85,14 +86,33 @@ export default function Create({ uid }: { uid: string }) {
     return await setData("users", uid, userData);
   };
 
+  const createExpStory = (storyId: string) => {
+    const expData = {
+      paths,
+      images: previewImages,
+      title,
+      story,
+      userId: uid,
+      storyId,
+    };
+    const expDataString = JSON.stringify(expData);
+    window.localStorage.setItem("story", expDataString);
+    router.push("/story/list");
+  };
+
   const createStory = async () => {
     if (paths.length === 0 || !images || title === "" || story === "") return;
+
+    const storyId = crypto.randomUUID();
+
+    if (isExp(uid)) {
+      createExpStory(storyId);
+      return;
+    }
 
     const fileUrls = await addFiles(images);
 
     if (!fileUrls) return;
-
-    const storyId = crypto.randomUUID();
 
     const storyData = {
       paths,
