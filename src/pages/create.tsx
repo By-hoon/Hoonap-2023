@@ -87,14 +87,25 @@ export default function Create({ uid }: { uid: string }) {
   };
 
   const createExpStory = (storyId: string) => {
-    const expData = {
+    const storageStory = window.localStorage.getItem("story");
+
+    const expData = storageStory ? [...JSON.parse(storageStory)] : [];
+
+    if (expData.length >= 3) {
+      alert("체험 계정은 3개까지만 스토리 등록이 가능합니다.");
+      router.push("/story/list");
+      return;
+    }
+
+    expData.push({
       paths,
       images: previewImages,
       title,
       story,
       userId: uid,
       storyId,
-    };
+    });
+
     const expDataString = JSON.stringify(expData);
     window.localStorage.setItem("story", expDataString);
     router.push("/story/list");
