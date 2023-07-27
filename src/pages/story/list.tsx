@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/router";
 import Layout from "@/components/common/Layout";
+import { isExp } from "@/utils/util";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
@@ -23,6 +24,7 @@ const List = () => {
     const usersResult = await getDocument("users", userId);
     return usersResult ? usersResult : false;
   };
+
   const getPathData = async () => {
     const usersResult = await getUserResult();
     if (!usersResult) return console.log("user result error");
@@ -42,9 +44,31 @@ const List = () => {
     await Promise.all(promises);
     setPaths(pathObjects);
   };
+  const getExpPathData = () => {
+    const storageStory = window.localStorage.getItem("story");
+    if (!storageStory) {
+      alert("게시된 스토리가 없습니다.");
+      return;
+    }
+
+    const expData = JSON.parse(storageStory);
+    const pathObjects: pathObjects = [];
+
+    expData.forEach((story: { paths: { latitude: number; longitude: number }[]; storyId: string }) => {
+      pathObjects.push({ pathArray: story.paths, storyId: story.storyId });
+    });
+    setPaths(pathObjects);
+    return;
+  };
 
   useEffect(() => {
-    if (userId !== "") getPathData();
+    if (userId === "") return;
+
+    if (isExp(userId)) {
+      getExpPathData();
+      return;
+    }
+    getPathData();
   }, [userId]);
 
   useEffect(() => {
