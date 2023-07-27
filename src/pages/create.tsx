@@ -89,15 +89,15 @@ export default function Create({ uid }: { uid: string }) {
   const createExpStory = (storyId: string) => {
     const storageStory = window.localStorage.getItem("story");
 
-    const expData = storageStory ? [...JSON.parse(storageStory)] : [];
+    const expDatas = storageStory ? [...JSON.parse(storageStory)] : [];
 
-    if (expData.length >= 3) {
+    if (expDatas.length >= 3) {
       alert("체험 계정은 3개까지만 스토리 등록이 가능합니다.");
       router.push("/story/list");
       return;
     }
 
-    expData.push({
+    expDatas.push({
       paths,
       images: previewImages,
       title,
@@ -106,8 +106,19 @@ export default function Create({ uid }: { uid: string }) {
       storyId,
     });
 
-    const expDataString = JSON.stringify(expData);
-    window.localStorage.setItem("story", expDataString);
+    const expPaths: { paths: { latitude: number; longitude: number }[]; storyId: string }[] = [];
+    const expImages: string[][] = [];
+    expDatas.forEach((expData) => {
+      expPaths.push({
+        paths: expData.paths,
+        storyId: expData.storyId,
+      });
+      expImages.push(expData.images);
+    });
+
+    window.localStorage.setItem("story", JSON.stringify(expDatas));
+    window.localStorage.setItem("paths", JSON.stringify(expPaths));
+    window.localStorage.setItem("images", JSON.stringify(expImages));
     router.push("/story/list");
   };
 

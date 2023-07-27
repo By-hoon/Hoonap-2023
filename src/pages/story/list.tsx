@@ -45,17 +45,17 @@ const List = () => {
     setPaths(pathObjects);
   };
   const getExpPathData = () => {
-    const storageStory = window.localStorage.getItem("story");
-    if (!storageStory) {
+    const storagePaths = window.localStorage.getItem("paths");
+    if (!storagePaths) {
       alert("게시된 스토리가 없습니다.");
       return;
     }
 
-    const expData = JSON.parse(storageStory);
+    const expPaths = JSON.parse(storagePaths);
     const pathObjects: pathObjects = [];
 
-    expData.forEach((story: { paths: { latitude: number; longitude: number }[]; storyId: string }) => {
-      pathObjects.push({ pathArray: story.paths, storyId: story.storyId });
+    expPaths.forEach((expData: { paths: { latitude: number; longitude: number }[]; storyId: string }) => {
+      pathObjects.push({ pathArray: expData.paths, storyId: expData.storyId });
     });
     setPaths(pathObjects);
     return;
