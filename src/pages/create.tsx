@@ -107,13 +107,13 @@ export default function Create({ uid }: { uid: string }) {
     });
 
     const expPaths: { paths: { latitude: number; longitude: number }[]; storyId: string }[] = [];
-    const expImages: string[][] = [];
+    const expImages: { [key: string]: string[] } = {};
     expDatas.forEach((expData) => {
       expPaths.push({
         paths: expData.paths,
         storyId: expData.storyId,
       });
-      expImages.push(expData.images);
+      expImages[expData.storyId] = expData.images;
     });
 
     window.localStorage.setItem("story", JSON.stringify(expDatas));

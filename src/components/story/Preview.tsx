@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import useUser from "@/hooks/useUser";
+import { isExp } from "@/utils/util";
 
 interface PreviewProps {
   currentStoryId: string;
@@ -19,7 +20,21 @@ const Preview = ({ currentStoryId, userId }: PreviewProps) => {
     setImages(result.images);
   };
 
+  const getExpImageData = () => {
+    const storageImages = window.localStorage.getItem("images");
+    if (!storageImages) return;
+
+    const expImages = JSON.parse(storageImages);
+    setImages(expImages[currentStoryId]);
+
+    return;
+  };
+
   useEffect(() => {
+    if (isExp(userId)) {
+      getExpImageData();
+      return;
+    }
     getStory();
   }, [currentStoryId]);
 
@@ -43,6 +58,7 @@ const Preview = ({ currentStoryId, userId }: PreviewProps) => {
             className="relative w-[100px] h-[100px] rounded-[5px] border-2 mx-[5px] my-[10px] p-[5px]"
             key={index}
           >
+            {<>{console.log(imageUrl)}</>}
             <Image
               src={imageUrl}
               alt="preview-image"
