@@ -58,7 +58,6 @@ const Preview = ({ currentStoryId, userId }: PreviewProps) => {
             className="relative w-[100px] h-[100px] rounded-[5px] border-2 mx-[5px] my-[10px] p-[5px]"
             key={index}
           >
-            {<>{console.log(imageUrl)}</>}
             <Image
               src={imageUrl}
               alt="preview-image"

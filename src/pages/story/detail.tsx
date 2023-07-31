@@ -5,23 +5,47 @@ import Link from "next/link";
 import Layout from "@/components/common/Layout";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/router";
+import { DocumentData } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { isExp } from "@/utils/util";
+
+interface storyProps {
+  title: string;
+  story: string;
+  images: string[];
+  userId: string;
+}
 
 const StoryDetail = () => {
   const [title, setTitle] = useState("");
   const [story, setStory] = useState("");
   const [images, setImages] = useState<string[]>([]);
   const [userId, setUserId] = useState("");
+  const [currentUserId, setCurrentUserId] = useState("");
   const [nickname, setNickname] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const router = useRouter();
   const { storyId } = router.query;
-
-  const getStories = async () => {
+  const getStory = async () => {
     const result = await getDocument("stories", storyId as string);
 
     if (!result) return;
 
+    setStoryData(result);
+  };
+
+  const getExpStory = () => {
+    const storageStory = window.localStorage.getItem("story");
+    if (!storageStory) return;
+
+    const expStory = JSON.parse(storageStory);
+    const result: storyProps = expStory[storyId as string];
+
+    setStoryData(result);
+  };
+
+  const setStoryData = (result: storyProps | DocumentData) => {
     setTitle(result.title);
     setStory(result.story);
     setImages(result.images);
@@ -55,7 +79,24 @@ const StoryDetail = () => {
   };
 
   useEffect(() => {
-    getStories();
+    if (currentUserId === "") return;
+
+    if (isExp(currentUserId)) {
+      getExpStory();
+      return;
+    }
+    getStory();
+  }, [currentUserId]);
+
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        router.push("/login");
+        return;
+      }
+      setCurrentUserId(user.uid);
+    });
   }, []);
 
   return (
