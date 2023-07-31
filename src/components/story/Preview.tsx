@@ -21,11 +21,11 @@ const Preview = ({ currentStoryId, userId }: PreviewProps) => {
   };
 
   const getExpImageData = () => {
-    const storageImages = window.localStorage.getItem("images");
-    if (!storageImages) return;
+    const storageImage = window.localStorage.getItem("image");
+    if (!storageImage) return;
 
-    const expImages = JSON.parse(storageImages);
-    setImages(expImages[currentStoryId]);
+    const expImage = JSON.parse(storageImage);
+    setImages(expImage[currentStoryId].images);
 
     return;
   };

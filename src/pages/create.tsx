@@ -93,10 +93,14 @@ export default function Create({ uid }: { uid: string }) {
 
   const createExpStory = async (storyId: string) => {
     const storageStory = window.localStorage.getItem("story");
+    const storagePath = window.localStorage.getItem("path");
+    const storageImage = window.localStorage.getItem("image");
 
-    const expDatas = storageStory ? [...JSON.parse(storageStory)] : [];
+    const expStory = storageStory ? JSON.parse(storageStory) : {};
+    const expPath = storagePath ? JSON.parse(storagePath) : {};
+    const expImage = storageImage ? JSON.parse(storageImage) : {};
 
-    if (expDatas.length >= 3) {
+    if (Object.keys(expStory).length >= 3) {
       alert("체험 계정은 3개까지만 스토리 등록이 가능합니다.");
       router.push("/story/list");
       return;
@@ -105,28 +109,27 @@ export default function Create({ uid }: { uid: string }) {
     if (!images) return;
     const fileUrls = await addFiles(images);
 
-    expDatas.push({
+    expStory[storyId] = {
       paths,
       images: fileUrls,
       title,
       story,
       userId: uid,
       storyId,
-    });
+    };
 
-    const expPaths: { paths: { latitude: number; longitude: number }[]; storyId: string }[] = [];
-    const expImages: { [key: string]: string[] } = {};
-    expDatas.forEach((expData) => {
-      expPaths.push({
-        paths: expData.paths,
-        storyId: expData.storyId,
-      });
-      expImages[expData.storyId] = expData.images;
-    });
+    expPath[storyId] = {
+      paths,
+      storyId,
+    };
+    expImage[storyId] = {
+      images: fileUrls,
+      storyId,
+    };
 
-    window.localStorage.setItem("story", JSON.stringify(expDatas));
-    window.localStorage.setItem("paths", JSON.stringify(expPaths));
-    window.localStorage.setItem("images", JSON.stringify(expImages));
+    window.localStorage.setItem("story", JSON.stringify(expStory));
+    window.localStorage.setItem("path", JSON.stringify(expPath));
+    window.localStorage.setItem("image", JSON.stringify(expImage));
     router.push("/story/list");
   };
 
