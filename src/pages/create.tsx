@@ -57,7 +57,12 @@ export default function Create({ uid }: { uid: string }) {
     for (let i = 0; i < imagesArr.length; i++) {
       const fileName = crypto.randomUUID();
 
-      const result = await addFile(imagesArr[i], `story/${fileName}`);
+      let result: string | false = false;
+      if (isExp(uid)) {
+        result = await addFile(imagesArr[i], `exp/${fileName}`);
+      } else {
+        result = await addFile(imagesArr[i], `story/${fileName}`);
+      }
       if (!result) {
         await deleteFiles(fileUrls);
         return false;
@@ -86,7 +91,7 @@ export default function Create({ uid }: { uid: string }) {
     return await setData("users", uid, userData);
   };
 
-  const createExpStory = (storyId: string) => {
+  const createExpStory = async (storyId: string) => {
     const storageStory = window.localStorage.getItem("story");
 
     const expDatas = storageStory ? [...JSON.parse(storageStory)] : [];
@@ -97,9 +102,12 @@ export default function Create({ uid }: { uid: string }) {
       return;
     }
 
+    if (!images) return;
+    const fileUrls = await addFiles(images);
+
     expDatas.push({
       paths,
-      images: previewImages,
+      images: fileUrls,
       title,
       story,
       userId: uid,
