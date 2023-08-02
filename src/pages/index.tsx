@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { isExp } from "@/utils/util";
+import { addInfo, expInfo } from "@/shared/constants";
 
 export default function Home({ loggedIn, uid }: { loggedIn: boolean; uid: string }) {
   const [isLoggedIn, setIsLoggedIn] = useState(loggedIn);
@@ -41,7 +42,19 @@ export default function Home({ loggedIn, uid }: { loggedIn: boolean; uid: string
   if (isExp(uid))
     return (
       <Layout>
-        <div>체험 안내사항</div>
+        <div className="w-[300px] p-[10px] mx-[auto]">
+          <div className="text-[22px] font-semibold text-center my-[20px]">{addInfo.expSubtitle}</div>
+          <div>
+            {expInfo.map((info, index) => (
+              <div key={index} className="text-[17px] mt-[10px] break-keep">
+                {info}
+              </div>
+            ))}
+            <div className="text-[15px] text-white mt-[2px] px-[10px] py-[4px] bg-red-300">
+              {addInfo.expRestrict}
+            </div>
+          </div>
+        </div>
       </Layout>
     );
 
