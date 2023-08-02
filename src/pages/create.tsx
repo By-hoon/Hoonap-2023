@@ -11,6 +11,7 @@ import checkUser from "@/firebase/auth/checkUser";
 import { useRouter } from "next/router";
 import Layout from "@/components/common/Layout";
 import { Icon } from "@iconify/react";
+import { isExp } from "@/utils/util";
 
 export default function Create({ uid }: { uid: string }) {
   const [part, setPart] = useState("path");
@@ -56,7 +57,12 @@ export default function Create({ uid }: { uid: string }) {
     for (let i = 0; i < imagesArr.length; i++) {
       const fileName = crypto.randomUUID();
 
-      const result = await addFile(imagesArr[i], `story/${fileName}`);
+      let result: string | false = false;
+      if (isExp(uid)) {
+        result = await addFile(imagesArr[i], `exp/${fileName}`);
+      } else {
+        result = await addFile(imagesArr[i], `story/${fileName}`);
+      }
       if (!result) {
         await deleteFiles(fileUrls);
         return false;
@@ -85,14 +91,61 @@ export default function Create({ uid }: { uid: string }) {
     return await setData("users", uid, userData);
   };
 
+  const createExpStory = async (storyId: string) => {
+    const storageStory = window.localStorage.getItem("story");
+    const storagePath = window.localStorage.getItem("path");
+    const storageImage = window.localStorage.getItem("image");
+
+    const expStory = storageStory ? JSON.parse(storageStory) : {};
+    const expPath = storagePath ? JSON.parse(storagePath) : {};
+    const expImage = storageImage ? JSON.parse(storageImage) : {};
+
+    if (Object.keys(expStory).length >= 3) {
+      alert("체험 계정은 3개까지만 스토리 등록이 가능합니다.");
+      router.push("/story/list");
+      return;
+    }
+
+    if (!images) return;
+    const fileUrls = await addFiles(images);
+
+    expStory[storyId] = {
+      paths,
+      images: fileUrls,
+      title,
+      story,
+      userId: uid,
+      storyId,
+    };
+
+    expPath[storyId] = {
+      paths,
+      storyId,
+    };
+    expImage[storyId] = {
+      images: fileUrls,
+      storyId,
+    };
+
+    window.localStorage.setItem("story", JSON.stringify(expStory));
+    window.localStorage.setItem("path", JSON.stringify(expPath));
+    window.localStorage.setItem("image", JSON.stringify(expImage));
+    router.push("/story/list");
+  };
+
   const createStory = async () => {
     if (paths.length === 0 || !images || title === "" || story === "") return;
+
+    const storyId = crypto.randomUUID();
+
+    if (isExp(uid)) {
+      createExpStory(storyId);
+      return;
+    }
 
     const fileUrls = await addFiles(images);
 
     if (!fileUrls) return;
-
-    const storyId = crypto.randomUUID();
 
     const storyData = {
       paths,

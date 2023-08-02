@@ -6,10 +6,12 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Preview from "@/components/story/Preview";
 import { Icon } from "@iconify/react";
+import { isExp } from "@/utils/util";
 
 const Gallery = () => {
   const [images, setImages] = useState<{ url: string; userId: string; id: string }[]>([]);
   const [current, setCurrent] = useState<{ url: string; userId: string; id: string }>();
+  const [userId, setUserId] = useState("");
 
   const router = useRouter();
 
@@ -27,6 +29,34 @@ const Gallery = () => {
     setImages(newData);
   };
 
+  const getExpImageData = () => {
+    const storageImage = window.localStorage.getItem("image");
+    if (!storageImage) {
+      alert("게시된 스토리가 없습니다.");
+      return;
+    }
+
+    const expImage = JSON.parse(storageImage);
+    const imageObjects: { url: string; userId: string; id: string }[] = [];
+
+    Object.keys(expImage).forEach((key) => {
+      expImage[key].images.forEach((imageUrl: string) => {
+        imageObjects.push({ url: imageUrl, userId, id: expImage[key].storyId });
+      });
+    });
+    setImages(imageObjects);
+  };
+
+  useEffect(() => {
+    if (userId === "") return;
+
+    if (isExp(userId)) {
+      getExpImageData();
+      return;
+    }
+    getImageData();
+  }, [userId]);
+
   useEffect(() => {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
@@ -34,7 +64,7 @@ const Gallery = () => {
         router.push("/login");
         return;
       }
-      getImageData();
+      setUserId(user.uid);
     });
   }, []);
 

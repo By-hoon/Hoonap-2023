@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/router";
 import Layout from "@/components/common/Layout";
+import { isExp } from "@/utils/util";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
@@ -23,11 +24,17 @@ const List = () => {
     const usersResult = await getDocument("users", userId);
     return usersResult ? usersResult : false;
   };
+
   const getPathData = async () => {
     const usersResult = await getUserResult();
     if (!usersResult) return console.log("user result error");
 
     const pathObjects: pathObjects = [];
+
+    if (!usersResult.storyIds) {
+      alert("게시된 스토리가 없습니다.");
+      return;
+    }
     const promises = usersResult.storyIds.map(async (storyId: string) => {
       const pathsResult = await getDocument("paths", storyId);
       if (!pathsResult) return;
@@ -37,9 +44,31 @@ const List = () => {
     await Promise.all(promises);
     setPaths(pathObjects);
   };
+  const getExpPathData = () => {
+    const storagePath = window.localStorage.getItem("path");
+    if (!storagePath) {
+      alert("게시된 스토리가 없습니다.");
+      return;
+    }
+
+    const expPath = JSON.parse(storagePath);
+    const pathObjects: pathObjects = [];
+
+    Object.keys(expPath).forEach((key) => {
+      pathObjects.push({ pathArray: expPath[key].paths, storyId: expPath[key].storyId });
+    });
+    setPaths(pathObjects);
+    return;
+  };
 
   useEffect(() => {
-    if (userId !== "") getPathData();
+    if (userId === "") return;
+
+    if (isExp(userId)) {
+      getExpPathData();
+      return;
+    }
+    getPathData();
   }, [userId]);
 
   useEffect(() => {
