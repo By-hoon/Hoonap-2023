@@ -1,6 +1,3 @@
-import admin from "@/firebase/adminConfig";
-import { GetServerSidePropsContext } from "next/types";
-import nookies from "nookies";
 import Link from "next/link";
 import Layout from "@/components/common/Layout";
 import signIn from "@/firebase/auth/signIn";
@@ -10,9 +7,10 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { isExp } from "@/utils/util";
 import { addInfo, expInfo } from "@/shared/constants";
 
-export default function Home({ loggedIn, uid }: { loggedIn: boolean; uid: string }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(loggedIn);
-  const [loading, setLoading] = useState(loggedIn);
+export default function Home() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState("");
 
   const router = useRouter();
 
@@ -33,13 +31,13 @@ export default function Home({ loggedIn, uid }: { loggedIn: boolean; uid: string
       setLoading(true);
       if (user) {
         setIsLoggedIn(true);
+        setUserId(user.uid);
       }
     });
   }, []);
-
   if (!loading) return <></>;
 
-  if (isExp(uid))
+  if (isExp(userId))
     return (
       <Layout>
         <div className="w-[300px] p-[10px] mx-[auto]">
@@ -88,18 +86,3 @@ export default function Home({ loggedIn, uid }: { loggedIn: boolean; uid: string
 
   return <Layout>Home</Layout>;
 }
-
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  try {
-    const cookies = nookies.get(context);
-    const token = await admin.auth().verifyIdToken(cookies.token);
-    const { uid } = token;
-    return {
-      props: { loggedIn: true, uid },
-    };
-  } catch (error) {
-    return {
-      props: { loggedIn: false },
-    };
-  }
-};
