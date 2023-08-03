@@ -50,8 +50,15 @@ export default function Home({ loggedIn, uid }: { loggedIn: boolean; uid: string
                 {info}
               </div>
             ))}
-            <div className="text-[15px] text-white mt-[2px] px-[10px] py-[4px] bg-red-300">
-              {addInfo.expRestrict}
+            <div className="flex flex-wrap">
+              {addInfo.expRestricts.map((restrict, index) => (
+                <div
+                  key={index}
+                  className="text-[15px] text-white mx-[2px] mt-[2px] px-[10px] py-[4px] bg-red-300"
+                >
+                  {restrict}
+                </div>
+              ))}
             </div>
           </div>
         </div>

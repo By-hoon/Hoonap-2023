@@ -23,6 +23,15 @@ const Login = () => {
     router.push("/");
   };
 
+  const tryLoginTestAccount = async () => {
+    const result = await signIn(
+      `${process.env.NEXT_PUBLIC_EXPERIENCE_AUTH_ID}`,
+      `${process.env.NEXT_PUBLIC_EXPERIENCE_AUTH_PASSWORD}`
+    );
+    if (!result) return;
+    router.push("/");
+  };
+
   const goSignUp = () => {
     router.push("/signup");
   };
@@ -56,6 +65,12 @@ const Login = () => {
         <div className="text-center mb-[20px]">
           <div>
             <input className="submit-button" type="submit" value="로그인" />
+            <button
+              className="submit-button bg-gray-400 hover:bg-gray-500 mx-[7px]"
+              onClick={tryLoginTestAccount}
+            >
+              체험하기
+            </button>
           </div>
           <div className="text-[17px] mt-[10px] hover:text-bcd">
             <button onClick={goSignUp}>아직 회원이 아니신가요? →</button>
