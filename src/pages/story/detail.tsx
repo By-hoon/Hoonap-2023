@@ -9,6 +9,9 @@ import { DocumentData } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { isExp } from "@/utils/util";
 import useClickOutside from "@/hooks/useClickOutside";
+import deleteDocument from "@/firebase/firestore/deleteDocument";
+import deleteFile from "@/firebase/storage/deleteFile";
+import updateField from "@/firebase/firestore/updateField";
 
 interface storyProps {
   title: string;
@@ -79,6 +82,31 @@ const StoryDetail = () => {
       return;
     }
     setCurrentIndex((c) => c + 1);
+  };
+
+  const deleteStory = async () => {
+    await deleteDocument("stories", storyId as string);
+    await deleteDocument("paths", storyId as string);
+    await deleteDocument("images", storyId as string);
+
+    for (let i = 0; i < images.length; i++) {
+      await deleteFile(images[i]);
+    }
+
+    updateUserStoryIds();
+
+    router.push("/story/list");
+  };
+
+  const updateUserStoryIds = async () => {
+    const userData = await getDocument("users", userId);
+    if (!userData) return;
+
+    const storyIds = userData.storyIds;
+
+    const newStoryIds = storyIds.length == 1 ? null : storyIds.filter((e: string) => e != storyId);
+
+    await updateField("users", userId, "storyIds", newStoryIds);
   };
 
   useEffect(() => {
@@ -157,7 +185,16 @@ const StoryDetail = () => {
               {showMoreMenu ? (
                 <div>
                   <div className="background-shadow" onClick={onClickMoreMenu} />
-                  <div className="absolute bottom-0 right-0 w-full md:w-[300px] h-[80%] text-white font-semibold text-[20px] bg-zinc-800 rounded-[6px] p-[15px] z-20"></div>
+                  <div className="absolute bottom-0 right-0 w-full md:w-[300px] h-[80%] text-white font-semibold text-[20px] bg-zinc-800 rounded-[6px] p-[15px] z-20">
+                    {userId === currentUserId ? (
+                      <div>
+                        <div className="cursor-pointer flex items-center text-red-600" onClick={deleteStory}>
+                          <Icon className="text-[24px] mr-[5px]" icon="mingcute:delete-line" />
+                          삭제
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
                 </div>
               ) : null}
             </div>
