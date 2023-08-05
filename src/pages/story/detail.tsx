@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { DocumentData } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { isExp } from "@/utils/util";
+import useClickOutside from "@/hooks/useClickOutside";
 
 interface storyProps {
   title: string;
@@ -24,6 +25,8 @@ const StoryDetail = () => {
   const [currentUserId, setCurrentUserId] = useState("");
   const [nickname, setNickname] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const { show: showMoreMenu, ref: moreMenuRef, onClickTarget: onClickMoreMenu } = useClickOutside();
 
   const router = useRouter();
   const { storyId } = router.query;
@@ -101,7 +104,7 @@ const StoryDetail = () => {
 
   return (
     <Layout>
-      <div className="md:grid md:grid-cols-[1fr_300px] min-w-[300px] max-w-[964px] md:mt-[95px] md:mx-[30px] lg:mx-auto border rounded-[5px] overflow-hidden">
+      <div className="relative md:grid md:grid-cols-[1fr_300px] min-w-[300px] max-w-[964px] md:mt-[95px] md:mx-[30px] lg:mx-auto border rounded-[5px] overflow-hidden">
         <div className="main-relative">
           <figure className="main-absolute p-0 bg-black">
             {images.length !== 0 ? (
@@ -137,7 +140,7 @@ const StoryDetail = () => {
           </figure>
         </div>
         <div>
-          <div className="h-[60px] border-b-2 mb-[10px] px-[15px]">
+          <div className="flex justify-between h-[60px] border-b-2 mb-[10px] px-[15px]">
             <div className="h-full flex items-center text-[18px]">
               <Link
                 href={{
@@ -148,6 +151,15 @@ const StoryDetail = () => {
               >
                 {nickname}
               </Link>
+            </div>
+            <div className="flex items-center" ref={moreMenuRef}>
+              <Icon icon="ri:more-fill" className=" cursor-pointer text-[32px]" onClick={onClickMoreMenu} />
+              {showMoreMenu ? (
+                <div>
+                  <div className="background-shadow" onClick={onClickMoreMenu} />
+                  <div className="absolute bottom-0 right-0 w-full md:w-[300px] h-[80%] text-white font-semibold text-[20px] bg-zinc-800 rounded-[6px] p-[15px] z-20"></div>
+                </div>
+              ) : null}
             </div>
           </div>
           <div className="px-[15px]">

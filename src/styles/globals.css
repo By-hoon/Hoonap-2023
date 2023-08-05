@@ -16,4 +16,8 @@
   .submit-button {
     @apply cursor-pointer text-[16px] text-white bg-bc rounded-[4px] px-[16px] py-[9px] hover:bg-bcd;
   }
+
+  .background-shadow {
+    @apply absolute top-0 right-0 w-full h-full bg-zinc-800 bg-opacity-50 z-10;
+  }
 }
