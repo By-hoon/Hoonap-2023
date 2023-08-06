@@ -16,7 +16,9 @@ import updateField from "@/firebase/firestore/updateField";
 interface storyProps {
   title: string;
   story: string;
+  paths: { latitude: number; longitude: number }[];
   images: string[];
+  storyId: string;
   userId: string;
 }
 
@@ -28,6 +30,8 @@ const StoryDetail = () => {
   const [currentUserId, setCurrentUserId] = useState("");
   const [nickname, setNickname] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const [restExpStory, setRestExpStory] = useState<{ [key: string]: storyProps }>({});
 
   const { show: showMoreMenu, ref: moreMenuRef, onClickTarget: onClickMoreMenu } = useClickOutside();
 
@@ -48,7 +52,11 @@ const StoryDetail = () => {
     const expStory = JSON.parse(storageStory);
     const result: storyProps = expStory[storyId as string];
 
+    const { ...newExpStory } = expStory;
+    delete newExpStory[storyId as string];
+
     setStoryData(result);
+    setRestExpStory(newExpStory);
   };
 
   const setStoryData = (result: storyProps | DocumentData) => {
@@ -84,17 +92,51 @@ const StoryDetail = () => {
     setCurrentIndex((c) => c + 1);
   };
 
-  const deleteStory = async () => {
-    await deleteDocument("stories", storyId as string);
-    await deleteDocument("paths", storyId as string);
-    await deleteDocument("images", storyId as string);
+  const deleteExpStory = () => {
+    const restExpStories = Object.keys(restExpStory);
 
+    if (restExpStories.length === 0) {
+      window.localStorage.clear();
+      return;
+    }
+
+    const newExpPaths: {
+      [key: string]: { paths: { latitude: number; longitude: number }[]; storyId: string };
+    } = {};
+    const newExpImages: { [key: string]: { images: string[]; storyId: string } } = {};
+
+    restExpStories.forEach((key) => {
+      newExpPaths[key] = {
+        paths: restExpStory[key].paths,
+        storyId: restExpStory[key].storyId,
+      };
+      newExpImages[key] = {
+        images: restExpStory[key].images,
+        storyId: restExpStory[key].storyId,
+      };
+    });
+
+    window.localStorage.setItem("story", JSON.stringify(restExpStory));
+    window.localStorage.setItem("path", JSON.stringify(newExpPaths));
+    window.localStorage.setItem("image", JSON.stringify(newExpImages));
+  };
+
+  const deleteStory = async () => {
     for (let i = 0; i < images.length; i++) {
       await deleteFile(images[i]);
     }
 
-    updateUserStoryIds();
+    if (isExp(currentUserId)) {
+      deleteExpStory();
+    } else {
+      await deleteDocument("stories", storyId as string);
+      await deleteDocument("paths", storyId as string);
+      await deleteDocument("images", storyId as string);
 
+      updateUserStoryIds();
+    }
+
+    alert("스토리가 삭제되었습니다.");
     router.push("/story/list");
   };
 
