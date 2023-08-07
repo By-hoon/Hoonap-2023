@@ -8,11 +8,17 @@ import { useRouter } from "next/router";
 import { DocumentData } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { isExp } from "@/utils/util";
+import useClickOutside from "@/hooks/useClickOutside";
+import deleteDocument from "@/firebase/firestore/deleteDocument";
+import deleteFile from "@/firebase/storage/deleteFile";
+import updateField from "@/firebase/firestore/updateField";
 
 interface storyProps {
   title: string;
   story: string;
+  paths: { latitude: number; longitude: number }[];
   images: string[];
+  storyId: string;
   userId: string;
 }
 
@@ -24,6 +30,10 @@ const StoryDetail = () => {
   const [currentUserId, setCurrentUserId] = useState("");
   const [nickname, setNickname] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const [restExpStory, setRestExpStory] = useState<{ [key: string]: storyProps }>({});
+
+  const { show: showMoreMenu, ref: moreMenuRef, onClickTarget: onClickMoreMenu } = useClickOutside();
 
   const router = useRouter();
   const { storyId } = router.query;
@@ -42,7 +52,11 @@ const StoryDetail = () => {
     const expStory = JSON.parse(storageStory);
     const result: storyProps = expStory[storyId as string];
 
+    const { ...newExpStory } = expStory;
+    delete newExpStory[storyId as string];
+
     setStoryData(result);
+    setRestExpStory(newExpStory);
   };
 
   const setStoryData = (result: storyProps | DocumentData) => {
@@ -78,6 +92,65 @@ const StoryDetail = () => {
     setCurrentIndex((c) => c + 1);
   };
 
+  const deleteExpStory = () => {
+    const restExpStories = Object.keys(restExpStory);
+
+    if (restExpStories.length === 0) {
+      window.localStorage.clear();
+      return;
+    }
+
+    const newExpPaths: {
+      [key: string]: { paths: { latitude: number; longitude: number }[]; storyId: string };
+    } = {};
+    const newExpImages: { [key: string]: { images: string[]; storyId: string } } = {};
+
+    restExpStories.forEach((key) => {
+      newExpPaths[key] = {
+        paths: restExpStory[key].paths,
+        storyId: restExpStory[key].storyId,
+      };
+      newExpImages[key] = {
+        images: restExpStory[key].images,
+        storyId: restExpStory[key].storyId,
+      };
+    });
+
+    window.localStorage.setItem("story", JSON.stringify(restExpStory));
+    window.localStorage.setItem("path", JSON.stringify(newExpPaths));
+    window.localStorage.setItem("image", JSON.stringify(newExpImages));
+  };
+
+  const deleteStory = async () => {
+    for (let i = 0; i < images.length; i++) {
+      await deleteFile(images[i]);
+    }
+
+    if (isExp(currentUserId)) {
+      deleteExpStory();
+    } else {
+      await deleteDocument("stories", storyId as string);
+      await deleteDocument("paths", storyId as string);
+      await deleteDocument("images", storyId as string);
+
+      updateUserStoryIds();
+    }
+
+    alert("스토리가 삭제되었습니다.");
+    router.push("/story/list");
+  };
+
+  const updateUserStoryIds = async () => {
+    const userData = await getDocument("users", userId);
+    if (!userData) return;
+
+    const storyIds = userData.storyIds;
+
+    const newStoryIds = storyIds.length == 1 ? null : storyIds.filter((e: string) => e != storyId);
+
+    await updateField("users", userId, "storyIds", newStoryIds);
+  };
+
   useEffect(() => {
     if (currentUserId === "") return;
 
@@ -101,7 +174,7 @@ const StoryDetail = () => {
 
   return (
     <Layout>
-      <div className="md:grid md:grid-cols-[1fr_300px] min-w-[300px] max-w-[964px] md:mt-[95px] md:mx-[30px] lg:mx-auto border rounded-[5px] overflow-hidden">
+      <div className="relative md:grid md:grid-cols-[1fr_300px] min-w-[300px] max-w-[964px] md:mt-[95px] md:mx-[30px] lg:mx-auto border rounded-[5px] overflow-hidden">
         <div className="main-relative">
           <figure className="main-absolute p-0 bg-black">
             {images.length !== 0 ? (
@@ -137,7 +210,7 @@ const StoryDetail = () => {
           </figure>
         </div>
         <div>
-          <div className="h-[60px] border-b-2 mb-[10px] px-[15px]">
+          <div className="flex justify-between h-[60px] border-b-2 mb-[10px] px-[15px]">
             <div className="h-full flex items-center text-[18px]">
               <Link
                 href={{
@@ -148,6 +221,24 @@ const StoryDetail = () => {
               >
                 {nickname}
               </Link>
+            </div>
+            <div className="flex items-center" ref={moreMenuRef}>
+              <Icon icon="ri:more-fill" className=" cursor-pointer text-[32px]" onClick={onClickMoreMenu} />
+              {showMoreMenu ? (
+                <div>
+                  <div className="background-shadow" onClick={onClickMoreMenu} />
+                  <div className="absolute bottom-0 right-0 w-full md:w-[300px] h-[80%] text-white font-semibold text-[20px] bg-zinc-800 rounded-[6px] p-[15px] z-20">
+                    {userId === currentUserId ? (
+                      <div>
+                        <div className="cursor-pointer flex items-center text-red-600" onClick={deleteStory}>
+                          <Icon className="text-[24px] mr-[5px]" icon="mingcute:delete-line" />
+                          삭제
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+              ) : null}
             </div>
           </div>
           <div className="px-[15px]">
