@@ -2,7 +2,7 @@ import Layout from "@/components/common/Layout";
 import SaveImage from "@/components/create/SaveImage";
 import SavePath from "@/components/create/SavePath";
 import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const StoryEdit = () => {
   const router = useRouter();
@@ -15,13 +15,12 @@ const StoryEdit = () => {
     userId,
     storyId,
   } = router.query;
-  const [paths, setPaths] = useState<{ latitude: number; longitude: number }[]>(
-    JSON.parse(queryPaths as string)
-  );
+
+  const [paths, setPaths] = useState<{ latitude: number; longitude: number }[]>([]);
   const [images, setImage] = useState<FileList>();
-  const [previewImages, setPreviewImages] = useState<string[]>(queryImageUrls as string[]);
-  const [title, setTitle] = useState(queryTitle);
-  const [story, setStory] = useState(queryStory);
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
+  const [title, setTitle] = useState("");
+  const [story, setStory] = useState("");
 
   const changeTitle = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -32,6 +31,13 @@ const StoryEdit = () => {
   }, []);
 
   const editStory = async () => {};
+
+  useEffect(() => {
+    setPaths(JSON.parse(queryPaths as string));
+    setPreviewImages(queryImageUrls as string[]);
+    setTitle(queryTitle as string);
+    setStory(queryStory as string);
+  }, []);
 
   return (
     <Layout>
