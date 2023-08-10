@@ -1,8 +1,8 @@
 <h1 align="center">Hoonap-2023</h1>
 
-[Hoonap](https://github.com/By-hoon/Hoonap) 업그레이드 버전
+이전 [Hoonap](https://github.com/By-hoon/Hoonap) 프로젝트 업그레이드 버전
 
-<br>
+[Vercel 배포](https://hoonap-2023.vercel.app)
 
 > ## 사용 스택
 
@@ -44,9 +44,11 @@ src
 │   │   └── signUp.ts
 │   ├── firestore
 │   │   ├── addData.ts
+│   │   ├── deleteDocument.ts
 │   │   ├── getCollection.ts
 │   │   ├── getDocument.ts
-│   │   └── setData.ts
+│   │   ├── setData.ts
+│   │   └── updateField.ts
 │   ├── storage
 │   │   ├── addFile.ts
 │   │   └── deleteFile.ts
@@ -80,8 +82,10 @@ src
 
 <br>
 
-> ## 구현 기능 목록
+> ## 현재 구현 기능 목록
 
+일부 페이지 반응형 구현 X
+일부 페이지 스타일링 X
 <br>
 
 - 회원가입
@@ -95,7 +99,11 @@ src
   - 지도에서 다각형 클릭
   - 스토리 미리보기
 - 게시물 상세정보
+- 게시물 삭제
+
 - 갤러리(이미지 목록)
 - 사용자 상세정보
 - 에러 페이지
+
+- 체험하기
   <br>
