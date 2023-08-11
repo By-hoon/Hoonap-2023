@@ -10,8 +10,8 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { isExp } from "@/utils/util";
 import useClickOutside from "@/hooks/useClickOutside";
 import deleteDocument from "@/firebase/firestore/deleteDocument";
-import deleteFile from "@/firebase/storage/deleteFile";
 import updateField from "@/firebase/firestore/updateField";
+import { deleteFile } from "@/firebase/storage/delete";
 
 interface storyProps {
   title: string;
