@@ -1,6 +1,9 @@
 import Layout from "@/components/common/Layout";
 import SaveImage from "@/components/create/SaveImage";
 import SavePath from "@/components/create/SavePath";
+import updateField from "@/firebase/firestore/updateField";
+import { addFiles } from "@/firebase/storage/add";
+import { isExp } from "@/utils/util";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 
@@ -19,6 +22,7 @@ const StoryEdit = () => {
   const [paths, setPaths] = useState<{ latitude: number; longitude: number }[]>([]);
   const [images, setImage] = useState<FileList>();
   const [previewImages, setPreviewImages] = useState<string[]>([]);
+  const [oldImages, setOldImages] = useState<string[]>([]);
   const [title, setTitle] = useState("");
   const [story, setStory] = useState("");
 
@@ -30,13 +34,41 @@ const StoryEdit = () => {
     setStory(e.target.value);
   }, []);
 
-  const editStory = async () => {};
+  const editStory = async () => {
+    const curStoryId = storyId as string;
+    const curUserId = userId as string;
+    const imageData = [...oldImages];
+
+    if (images) {
+      const fileUrls = await addFiles(images, curUserId);
+      if (!fileUrls) return;
+
+      fileUrls.forEach((url) => {
+        imageData.push(url);
+      });
+    }
+
+    if (isExp(curUserId)) {
+      console.log("exp");
+    } else {
+      await updateField("paths", curStoryId, "paths", paths);
+      await updateField("images", curStoryId, "fileUrls", imageData);
+      await updateField("stories", curStoryId, "paths", paths);
+      await updateField("stories", curStoryId, "images", imageData);
+      await updateField("stories", curStoryId, "title", title);
+      await updateField("stories", curStoryId, "story", story);
+    }
+  };
 
   useEffect(() => {
     setPaths(JSON.parse(queryPaths as string));
-    setPreviewImages(queryImageUrls as string[]);
     setTitle(queryTitle as string);
     setStory(queryStory as string);
+
+    const stringImages = queryImageUrls as string[];
+    const newQueryImageUrls = typeof stringImages === "string" ? [stringImages] : stringImages;
+    setPreviewImages(newQueryImageUrls);
+    setOldImages(newQueryImageUrls);
   }, []);
 
   return (
@@ -49,7 +81,7 @@ const StoryEdit = () => {
           <SaveImage
             images={images}
             setImage={setImage}
-            previewImages={typeof previewImages === "string" ? [previewImages] : previewImages}
+            previewImages={previewImages}
             setPreviewImages={setPreviewImages}
           />
         </div>
