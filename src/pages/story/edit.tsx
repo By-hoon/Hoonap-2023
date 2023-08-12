@@ -6,6 +6,7 @@ import { addFiles } from "@/firebase/storage/add";
 import { isExp } from "@/utils/util";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
+import { storyProps } from "./detail";
 
 const StoryEdit = () => {
   const router = useRouter();
@@ -17,6 +18,7 @@ const StoryEdit = () => {
     paths: queryPaths,
     userId,
     storyId,
+    restExpStory: queryRestExpStory,
   } = router.query;
 
   const [paths, setPaths] = useState<{ latitude: number; longitude: number }[]>([]);
@@ -34,6 +36,63 @@ const StoryEdit = () => {
     setStory(e.target.value);
   }, []);
 
+  const ediEtxpStory = (imageData: string[]) => {
+    const curStoryId = storyId as string;
+    const curUserId = userId as string;
+
+    const newExpStory: { [key: string]: storyProps } = {};
+    const newExpPaths: {
+      [key: string]: { paths: { latitude: number; longitude: number }[]; storyId: string };
+    } = {};
+    const newExpImages: { [key: string]: { images: string[]; storyId: string } } = {};
+
+    newExpStory[curStoryId] = {
+      title,
+      story,
+      paths,
+      images: imageData,
+      storyId: curStoryId,
+      userId: curUserId,
+    };
+    newExpPaths[curStoryId] = {
+      paths,
+      storyId: curStoryId,
+    };
+    newExpImages[curStoryId] = {
+      images: imageData,
+      storyId: curStoryId,
+    };
+
+    const restExpStory = JSON.parse(queryRestExpStory as string);
+
+    const restExpStories = Object.keys(restExpStory);
+
+    if (restExpStories.length !== 0) {
+      restExpStories.forEach((key) => {
+        newExpStory[key] = {
+          title: restExpStory[key].title,
+          story: restExpStory[key].story,
+          paths: restExpStory[key].paths,
+          images: restExpStory[key].images,
+          storyId: restExpStory[key].storyId,
+          userId: restExpStory[key].userId,
+        };
+        newExpPaths[key] = {
+          paths: restExpStory[key].paths,
+          storyId: restExpStory[key].storyId,
+        };
+        newExpImages[key] = {
+          images: restExpStory[key].images,
+          storyId: restExpStory[key].storyId,
+        };
+      });
+    }
+
+    window.localStorage.setItem("story", JSON.stringify(newExpStory));
+    window.localStorage.setItem("path", JSON.stringify(newExpPaths));
+    window.localStorage.setItem("image", JSON.stringify(newExpImages));
+  };
+
   const editStory = async () => {
     const curStoryId = storyId as string;
     const curUserId = userId as string;
@@ -49,7 +108,7 @@ const StoryEdit = () => {
     }
 
     if (isExp(curUserId)) {
-      console.log("exp");
+      ediEtxpStory(imageData);
     } else {
       await updateField("paths", curStoryId, "paths", paths);
       await updateField("images", curStoryId, "fileUrls", imageData);
@@ -58,6 +117,8 @@ const StoryEdit = () => {
       await updateField("stories", curStoryId, "title", title);
       await updateField("stories", curStoryId, "story", story);
     }
+
+    router.push("/story/list");
   };
 
   useEffect(() => {

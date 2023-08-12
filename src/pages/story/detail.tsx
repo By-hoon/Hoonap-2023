@@ -13,7 +13,7 @@ import deleteDocument from "@/firebase/firestore/deleteDocument";
 import updateField from "@/firebase/firestore/updateField";
 import { deleteFile } from "@/firebase/storage/delete";
 
-interface storyProps {
+export interface storyProps {
   title: string;
   story: string;
   paths: { latitude: number; longitude: number }[];
@@ -243,6 +243,7 @@ const StoryDetail = () => {
                               paths: JSON.stringify(paths),
                               userId,
                               storyId,
+                              restExpStory: JSON.stringify(restExpStory),
                             },
                           }}
                           as="/story/edit"
