@@ -94,9 +94,20 @@ const StoryEdit = () => {
   };
 
   const editStory = async () => {
+    if (paths.length === 0 || !previewImages || title === "" || story === "") return;
+
     const curStoryId = storyId as string;
     const curUserId = userId as string;
-    const imageData = [...oldImages];
+    const imageData: string[] = [];
+
+    for (let i = 0; i < oldImages.length; i++) {
+      for (let j = 0; j < oldImages.length; j++) {
+        if (oldImages[i] === previewImages[j]) {
+          imageData.push(oldImages[i]);
+          break;
+        }
+      }
+    }
 
     if (images) {
       const fileUrls = await addFiles(images, curUserId);
