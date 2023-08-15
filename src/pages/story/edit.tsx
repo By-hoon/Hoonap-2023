@@ -7,6 +7,7 @@ import { isExp } from "@/utils/util";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { storyProps } from "./detail";
+import { deleteFile } from "@/firebase/storage/delete";
 
 const StoryEdit = () => {
   const router = useRouter();
@@ -101,12 +102,15 @@ const StoryEdit = () => {
     const imageData: string[] = [];
 
     for (let i = 0; i < oldImages.length; i++) {
+      let isDelete = true;
       for (let j = 0; j < oldImages.length; j++) {
         if (oldImages[i] === previewImages[j]) {
           imageData.push(oldImages[i]);
+          isDelete = false;
           break;
         }
       }
+      if (isDelete) deleteFile(oldImages[i]);
     }
 
     if (images) {
