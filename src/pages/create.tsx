@@ -2,8 +2,6 @@ import SaveImage from "@/components/create/SaveImage";
 import SavePath from "@/components/create/SavePath";
 import { useCallback, useState } from "react";
 import Image from "next/image";
-import addFile from "@/firebase/storage/addFile";
-import deleteFile from "@/firebase/storage/deleteFile";
 import setData from "@/firebase/firestore/setData";
 import getDocument from "@/firebase/firestore/getDocument";
 import { GetServerSidePropsContext } from "next/types";
@@ -12,6 +10,8 @@ import { useRouter } from "next/router";
 import Layout from "@/components/common/Layout";
 import { Icon } from "@iconify/react";
 import { isExp } from "@/utils/util";
+import { addFiles } from "@/firebase/storage/add";
+import { deleteFiles } from "@/firebase/storage/delete";
 
 export default function Create({ uid }: { uid: string }) {
   const [part, setPart] = useState("path");
@@ -49,35 +49,6 @@ export default function Create({ uid }: { uid: string }) {
     if (part === "image") changePart("story");
   };
 
-  const addFiles = async (files: FileList) => {
-    const fileUrls: string[] = [];
-
-    const imagesArr = [...Array.from(files)];
-
-    for (let i = 0; i < imagesArr.length; i++) {
-      const fileName = crypto.randomUUID();
-
-      let result: string | false = false;
-      if (isExp(uid)) {
-        result = await addFile(imagesArr[i], `exp/${fileName}`);
-      } else {
-        result = await addFile(imagesArr[i], `story/${fileName}`);
-      }
-      if (!result) {
-        await deleteFiles(fileUrls);
-        return false;
-      }
-      fileUrls.push(result);
-    }
-    return fileUrls;
-  };
-
-  const deleteFiles = async (fileUrls: string[]) => {
-    for (let i = 0; i < fileUrls.length; i++) {
-      await deleteFile(fileUrls[i]);
-    }
-  };
-
   const getUserData = async (userId: string, storyId: string) => {
     const userData = await getDocument("users", userId);
     if (!userData) return { storyIds: [storyId] };
@@ -107,7 +78,7 @@ export default function Create({ uid }: { uid: string }) {
     }
 
     if (!images) return;
-    const fileUrls = await addFiles(images);
+    const fileUrls = await addFiles(images, uid);
 
     expStory[storyId] = {
       paths,
@@ -143,7 +114,7 @@ export default function Create({ uid }: { uid: string }) {
       return;
     }
 
-    const fileUrls = await addFiles(images);
+    const fileUrls = await addFiles(images, uid);
 
     if (!fileUrls) return;
 

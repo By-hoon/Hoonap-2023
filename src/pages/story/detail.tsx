@@ -10,10 +10,10 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { isExp } from "@/utils/util";
 import useClickOutside from "@/hooks/useClickOutside";
 import deleteDocument from "@/firebase/firestore/deleteDocument";
-import deleteFile from "@/firebase/storage/deleteFile";
 import updateField from "@/firebase/firestore/updateField";
+import { deleteFile } from "@/firebase/storage/delete";
 
-interface storyProps {
+export interface storyProps {
   title: string;
   story: string;
   paths: { latitude: number; longitude: number }[];
@@ -26,6 +26,7 @@ const StoryDetail = () => {
   const [title, setTitle] = useState("");
   const [story, setStory] = useState("");
   const [images, setImages] = useState<string[]>([]);
+  const [paths, setPaths] = useState<{ latitude: number; longitude: number }[]>([]);
   const [userId, setUserId] = useState("");
   const [currentUserId, setCurrentUserId] = useState("");
   const [nickname, setNickname] = useState("");
@@ -63,6 +64,7 @@ const StoryDetail = () => {
     setTitle(result.title);
     setStory(result.story);
     setImages(result.images);
+    setPaths(result.paths);
     setUserId(result.userId);
 
     getUserNickname(result.userId);
@@ -227,11 +229,33 @@ const StoryDetail = () => {
               {showMoreMenu ? (
                 <div>
                   <div className="background-shadow" onClick={onClickMoreMenu} />
-                  <div className="absolute bottom-0 right-0 w-full md:w-[300px] h-[80%] text-white font-semibold text-[20px] bg-zinc-800 rounded-[6px] p-[15px] z-20">
+                  <div className="absolute bottom-0 right-0 w-full md:w-[300px] h-[80%] text-white font-semibold text-[18px] bg-zinc-800 rounded-[6px] p-[20px] z-20">
                     {userId === currentUserId ? (
                       <div>
-                        <div className="cursor-pointer flex items-center text-red-600" onClick={deleteStory}>
-                          <Icon className="text-[24px] mr-[5px]" icon="mingcute:delete-line" />
+                        <Link
+                          className="cursor-pointer flex items-center text-white mb-[20px]"
+                          href={{
+                            pathname: "/story/edit",
+                            query: {
+                              title,
+                              story,
+                              images,
+                              paths: JSON.stringify(paths),
+                              userId,
+                              storyId,
+                              restExpStory: JSON.stringify(restExpStory),
+                            },
+                          }}
+                          as="/story/edit"
+                        >
+                          <Icon className="text-[28px] mr-[8px]" icon="fluent:edit-20-regular" />
+                          수정
+                        </Link>
+                        <div
+                          className="cursor-pointer flex items-center text-red-600 mb-[20px]"
+                          onClick={deleteStory}
+                        >
+                          <Icon className="text-[28px] mr-[8px]" icon="mingcute:delete-line" />
                           삭제
                         </div>
                       </div>

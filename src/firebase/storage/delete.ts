@@ -2,7 +2,7 @@ import { getStorage, ref, deleteObject } from "firebase/storage";
 
 const storage = getStorage();
 
-export default async function deleteFile(name: string) {
+export async function deleteFile(name: string) {
   const storageRef = ref(storage, name);
 
   try {
@@ -11,3 +11,9 @@ export default async function deleteFile(name: string) {
     console.log(error);
   }
 }
+
+export const deleteFiles = async (fileUrls: string[]) => {
+  for (let i = 0; i < fileUrls.length; i++) {
+    await deleteFile(fileUrls[i]);
+  }
+};

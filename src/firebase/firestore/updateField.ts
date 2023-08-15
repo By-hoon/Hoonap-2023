@@ -12,6 +12,37 @@ export default async function updateField(name: string, id: string, field: strin
         await updateDoc(docRef, {
           storyIds: data,
         });
+        return;
+      }
+      case "paths": {
+        await updateDoc(docRef, {
+          paths: data,
+        });
+        return;
+      }
+      case "fileUrls": {
+        await updateDoc(docRef, {
+          fileUrls: data,
+        });
+        return;
+      }
+      case "images": {
+        await updateDoc(docRef, {
+          images: data,
+        });
+        return;
+      }
+      case "title": {
+        await updateDoc(docRef, {
+          title: data,
+        });
+        return;
+      }
+      case "story": {
+        await updateDoc(docRef, {
+          story: data,
+        });
+        return;
       }
     }
   } catch (error) {
