@@ -1,28 +1,52 @@
 import MapOption from "@/components/user/MapOption";
 import getDocument from "@/firebase/firestore/getDocument";
 import Image from "next/image";
-import { DocumentData } from "firebase/firestore";
-import { GetServerSidePropsContext } from "next";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import useUser from "@/hooks/useUser";
 import Layout from "@/components/common/Layout";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
 
-interface UserDetailProps {
-  paths: [{ latitude: number; longitude: number }[]];
-  images: { urls: string[]; id: string }[];
-  userId: string;
-}
+const UserDetail = () => {
+  const [paths, setPaths] = useState<[{ latitude: number; longitude: number }[]]>([[]]);
+  const [images, setImages] = useState<{ urls: string[]; id: string }[]>([]);
 
-const UserDetail = ({ paths, images, userId }: UserDetailProps) => {
-  const { nickname } = useUser(userId);
+  const router = useRouter();
+  const { userId } = router.query;
+
+  const { nickname } = useUser(userId as string);
+
+  const getUserData = async () => {
+    const userStoryResult = await getDocument("users", userId as string);
+
+    if (!userStoryResult) return;
+
+    const paths: [{ latitude: number; longitude: number }[]] = [[]];
+    const images: { urls: string[]; id: string }[] = [];
+
+    const promises = userStoryResult.storyIds.map(async (storyId: string) => {
+      const storyResult = await getDocument("stories", storyId);
+      if (!storyResult) return;
+      paths.push(storyResult.paths);
+      images.push({ urls: storyResult.images, id: storyId });
+    });
+
+    await Promise.all(promises);
+
+    setPaths(paths);
+    setImages(images);
+  };
+  useEffect(() => {
+    getUserData();
+  }, []);
 
   return (
     <Layout>
-      <div>
+      <div className="w-[300px] h-[300px]">
         <Map>
           <MapOption paths={paths} />
         </Map>
@@ -58,25 +82,3 @@ const UserDetail = ({ paths, images, userId }: UserDetailProps) => {
 };
 
 export default UserDetail;
-
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const userId = context.query.userId as string;
-  const userStoryResult = await getDocument("users", userId);
-  if (!userStoryResult) return { notFound: true };
-
-  const paths: [{ latitude: number; longitude: number }[]] = [[]];
-  const images: { urls: string[]; id: string }[] = [];
-
-  const promises = userStoryResult.storyIds.map(async (storyId: string) => {
-    const storyResult = await getDocument("stories", storyId);
-    if (!storyResult) return;
-    paths.push(storyResult.paths);
-    images.push({ urls: storyResult.images, id: storyId });
-  });
-
-  await Promise.all(promises);
-
-  return {
-    props: { paths, images, userId },
-  };
-};
