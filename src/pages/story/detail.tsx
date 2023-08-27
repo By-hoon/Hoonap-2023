@@ -6,12 +6,12 @@ import Layout from "@/components/common/Layout";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/router";
 import { DocumentData } from "firebase/firestore";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { isExp } from "@/utils/util";
 import useClickOutside from "@/hooks/useClickOutside";
 import deleteDocument from "@/firebase/firestore/deleteDocument";
 import updateField from "@/firebase/firestore/updateField";
 import { deleteFile } from "@/firebase/storage/delete";
+import { useAuth } from "@/context/authProvoider";
 
 export interface storyProps {
   title: string;
@@ -28,7 +28,6 @@ const StoryDetail = () => {
   const [images, setImages] = useState<string[]>([]);
   const [paths, setPaths] = useState<{ latitude: number; longitude: number }[]>([]);
   const [userId, setUserId] = useState("");
-  const [currentUserId, setCurrentUserId] = useState("");
   const [nickname, setNickname] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -36,39 +35,10 @@ const StoryDetail = () => {
 
   const { show: showMoreMenu, ref: moreMenuRef, onClickTarget: onClickMoreMenu } = useClickOutside();
 
+  const { user } = useAuth();
+
   const router = useRouter();
   const { storyId } = router.query;
-  const getStory = async () => {
-    const result = await getDocument("stories", storyId as string);
-
-    if (!result) return;
-
-    setStoryData(result);
-  };
-
-  const getExpStory = () => {
-    const storageStory = window.localStorage.getItem("story");
-    if (!storageStory) return;
-
-    const expStory = JSON.parse(storageStory);
-    const result: storyProps = expStory[storyId as string];
-
-    const { ...newExpStory } = expStory;
-    delete newExpStory[storyId as string];
-
-    setStoryData(result);
-    setRestExpStory(newExpStory);
-  };
-
-  const setStoryData = (result: storyProps | DocumentData) => {
-    setTitle(result.title);
-    setStory(result.story);
-    setImages(result.images);
-    setPaths(result.paths);
-    setUserId(result.userId);
-
-    getUserNickname(result.userId);
-  };
 
   const getUserNickname = async (userId: string) => {
     const result = await getDocument("users", userId);
@@ -128,7 +98,7 @@ const StoryDetail = () => {
       await deleteFile(images[i]);
     }
 
-    if (isExp(currentUserId)) {
+    if (isExp(user?.uid as string)) {
       deleteExpStory();
     } else {
       await deleteDocument("stories", storyId as string);
@@ -154,25 +124,53 @@ const StoryDetail = () => {
   };
 
   useEffect(() => {
-    if (currentUserId === "") return;
+    if (!user || !storyId) return;
 
-    if (isExp(currentUserId)) {
+    const setStoryData = (result: storyProps | DocumentData) => {
+      setTitle(result.title);
+      setStory(result.story);
+      setImages(result.images);
+      setPaths(result.paths);
+      setUserId(result.userId);
+
+      getUserNickname(result.userId);
+    };
+
+    const getStory = async () => {
+      const result = await getDocument("stories", storyId as string);
+
+      if (!result) return;
+
+      setStoryData(result);
+    };
+
+    const getExpStory = () => {
+      const storageStory = window.localStorage.getItem("story");
+      if (!storageStory) return;
+
+      const expStory = JSON.parse(storageStory);
+      const result: storyProps = expStory[storyId as string];
+
+      const { ...newExpStory } = expStory;
+      delete newExpStory[storyId as string];
+
+      setStoryData(result);
+      setRestExpStory(newExpStory);
+    };
+
+    if (isExp(user.uid)) {
       getExpStory();
       return;
     }
     getStory();
-  }, [currentUserId]);
+  }, [storyId, user]);
 
-  useEffect(() => {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        router.push("/login");
-        return;
-      }
-      setCurrentUserId(user.uid);
-    });
-  }, []);
+  if (!user)
+    return (
+      <Layout>
+        <div></div>
+      </Layout>
+    );
 
   return (
     <Layout>
@@ -230,7 +228,7 @@ const StoryDetail = () => {
                 <div>
                   <div className="background-shadow" onClick={onClickMoreMenu} />
                   <div className="absolute bottom-0 right-0 w-full md:w-[300px] h-[80%] text-white font-semibold text-[18px] bg-zinc-800 rounded-[6px] p-[20px] z-20">
-                    {userId === currentUserId ? (
+                    {userId === user.uid ? (
                       <div>
                         <Link
                           className="cursor-pointer flex items-center text-white mb-[20px]"
