@@ -15,40 +15,40 @@ const Gallery = () => {
 
   const router = useRouter();
 
-  const getImageData = async () => {
-    const result = await getCollection("images");
-    if (!result) return;
-
-    const newData: { url: string; userId: string; id: string }[] = [];
-    result.docs.forEach((doc) => {
-      const userId = doc.data().userId;
-      doc.data().fileUrls.forEach((url: string) => {
-        newData.push({ url, userId, id: doc.id });
-      });
-    });
-    setImages(newData);
-  };
-
-  const getExpImageData = () => {
-    const storageImage = window.localStorage.getItem("image");
-    if (!storageImage) {
-      alert("게시된 스토리가 없습니다.");
-      return;
-    }
-
-    const expImage = JSON.parse(storageImage);
-    const imageObjects: { url: string; userId: string; id: string }[] = [];
-
-    Object.keys(expImage).forEach((key) => {
-      expImage[key].images.forEach((imageUrl: string) => {
-        imageObjects.push({ url: imageUrl, userId, id: expImage[key].storyId });
-      });
-    });
-    setImages(imageObjects);
-  };
-
   useEffect(() => {
     if (userId === "") return;
+
+    const getImageData = async () => {
+      const result = await getCollection("images");
+      if (!result) return;
+
+      const newData: { url: string; userId: string; id: string }[] = [];
+      result.docs.forEach((doc) => {
+        const userId = doc.data().userId;
+        doc.data().fileUrls.forEach((url: string) => {
+          newData.push({ url, userId, id: doc.id });
+        });
+      });
+      setImages(newData);
+    };
+
+    const getExpImageData = () => {
+      const storageImage = window.localStorage.getItem("image");
+      if (!storageImage) {
+        alert("게시된 스토리가 없습니다.");
+        return;
+      }
+
+      const expImage = JSON.parse(storageImage);
+      const imageObjects: { url: string; userId: string; id: string }[] = [];
+
+      Object.keys(expImage).forEach((key) => {
+        expImage[key].images.forEach((imageUrl: string) => {
+          imageObjects.push({ url: imageUrl, userId, id: expImage[key].storyId });
+        });
+      });
+      setImages(imageObjects);
+    };
 
     if (isExp(userId)) {
       getExpImageData();

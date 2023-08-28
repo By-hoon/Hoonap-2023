@@ -14,29 +14,28 @@ const Preview = ({ currentStoryId, userId }: PreviewProps) => {
   const [images, setImages] = useState<string[]>([]);
   const { nickname } = useUser(userId);
 
-  const getStory = async () => {
-    const result = await getDocument("stories", currentStoryId);
-    if (!result) return;
-    setImages(result.images);
-  };
-
-  const getExpImageData = () => {
-    const storageImage = window.localStorage.getItem("image");
-    if (!storageImage) return;
-
-    const expImage = JSON.parse(storageImage);
-    setImages(expImage[currentStoryId].images);
-
-    return;
-  };
-
   useEffect(() => {
+    const getImageData = async () => {
+      const result = await getDocument("stories", currentStoryId);
+      if (!result) return;
+      setImages(result.images);
+    };
+
+    const getExpImageData = () => {
+      const storageImage = window.localStorage.getItem("image");
+      if (!storageImage) return;
+
+      const expImage = JSON.parse(storageImage);
+      setImages(expImage[currentStoryId].images);
+    };
+
     if (isExp(userId)) {
       getExpImageData();
       return;
     }
-    getStory();
-  }, [currentStoryId]);
+
+    getImageData();
+  }, [currentStoryId, userId]);
 
   return (
     <div className="w-[100%] rounded-[7px] shadow-underblue overflow-hidden">
