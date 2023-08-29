@@ -7,16 +7,17 @@ import { useEffect, useState } from "react";
 import Preview from "@/components/story/Preview";
 import { Icon } from "@iconify/react";
 import { isExp } from "@/utils/util";
+import { useAuth } from "@/context/authProvoider";
 
 const Gallery = () => {
   const [images, setImages] = useState<{ url: string; userId: string; id: string }[]>([]);
   const [current, setCurrent] = useState<{ url: string; userId: string; id: string }>();
-  const [userId, setUserId] = useState("");
 
-  const router = useRouter();
+  const { user } = useAuth();
 
   useEffect(() => {
-    if (userId === "") return;
+    if (!user) return;
+    const userId = user.uid;
 
     const getImageData = async () => {
       const result = await getCollection("images");
@@ -55,18 +56,7 @@ const Gallery = () => {
       return;
     }
     getImageData();
-  }, [userId]);
-
-  useEffect(() => {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        router.push("/login");
-        return;
-      }
-      setUserId(user.uid);
-    });
-  }, []);
+  }, [user]);
 
   return (
     <Layout>
