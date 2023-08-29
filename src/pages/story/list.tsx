@@ -3,10 +3,9 @@ import getDocument from "@/firebase/firestore/getDocument";
 import MapOption from "@/components/list/MapOption";
 import Preview from "@/components/story/Preview";
 import { useEffect, useState } from "react";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useRouter } from "next/router";
 import Layout from "@/components/common/Layout";
 import { isExp } from "@/utils/util";
+import { useAuth } from "@/context/authProvoider";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
@@ -16,73 +15,63 @@ type pathObjects = { pathArray: { latitude: number; longitude: number }[]; story
 const List = () => {
   const [currentStoryId, setCurrentStoryId] = useState<string | undefined>();
   const [paths, setPaths] = useState<pathObjects>([]);
-  const [userId, setUserId] = useState("");
 
-  const router = useRouter();
-
-  const getUserResult = async () => {
-    const usersResult = await getDocument("users", userId);
-    return usersResult ? usersResult : false;
-  };
-
-  const getPathData = async () => {
-    const usersResult = await getUserResult();
-    if (!usersResult) return console.log("user result error");
-
-    const pathObjects: pathObjects = [];
-
-    if (!usersResult.storyIds) {
-      alert("게시된 스토리가 없습니다.");
-      return;
-    }
-    const promises = usersResult.storyIds.map(async (storyId: string) => {
-      const pathsResult = await getDocument("paths", storyId);
-      if (!pathsResult) return;
-      pathObjects.push({ pathArray: pathsResult.paths, storyId });
-    });
-
-    await Promise.all(promises);
-    setPaths(pathObjects);
-  };
-  const getExpPathData = () => {
-    const storagePath = window.localStorage.getItem("path");
-    if (!storagePath) {
-      alert("게시된 스토리가 없습니다.");
-      return;
-    }
-
-    const expPath = JSON.parse(storagePath);
-    const pathObjects: pathObjects = [];
-
-    Object.keys(expPath).forEach((key) => {
-      pathObjects.push({ pathArray: expPath[key].paths, storyId: expPath[key].storyId });
-    });
-    setPaths(pathObjects);
-    return;
-  };
+  const { user } = useAuth();
 
   useEffect(() => {
-    if (userId === "") return;
+    if (!user) return;
 
-    if (isExp(userId)) {
+    const getUserResult = async () => {
+      const usersResult = await getDocument("users", user.uid);
+      return usersResult ? usersResult : false;
+    };
+
+    const getPathData = async () => {
+      const usersResult = await getUserResult();
+      if (!usersResult) return console.log("user result error");
+
+      const pathObjects: pathObjects = [];
+
+      if (!usersResult.storyIds) {
+        alert("게시된 스토리가 없습니다.");
+        return;
+      }
+      const promises = usersResult.storyIds.map(async (storyId: string) => {
+        const pathsResult = await getDocument("paths", storyId);
+        if (!pathsResult) return;
+        pathObjects.push({ pathArray: pathsResult.paths, storyId });
+      });
+
+      await Promise.all(promises);
+      setPaths(pathObjects);
+    };
+
+    const getExpPathData = () => {
+      const storagePath = window.localStorage.getItem("path");
+      if (!storagePath) {
+        alert("게시된 스토리가 없습니다.");
+        return;
+      }
+
+      const expPath = JSON.parse(storagePath);
+      const pathObjects: pathObjects = [];
+
+      Object.keys(expPath).forEach((key) => {
+        pathObjects.push({ pathArray: expPath[key].paths, storyId: expPath[key].storyId });
+      });
+      setPaths(pathObjects);
+    };
+
+    if (isExp(user.uid)) {
       getExpPathData();
       return;
     }
+
     getPathData();
-  }, [userId]);
+  }, [user]);
 
-  useEffect(() => {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        router.push("/login");
-        return;
-      }
-      setUserId(user.uid);
-    });
-  }, []);
+  if (!user) return;
 
-  if (userId === "") return;
   return (
     <Layout>
       <div className="p-[10px]">
@@ -95,7 +84,7 @@ const List = () => {
             </div>
           </div>
           <div className="flex items-center p-[15px]">
-            {currentStoryId ? <Preview currentStoryId={currentStoryId} userId={userId} /> : null}
+            {currentStoryId ? <Preview currentStoryId={currentStoryId} userId={user.uid} /> : null}
           </div>
         </div>
       </div>

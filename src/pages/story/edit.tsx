@@ -145,7 +145,7 @@ const StoryEdit = () => {
     const newQueryImageUrls = typeof stringImages === "string" ? [stringImages] : stringImages;
     setPreviewImages(newQueryImageUrls);
     setOldImages(newQueryImageUrls);
-  }, []);
+  }, [queryImageUrls, queryPaths, queryStory, queryTitle]);
 
   return (
     <Layout>
