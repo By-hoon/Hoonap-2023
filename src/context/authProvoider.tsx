@@ -2,6 +2,7 @@ import { useState, useEffect, useContext, createContext, useMemo, Dispatch } fro
 import { getAuth, User } from "firebase/auth";
 import nookies from "nookies";
 import firebase_app from "@/firebase/config";
+import Router from "next/router";
 
 const AuthContext = createContext<{ user: User | null }>({
   user: null,
@@ -15,6 +16,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (!user) {
         setUserState(null);
         nookies.set(null, "token", "", { path: "/" });
+
+        if (Router.pathname === "/") return;
+        alert("로그인이 필요한 서비스입니다.");
+        Router.push("/login");
         return;
       }
 
