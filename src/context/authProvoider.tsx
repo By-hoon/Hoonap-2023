@@ -17,7 +17,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUserState(null);
         nookies.set(null, "token", "", { path: "/" });
 
-        if (Router.pathname === "/") return;
+        const curPathname = Router.pathname;
+        if (curPathname === "/" || curPathname === "/login" || curPathname === "/signup") return;
         alert("로그인이 필요한 서비스입니다.");
         Router.push("/login");
         return;

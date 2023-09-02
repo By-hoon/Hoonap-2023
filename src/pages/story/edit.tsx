@@ -4,7 +4,7 @@ import SavePath from "@/components/create/SavePath";
 import updateField from "@/firebase/firestore/updateField";
 import { addFiles } from "@/firebase/storage/add";
 import { isExp } from "@/utils/util";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { storyProps } from "./detail";
 import { deleteFile } from "@/firebase/storage/delete";
@@ -137,6 +137,8 @@ const StoryEdit = () => {
   };
 
   useEffect(() => {
+    if (!queryPaths || !queryTitle || !queryStory || !queryImageUrls) return;
+
     setPaths(JSON.parse(queryPaths as string));
     setTitle(queryTitle as string);
     setStory(queryStory as string);
@@ -146,6 +148,13 @@ const StoryEdit = () => {
     setPreviewImages(newQueryImageUrls);
     setOldImages(newQueryImageUrls);
   }, [queryImageUrls, queryPaths, queryStory, queryTitle]);
+
+  if (!queryImageUrls)
+    return (
+      <Layout>
+        <div></div>
+      </Layout>
+    );
 
   return (
     <Layout>

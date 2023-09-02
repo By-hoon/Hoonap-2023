@@ -46,7 +46,12 @@ const UserDetail = () => {
     getUserData();
   }, [userId]);
 
-  if (!userId) return;
+  if (!userId)
+    return (
+      <Layout>
+        <div></div>
+      </Layout>
+    );
 
   return (
     <Layout>

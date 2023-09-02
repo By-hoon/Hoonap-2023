@@ -4,7 +4,7 @@ import getDocument from "@/firebase/firestore/getDocument";
 import Link from "next/link";
 import Layout from "@/components/common/Layout";
 import { Icon } from "@iconify/react";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import { DocumentData } from "firebase/firestore";
 import { isExp } from "@/utils/util";
 import useClickOutside from "@/hooks/useClickOutside";
@@ -124,7 +124,13 @@ const StoryDetail = () => {
   };
 
   useEffect(() => {
-    if (!user || !storyId) return;
+    if (!user) return;
+
+    if (!storyId) {
+      alert("스토리 정보가 없습니다.");
+      Router.push("/story/list");
+      return;
+    }
 
     const setStoryData = (result: storyProps | DocumentData) => {
       setTitle(result.title);

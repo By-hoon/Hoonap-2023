@@ -58,6 +58,13 @@ const Gallery = () => {
     getImageData();
   }, [user]);
 
+  if (!user)
+    return (
+      <Layout>
+        <div></div>
+      </Layout>
+    );
+
   return (
     <Layout>
       <div className="p-[10px]">

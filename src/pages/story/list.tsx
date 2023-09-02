@@ -70,7 +70,12 @@ const List = () => {
     getPathData();
   }, [user]);
 
-  if (!user) return;
+  if (!user)
+    return (
+      <Layout>
+        <div></div>
+      </Layout>
+    );
 
   return (
     <Layout>
