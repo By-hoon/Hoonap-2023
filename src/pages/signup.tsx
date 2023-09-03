@@ -1,4 +1,3 @@
-import Title from "@/components/common/Title";
 import signUp from "@/firebase/auth/signUp";
 import setData from "@/firebase/firestore/setData";
 import { useRouter } from "next/router";

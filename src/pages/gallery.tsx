@@ -1,8 +1,6 @@
 import Layout from "@/components/common/Layout";
 import getCollection from "@/firebase/firestore/getCollection";
 import Image from "next/image";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Preview from "@/components/story/Preview";
 import { Icon } from "@iconify/react";

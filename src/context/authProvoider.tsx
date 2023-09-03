@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, createContext, useMemo, Dispatch } from "react";
+import { useState, useEffect, useContext, createContext, useMemo } from "react";
 import { getAuth, User } from "firebase/auth";
 import nookies from "nookies";
 import firebase_app from "@/firebase/config";

@@ -4,7 +4,7 @@ import SavePath from "@/components/create/SavePath";
 import updateField from "@/firebase/firestore/updateField";
 import { addFiles } from "@/firebase/storage/add";
 import { isExp } from "@/utils/util";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { storyProps } from "./detail";
 import { deleteFile } from "@/firebase/storage/delete";
@@ -37,7 +37,7 @@ const StoryEdit = () => {
     setStory(e.target.value);
   }, []);
 
-  const ediEtxpStory = (imageData: string[]) => {
+  const editExpStory = (imageData: string[]) => {
     const curStoryId = storyId as string;
     const curUserId = userId as string;
 
@@ -123,7 +123,7 @@ const StoryEdit = () => {
     }
 
     if (isExp(curUserId)) {
-      ediEtxpStory(imageData);
+      editExpStory(imageData);
     } else {
       await updateField("paths", curStoryId, "paths", paths);
       await updateField("images", curStoryId, "fileUrls", imageData);

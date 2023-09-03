@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 

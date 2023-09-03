@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import MapOption from "./MapOption";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
