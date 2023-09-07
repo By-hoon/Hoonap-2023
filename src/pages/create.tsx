@@ -12,6 +12,7 @@ import { Icon } from "@iconify/react";
 import { isExp } from "@/utils/util";
 import { addFiles } from "@/firebase/storage/add";
 import { deleteFiles } from "@/firebase/storage/delete";
+import Button from "@/components/common/Button";
 
 export default function Create({ uid }: { uid: string }) {
   const [part, setPart] = useState("path");
@@ -215,7 +216,7 @@ export default function Create({ uid }: { uid: string }) {
                   <div className="flex items-center text-[28px] mr-[10px]">
                     <Icon icon="bx:map" />
                   </div>
-                  <button onClick={() => changePart("path")}>위치</button>
+                  <Button text="위치" style="" onClick={() => changePart("path")} />
                 </div>
                 {paths.length !== 0 ? (
                   <div className="flex items-center text-green-500 ml-[10px]">
@@ -228,7 +229,7 @@ export default function Create({ uid }: { uid: string }) {
                   <div className="flex items-center text-[28px] mr-[10px]">
                     <Icon icon="icon-park-outline:add-pic" />
                   </div>
-                  <button onClick={() => changePart("image")}>사진</button>
+                  <Button text="사진" style="" onClick={() => changePart("image")} />
                 </div>
                 {images ? (
                   <div className="flex items-center text-green-500 ml-[10px]">
@@ -241,7 +242,7 @@ export default function Create({ uid }: { uid: string }) {
                   <div className="flex items-center text-[28px] mr-[10px]">
                     <Icon icon="eos-icons:content-new" />
                   </div>
-                  <button onClick={() => changePart("story")}>스토리</button>
+                  <Button text="스토리" style="" onClick={() => changePart("story")} />
                 </div>
                 {story !== "" && title !== "" ? (
                   <div className="flex items-center text-green-500 ml-[10px]">
@@ -250,23 +251,28 @@ export default function Create({ uid }: { uid: string }) {
                 ) : null}
               </div>
               <div className="w-[100%] text-center mt-[45px]">
-                <button
-                  className="text-[19px] font-semibold bg-bc text-white px-[38px] py-[15px] rounded-[12px]"
+                <Button
+                  text="스토리 생성"
+                  style="text-[19px] font-semibold bg-bc text-white px-[38px] py-[15px] rounded-[12px]"
                   onClick={createStory}
-                >
-                  스토리 생성
-                </button>
+                />
               </div>
             </div>
           </div>
         </div>
         <div className="text-[20px] font-semibold text-center">
-          <button className="mx-[10px]" onClick={goPreviousPart} disabled={part === "path" ? true : false}>
-            이전
-          </button>
-          <button className="mx-[10px]" onClick={goNextPart} disabled={part === "story" ? true : false}>
-            다음
-          </button>
+          <Button
+            text="이전"
+            style="mx-[10px]"
+            onClick={goPreviousPart}
+            disabled={part === "path" ? true : false}
+          />
+          <Button
+            text="다음"
+            style="mx-[10px]"
+            onClick={goNextPart}
+            disabled={part === "story" ? true : false}
+          />
         </div>
       </div>
     </Layout>

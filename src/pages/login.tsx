@@ -1,3 +1,4 @@
+import Button from "@/components/common/Button";
 import signIn from "@/firebase/auth/signIn";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -63,16 +64,15 @@ const Login = () => {
         </div>
         <div className="text-center mb-[20px]">
           <div>
-            <input className="submit-button" type="submit" value="로그인" />
-            <button
-              className="submit-button bg-gray-400 hover:bg-gray-500 mx-[7px]"
+            <Button text="로그인" style="submit-button" type="submit" />
+            <Button
+              text="체험하기"
+              style="submit-button bg-gray-400 hover:bg-gray-500 mx-[7px]"
               onClick={tryLoginTestAccount}
-            >
-              체험하기
-            </button>
+            />
           </div>
           <div className="text-[17px] mt-[10px] hover:text-bcd">
-            <button onClick={goSignUp}>아직 회원이 아니신가요? →</button>
+            <Button text="아직 회원이 아니신가요? →" style="" onClick={goSignUp} />
           </div>
         </div>
       </form>
