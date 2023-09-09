@@ -7,9 +7,6 @@ import useUser from "@/hooks/useUser";
 import Layout from "@/components/common/Layout";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-const Map = dynamic(() => import("@/components/Map"), {
-  ssr: false,
-});
 
 const UserDetail = () => {
   const [paths, setPaths] = useState<[{ latitude: number; longitude: number }[]]>([[]]);
@@ -55,11 +52,6 @@ const UserDetail = () => {
 
   return (
     <Layout>
-      <div className="w-[300px] h-[300px]">
-        <Map>
-          <MapOption paths={paths} />
-        </Map>
-      </div>
       <div>
         <div>{nickname}</div>
       </div>

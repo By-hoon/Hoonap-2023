@@ -1,11 +1,11 @@
 import dynamic from "next/dynamic";
 import getDocument from "@/firebase/firestore/getDocument";
-import MapOption from "@/components/list/MapOption";
 import Preview from "@/components/story/Preview";
 import { useEffect, useState } from "react";
 import Layout from "@/components/common/Layout";
 import { isExp } from "@/utils/util";
 import { useAuth } from "@/context/authProvoider";
+import MapOption from "@/components/MapOption";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
