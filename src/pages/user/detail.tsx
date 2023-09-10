@@ -1,7 +1,5 @@
-import MapOption from "@/components/user/MapOption";
 import getDocument from "@/firebase/firestore/getDocument";
 import Image from "next/image";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import useUser from "@/hooks/useUser";
 import Layout from "@/components/common/Layout";
