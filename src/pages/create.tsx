@@ -13,6 +13,7 @@ import { isExp } from "@/utils/util";
 import { addFiles } from "@/firebase/storage/add";
 import { deleteFiles } from "@/firebase/storage/delete";
 import Button from "@/components/common/Button";
+import BasicImage from "@/components/common/BasicImage";
 
 export default function Create({ uid }: { uid: string }) {
   const [part, setPart] = useState("path");
@@ -162,18 +163,12 @@ export default function Create({ uid }: { uid: string }) {
           <div className="main-absolute">
             <div className="h-[60%] p-[20px] flex flex-wrap justify-between overflow-y-scroll scrollbar-hide">
               {previewImages.map((imageUrl, index) => (
-                <figure
+                <BasicImage
                   key={index}
-                  className="relative w-[150px] h-[150px] rounded-[10px] border-2 my-[10px] p-[5px]"
-                >
-                  <Image
-                    className="!relative object-contain"
-                    src={imageUrl}
-                    alt="preview-image"
-                    sizes="(max-width: 768px) 50vw, 100vw"
-                    fill
-                  />
-                </figure>
+                  style={"relative w-[150px] h-[150px] rounded-[10px] border-2 my-[10px] p-[5px]"}
+                  url={imageUrl}
+                  alt={"uploaded-image"}
+                />
               ))}
             </div>
             <div className="min-w-[420px] max-w-[550px] h-[40%] mx-auto my-0 p-[10px] flex flex-wrap content-between">

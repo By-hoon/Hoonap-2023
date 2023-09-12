@@ -5,7 +5,7 @@ interface BasicImageProps {
   style: string;
   url: string;
   alt: string;
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 const BasicImage = ({ style, url, alt, children }: BasicImageProps) => {

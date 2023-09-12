@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import useUser from "@/hooks/useUser";
 import { isExp } from "@/utils/util";
+import BasicImage from "../common/BasicImage";
 
 interface PreviewProps {
   currentStoryId: string;
@@ -53,18 +54,12 @@ const Preview = ({ currentStoryId, userId }: PreviewProps) => {
       </div>
       <div className="h-[290px] flex flex-wrap overflow-y-scroll scrollbar-hide p-[5px]">
         {images.map((imageUrl, index) => (
-          <figure
-            className="relative w-[100px] h-[100px] rounded-[5px] border-2 mx-[5px] my-[10px] p-[5px]"
+          <BasicImage
             key={index}
-          >
-            <Image
-              src={imageUrl}
-              alt="preview-image"
-              className="!relative object-contain"
-              sizes="(max-width: 768px) 50vw, 100vw"
-              fill
-            />
-          </figure>
+            style={"relative w-[100px] h-[100px] rounded-[5px] border-2 mx-[5px] my-[10px] p-[5px]"}
+            url={imageUrl}
+            alt={"preview-image"}
+          />
         ))}
       </div>
       <div className="h-[50px] flex justify-center items-center text-white font-semibold bg-bc">

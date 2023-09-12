@@ -12,6 +12,7 @@ import deleteDocument from "@/firebase/firestore/deleteDocument";
 import updateField from "@/firebase/firestore/updateField";
 import { deleteFile } from "@/firebase/storage/delete";
 import { useAuth } from "@/context/authProvoider";
+import BasicImage from "@/components/common/BasicImage";
 
 export interface storyProps {
   title: string;
@@ -184,13 +185,7 @@ const StoryDetail = () => {
         <div className="main-relative">
           <figure className="main-absolute p-0 bg-black">
             {images.length !== 0 ? (
-              <Image
-                src={images[currentIndex]}
-                alt="detail-image"
-                className="!relative object-contain"
-                sizes="(max-width: 768px) 50vw, 100vw"
-                fill
-              />
+              <BasicImage style={"w-full h-full"} url={images[currentIndex]} alt={"detail-image"} />
             ) : null}
             {images.length > 1 ? (
               <div>

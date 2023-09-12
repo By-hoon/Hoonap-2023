@@ -5,6 +5,7 @@ import useUser from "@/hooks/useUser";
 import Layout from "@/components/common/Layout";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import BasicImage from "@/components/common/BasicImage";
 
 const UserDetail = () => {
   const [paths, setPaths] = useState<[{ latitude: number; longitude: number }[]]>([[]]);
@@ -56,23 +57,20 @@ const UserDetail = () => {
       <div className="flex">
         {images.map((image) =>
           image.urls.map((imageUrl) => (
-            <figure key={imageUrl}>
-              <Link
-                href={{
-                  pathname: "/story/detail",
-                  query: { storyId: image.id },
-                }}
-                as="/story/detail"
-              >
-                <Image
-                  src={imageUrl}
-                  alt="preview-image"
-                  width={150}
-                  height={150}
-                  style={{ width: 150, height: 150 }}
-                />
-              </Link>
-            </figure>
+            <Link
+              key={imageUrl}
+              href={{
+                pathname: "/story/detail",
+                query: { storyId: image.id },
+              }}
+              as="/story/detail"
+            >
+              <BasicImage
+                style={"relative w-[100px] h-[100px] rounded-[5px] border-2 mx-[5px] my-[10px] p-[5px]"}
+                url={imageUrl}
+                alt={"user-story-image"}
+              />
+            </Link>
           ))
         )}
       </div>

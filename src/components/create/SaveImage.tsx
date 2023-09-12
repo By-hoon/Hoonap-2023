@@ -1,6 +1,7 @@
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
+import BasicImage from "../common/BasicImage";
 
 interface SaveImageProps {
   images: FileList | undefined;
@@ -57,24 +58,19 @@ const SaveImage = ({ images, setImage, previewImages, setPreviewImages }: SaveIm
     <div className="main-absolute">
       <div className="h-[85%] p-[20px] flex flex-wrap justify-between overflow-y-scroll scrollbar-hide">
         {previewImages.map((imageUrl, index) => (
-          <figure
+          <BasicImage
             key={index}
-            className="relative w-[200px] h-[200px] rounded-[10px] border-2 my-[10px] p-[5px]"
+            style={"relative w-[200px] h-[200px] rounded-[10px] border-2 my-[10px] p-[5px]"}
+            url={imageUrl}
+            alt={"upload-image"}
           >
-            <Image
-              className="!relative object-contain"
-              src={imageUrl}
-              alt="preview-image"
-              sizes="(max-width: 768px) 50vw, 100vw"
-              fill
-            />
             <div
               className="absolute top-0 left-0 flex justify-center items-center w-[100%] h-[100%] rounded-[10px] cursor-pointer"
               onClick={() => deleteImage(index)}
             >
               <Icon icon="ant-design:delete-filled" className="text-[30px] text-white" />
             </div>
-          </figure>
+          </BasicImage>
         ))}
       </div>
       <div>
