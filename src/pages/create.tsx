@@ -14,6 +14,7 @@ import { addFiles } from "@/firebase/storage/add";
 import { deleteFiles } from "@/firebase/storage/delete";
 import Button from "@/components/common/Button";
 import BasicImage from "@/components/common/BasicImage";
+import PartButton from "@/components/create/PartButton";
 
 export default function Create({ uid }: { uid: string }) {
   const [part, setPart] = useState("path");
@@ -206,45 +207,24 @@ export default function Create({ uid }: { uid: string }) {
           <div className="main-relative">{partRender()}</div>
           <div className="p-[15px]">
             <div className="flex flex-wrap content-center p-[20px] pl-[40px] h-[90%]">
-              <div className="flex w-[100%]">
-                <div className="flex font-semibold text-[20px] my-[10px] pl-[10px] hover:text-bc">
-                  <div className="flex items-center text-[28px] mr-[10px]">
-                    <Icon icon="bx:map" />
-                  </div>
-                  <Button text="위치" style="" onClick={() => changePart("path")} />
-                </div>
-                {paths.length !== 0 ? (
-                  <div className="flex items-center text-green-500 ml-[10px]">
-                    <Icon icon="fluent-mdl2:completed-solid" />
-                  </div>
-                ) : null}
-              </div>
-              <div className="flex w-[100%]">
-                <div className="flex font-semibold text-[20px] my-[10px] pl-[10px] hover:text-bc">
-                  <div className="flex items-center text-[28px] mr-[10px]">
-                    <Icon icon="icon-park-outline:add-pic" />
-                  </div>
-                  <Button text="사진" style="" onClick={() => changePart("image")} />
-                </div>
-                {images ? (
-                  <div className="flex items-center text-green-500 ml-[10px]">
-                    <Icon icon="fluent-mdl2:completed-solid" />
-                  </div>
-                ) : null}
-              </div>
-              <div className="flex w-[100%]">
-                <div className="flex font-semibold text-[20px] my-[10px] pl-[10px] hover:text-bc">
-                  <div className="flex items-center text-[28px] mr-[10px]">
-                    <Icon icon="eos-icons:content-new" />
-                  </div>
-                  <Button text="스토리" style="" onClick={() => changePart("story")} />
-                </div>
-                {story !== "" && title !== "" ? (
-                  <div className="flex items-center text-green-500 ml-[10px]">
-                    <Icon icon="fluent-mdl2:completed-solid" />
-                  </div>
-                ) : null}
-              </div>
+              <PartButton
+                name={"위치"}
+                icon={"bx:map"}
+                isComplete={paths.length !== 0}
+                onClick={() => changePart("path")}
+              />
+              <PartButton
+                name={"사진"}
+                icon={"icon-park-outline:add-pic"}
+                isComplete={!!images}
+                onClick={() => changePart("image")}
+              />
+              <PartButton
+                name={"스토리"}
+                icon={"eos-icons:content-new"}
+                isComplete={story !== "" && title !== ""}
+                onClick={() => changePart("story")}
+              />
               <div className="w-[100%] text-center mt-[45px]">
                 <Button
                   text="스토리 생성"
