@@ -1,10 +1,10 @@
-import Link from "next/link";
 import Layout from "@/components/common/Layout";
 import signIn from "@/firebase/auth/signIn";
 import { useRouter } from "next/router";
 import { isExp } from "@/utils/util";
 import { addInfo, expInfo } from "@/shared/constants";
 import { useAuth } from "@/context/authProvoider";
+import Button from "@/components/common/Button";
 
 export default function Home() {
   const { user } = useAuth();
@@ -25,18 +25,28 @@ export default function Home() {
       <div className="max-w-[768px] min-w-[320px] mx-auto p-[5px]">
         <div className="text-center text-[22px] md:text-[24px] font-semibold">Hoonap 방문을 환영합니다 !</div>
         <div className="flex justify-between w-[190px] mx-auto mt-[20px]">
-          <Link href="/signup">
-            <button className="submit-button px-[15px]">회원가입</button>
-          </Link>
-          <Link href="/login">
-            <button className="submit-button">로그인</button>
-          </Link>
+          <Button
+            text="회원가입"
+            style="submit-button px-[15px]"
+            onClick={() => {
+              router.push("/signup");
+            }}
+          />
+          <Button
+            text="로그인"
+            style="submit-button"
+            onClick={() => {
+              router.push("/login");
+            }}
+          />
         </div>
         <div className="text-center mt-[40px]">미리 서비스를 사용해 보고 싶다면?</div>
         <div className="mt-[10px] text-center">
-          <button className="submit-button bg-gray-400 hover:bg-gray-500" onClick={tryLoginTestAccount}>
-            체험하기
-          </button>
+          <Button
+            text="체험하기"
+            style="submit-button bg-gray-400 hover:bg-gray-500"
+            onClick={tryLoginTestAccount}
+          />
         </div>
       </div>
     );

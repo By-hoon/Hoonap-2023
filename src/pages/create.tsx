@@ -12,6 +12,9 @@ import { Icon } from "@iconify/react";
 import { isExp } from "@/utils/util";
 import { addFiles } from "@/firebase/storage/add";
 import { deleteFiles } from "@/firebase/storage/delete";
+import Button from "@/components/common/Button";
+import BasicImage from "@/components/common/BasicImage";
+import PartButton from "@/components/create/PartButton";
 
 export default function Create({ uid }: { uid: string }) {
   const [part, setPart] = useState("path");
@@ -161,18 +164,12 @@ export default function Create({ uid }: { uid: string }) {
           <div className="main-absolute">
             <div className="h-[60%] p-[20px] flex flex-wrap justify-between overflow-y-scroll scrollbar-hide">
               {previewImages.map((imageUrl, index) => (
-                <figure
+                <BasicImage
                   key={index}
-                  className="relative w-[150px] h-[150px] rounded-[10px] border-2 my-[10px] p-[5px]"
-                >
-                  <Image
-                    className="!relative object-contain"
-                    src={imageUrl}
-                    alt="preview-image"
-                    sizes="(max-width: 768px) 50vw, 100vw"
-                    fill
-                  />
-                </figure>
+                  style={"relative w-[150px] h-[150px] rounded-[10px] border-2 my-[10px] p-[5px]"}
+                  url={imageUrl}
+                  alt={"uploaded-image"}
+                />
               ))}
             </div>
             <div className="min-w-[420px] max-w-[550px] h-[40%] mx-auto my-0 p-[10px] flex flex-wrap content-between">
@@ -210,63 +207,47 @@ export default function Create({ uid }: { uid: string }) {
           <div className="main-relative">{partRender()}</div>
           <div className="p-[15px]">
             <div className="flex flex-wrap content-center p-[20px] pl-[40px] h-[90%]">
-              <div className="flex w-[100%]">
-                <div className="flex font-semibold text-[20px] my-[10px] pl-[10px] hover:text-bc">
-                  <div className="flex items-center text-[28px] mr-[10px]">
-                    <Icon icon="bx:map" />
-                  </div>
-                  <button onClick={() => changePart("path")}>위치</button>
-                </div>
-                {paths.length !== 0 ? (
-                  <div className="flex items-center text-green-500 ml-[10px]">
-                    <Icon icon="fluent-mdl2:completed-solid" />
-                  </div>
-                ) : null}
-              </div>
-              <div className="flex w-[100%]">
-                <div className="flex font-semibold text-[20px] my-[10px] pl-[10px] hover:text-bc">
-                  <div className="flex items-center text-[28px] mr-[10px]">
-                    <Icon icon="icon-park-outline:add-pic" />
-                  </div>
-                  <button onClick={() => changePart("image")}>사진</button>
-                </div>
-                {images ? (
-                  <div className="flex items-center text-green-500 ml-[10px]">
-                    <Icon icon="fluent-mdl2:completed-solid" />
-                  </div>
-                ) : null}
-              </div>
-              <div className="flex w-[100%]">
-                <div className="flex font-semibold text-[20px] my-[10px] pl-[10px] hover:text-bc">
-                  <div className="flex items-center text-[28px] mr-[10px]">
-                    <Icon icon="eos-icons:content-new" />
-                  </div>
-                  <button onClick={() => changePart("story")}>스토리</button>
-                </div>
-                {story !== "" && title !== "" ? (
-                  <div className="flex items-center text-green-500 ml-[10px]">
-                    <Icon icon="fluent-mdl2:completed-solid" />
-                  </div>
-                ) : null}
-              </div>
+              <PartButton
+                name={"위치"}
+                icon={"bx:map"}
+                isComplete={paths.length !== 0}
+                onClick={() => changePart("path")}
+              />
+              <PartButton
+                name={"사진"}
+                icon={"icon-park-outline:add-pic"}
+                isComplete={!!images}
+                onClick={() => changePart("image")}
+              />
+              <PartButton
+                name={"스토리"}
+                icon={"eos-icons:content-new"}
+                isComplete={story !== "" && title !== ""}
+                onClick={() => changePart("story")}
+              />
               <div className="w-[100%] text-center mt-[45px]">
-                <button
-                  className="text-[19px] font-semibold bg-bc text-white px-[38px] py-[15px] rounded-[12px]"
+                <Button
+                  text="스토리 생성"
+                  style="text-[19px] font-semibold bg-bc text-white px-[38px] py-[15px] rounded-[12px]"
                   onClick={createStory}
-                >
-                  스토리 생성
-                </button>
+                />
               </div>
             </div>
           </div>
         </div>
         <div className="text-[20px] font-semibold text-center">
-          <button className="mx-[10px]" onClick={goPreviousPart} disabled={part === "path" ? true : false}>
-            이전
-          </button>
-          <button className="mx-[10px]" onClick={goNextPart} disabled={part === "story" ? true : false}>
-            다음
-          </button>
+          <Button
+            text="이전"
+            style="mx-[10px]"
+            onClick={goPreviousPart}
+            disabled={part === "path" ? true : false}
+          />
+          <Button
+            text="다음"
+            style="mx-[10px]"
+            onClick={goNextPart}
+            disabled={part === "story" ? true : false}
+          />
         </div>
       </div>
     </Layout>

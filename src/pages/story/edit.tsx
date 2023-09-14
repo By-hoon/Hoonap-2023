@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { storyProps } from "./detail";
 import { deleteFile } from "@/firebase/storage/delete";
+import Button from "@/components/common/Button";
 
 const StoryEdit = () => {
   const router = useRouter();
@@ -196,12 +197,11 @@ const StoryEdit = () => {
           </div>
         </div>
         <div className="w-[100%] text-center mt-[45px]">
-          <button
-            className="text-[19px] font-semibold bg-bc text-white px-[38px] py-[15px] rounded-[12px]"
+          <Button
+            text="스토리 수정"
+            style="text-[19px] font-semibold bg-bc text-white px-[38px] py-[15px] rounded-[12px]"
             onClick={editStory}
-          >
-            스토리 수정
-          </button>
+          />
         </div>
       </div>
     </Layout>

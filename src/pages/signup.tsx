@@ -1,3 +1,4 @@
+import Button from "@/components/common/Button";
 import signUp from "@/firebase/auth/signUp";
 import setData from "@/firebase/firestore/setData";
 import { useRouter } from "next/router";
@@ -72,11 +73,9 @@ const Signup = () => {
           />
         </div>
         <div className="text-center mb-[20px]">
-          <div>
-            <input className="submit-button py-[7px]" type="submit" value="가입" />
-          </div>
+          <Button text="가입" style="submit-button py-[7px]" type="submit" />
           <div className="text-[17px] mt-[10px] hover:text-bcd">
-            <button onClick={goSignUp}>이미 회원이신가요? →</button>
+            <Button text="이미 회원이신가요? →" style="" onClick={goSignUp} />
           </div>
         </div>
       </form>

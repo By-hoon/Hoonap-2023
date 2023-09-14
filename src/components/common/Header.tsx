@@ -18,22 +18,6 @@ const Header = () => {
     query: "(max-width: 768px)",
   });
 
-  const onClickOutSide = (e: any) => {
-    if (showSidebar && sidebarRef.current && !sidebarRef.current.contains(e.target)) {
-      onClickSidebar();
-    }
-    if (showProfileMenu && profileMenuRef.current && !profileMenuRef.current.contains(e.target)) {
-      onClickProfileMenu();
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("click", onClickOutSide);
-    return () => {
-      document.removeEventListener("click", onClickOutSide);
-    };
-  });
-
   useEffect(() => {
     setMounted(true);
   }, []);

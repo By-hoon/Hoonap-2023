@@ -6,6 +6,7 @@ import Preview from "@/components/story/Preview";
 import { Icon } from "@iconify/react";
 import { isExp } from "@/utils/util";
 import { useAuth } from "@/context/authProvoider";
+import BasicImage from "@/components/common/BasicImage";
 
 const Gallery = () => {
   const [images, setImages] = useState<{ url: string; userId: string; id: string }[]>([]);
@@ -77,15 +78,7 @@ const Gallery = () => {
               />
             </div>
             <div className="main-relative">
-              <figure className="main-absolute">
-                <Image
-                  src={current.url}
-                  alt="preview-image"
-                  className="!relative object-contain"
-                  sizes="(max-width: 768px) 50vw, 100vw"
-                  fill
-                />
-              </figure>
+              <BasicImage style={"main-absolute"} url={current.url} alt={"gallery-current-image"} />
             </div>
             <div className="flex items-center p-[15px]">
               <Preview currentStoryId={current.id} userId={current.userId} />
@@ -97,21 +90,18 @@ const Gallery = () => {
           ${current ? "h-[200px] overflow-y-scroll scrollbar-hide" : ""}`}
         >
           {images.map((imageObj, index) => (
-            <figure
-              className="relative w-[150px] h-[150px] mx-[10px] rounded-[8px] overflow-hidden"
+            <div
               key={index}
+              onClick={() => {
+                setCurrent(imageObj);
+              }}
             >
-              <Image
-                src={imageObj.url}
-                alt="preview-image"
-                className="!relative object-contain"
-                sizes="(max-width: 768px) 50vw, 100vw"
-                fill
-                onClick={() => {
-                  setCurrent(imageObj);
-                }}
+              <BasicImage
+                style={"relative w-[150px] h-[150px] mx-[10px] rounded-[8px] overflow-hidden"}
+                url={imageObj.url}
+                alt={"gallery-image"}
               />
-            </figure>
+            </div>
           ))}
         </div>
       </div>
