@@ -79,21 +79,20 @@ Vercel 배포: https://hoonap-2023.vercel.app/
 src
 ├── components
 │   ├── common
+│   │   ├── BasicImage.tsx
+│   │   ├── Button.tsx
 │   │   ├── Header.tsx
 │   │   ├── Layout.tsx
 │   │   ├── Loading.tsx
 │   │   └── Title.tsx
 │   ├── create
-│   │   ├── MapOption.tsx
+│   │   ├── PartButton.tsx
 │   │   ├── SaveImage.tsx
 │   │   └── SavePath.tsx
-│   ├── list
-│   │   └── MapOption.tsx
 │   ├── story
 │   │   └── Preview.tsx
-│   ├── user
-│   │   └── MapOption.tsx
-│   └── Map.tsx
+│   ├── Map.tsx
+│   └── MapOption.tsx
 └── context
 │   └── authProvoider.ts
 ├── firebase
