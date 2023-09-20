@@ -4,7 +4,7 @@ import Link from "next/link";
 import useUser from "@/hooks/useUser";
 import Layout from "@/components/common/Layout";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import BasicImage from "@/components/common/BasicImage";
 
 const UserDetail = () => {
@@ -17,7 +17,11 @@ const UserDetail = () => {
   const { nickname } = useUser(userId as string);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId) {
+      alert("사용자 정보가 없습니다.");
+      Router.push("/story/list");
+      return;
+    }
 
     const getUserData = async () => {
       const userStoryResult = await getDocument("users", userId as string);
