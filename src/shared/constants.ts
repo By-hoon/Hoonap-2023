@@ -3,6 +3,7 @@ export const title = {
   story: "스토리 상세정보",
   stories: "내 스토리 목록",
   gallery: "갤러리",
+  user: "사용자 정보",
 };
 
 export const expInfo = [
