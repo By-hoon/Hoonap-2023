@@ -6,6 +6,11 @@ import Layout from "@/components/common/Layout";
 import { useEffect, useState } from "react";
 import Router, { useRouter } from "next/router";
 import BasicImage from "@/components/common/BasicImage";
+import dynamic from "next/dynamic";
+import MapOption from "@/components/MapOption";
+const Map = dynamic(() => import("@/components/Map"), {
+  ssr: false,
+});
 
 const UserDetail = () => {
   const [paths, setPaths] = useState<[{ latitude: number; longitude: number }[]]>([[]]);
@@ -39,6 +44,7 @@ const UserDetail = () => {
       });
 
       await Promise.all(promises);
+      paths.shift();
 
       setPaths(paths);
       setImages(images);
@@ -57,6 +63,11 @@ const UserDetail = () => {
     <Layout>
       <div>
         <div>{nickname}</div>
+      </div>
+      <div className="w-[300px] h-[300px]">
+        <Map>
+          <MapOption paths={paths.map((path) => ({ pathArray: path }))} />
+        </Map>
       </div>
       <div className="flex">
         {images.map((image) =>
