@@ -14,12 +14,21 @@ const Map = dynamic(() => import("@/components/Map"), {
 
 const UserDetail = () => {
   const [paths, setPaths] = useState<[{ latitude: number; longitude: number }[]]>([[]]);
+  const [storyIds, setStoryIds] = useState<string[]>([]);
   const [images, setImages] = useState<{ urls: string[]; id: string }[]>([]);
 
   const router = useRouter();
   const { userId } = router.query;
 
   const { nickname } = useUser(userId as string);
+
+  const clickMap = (storyId?: string) => {
+    if (!storyId) return;
+    Router.push({
+      pathname: "/story/detail",
+      query: { storyId: storyId },
+    });
+  };
 
   useEffect(() => {
     if (!userId) {
@@ -34,12 +43,14 @@ const UserDetail = () => {
       if (!userStoryResult) return;
 
       const paths: [{ latitude: number; longitude: number }[]] = [[]];
+      const storyIds: string[] = [];
       const images: { urls: string[]; id: string }[] = [];
 
       const promises = userStoryResult.storyIds.map(async (storyId: string) => {
         const storyResult = await getDocument("stories", storyId);
         if (!storyResult) return;
         paths.push(storyResult.paths);
+        storyIds.push(storyId);
         images.push({ urls: storyResult.images, id: storyId });
       });
 
@@ -47,6 +58,7 @@ const UserDetail = () => {
       paths.shift();
 
       setPaths(paths);
+      setStoryIds(storyIds);
       setImages(images);
     };
     getUserData();
@@ -66,7 +78,10 @@ const UserDetail = () => {
       </div>
       <div className="w-[300px] h-[300px]">
         <Map>
-          <MapOption paths={paths.map((path) => ({ pathArray: path }))} />
+          <MapOption
+            paths={paths.map((path, index) => ({ pathArray: path, storyId: storyIds[index] }))}
+            clickMap={clickMap}
+          />
         </Map>
       </div>
       <div className="flex">
