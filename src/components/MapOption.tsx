@@ -1,18 +1,17 @@
 import { convertToLatLng } from "@/utils/util";
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction } from "react";
 import { Listener, Marker, Polygon, useNavermaps } from "react-naver-maps";
 
 type PathType = { latitude: number; longitude: number };
 
 interface MapOptionProps {
   paths: { pathArray: PathType[]; storyId?: string }[];
-  setCurrentStoryId?: Dispatch<SetStateAction<string | undefined>>;
+  clickMap?: (storyId?: string) => void;
   addPaths?: (path: PathType) => void;
   deletePaths?: (index: number) => void;
 }
 
-export default function MapOption({ paths, setCurrentStoryId, addPaths, deletePaths }: MapOptionProps) {
+export default function MapOption({ paths, clickMap, addPaths, deletePaths }: MapOptionProps) {
   const navermaps = useNavermaps();
 
   const router = useRouter();
@@ -48,10 +47,7 @@ export default function MapOption({ paths, setCurrentStoryId, addPaths, deletePa
       default:
         return (
           <>
-            <Listener
-              type="click"
-              listener={() => (setCurrentStoryId ? setCurrentStoryId(undefined) : undefined)}
-            />
+            <Listener type="click" listener={() => (clickMap ? clickMap() : undefined)} />
             {paths.map((path, index) => (
               <Polygon
                 key={index}
@@ -62,7 +58,7 @@ export default function MapOption({ paths, setCurrentStoryId, addPaths, deletePa
                 strokeOpacity={0.6}
                 strokeWeight={3}
                 clickable
-                onClick={() => (setCurrentStoryId ? setCurrentStoryId(path.storyId) : undefined)}
+                onClick={() => (clickMap ? clickMap(path.storyId) : undefined)}
               />
             ))}
           </>

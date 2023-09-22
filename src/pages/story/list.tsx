@@ -18,6 +18,14 @@ const List = () => {
 
   const { user } = useAuth();
 
+  const clickMap = (storyId?: string) => {
+    if (!storyId) {
+      setCurrentStoryId(undefined);
+      return;
+    }
+    setCurrentStoryId(storyId);
+  };
+
   useEffect(() => {
     if (!user) return;
 
@@ -84,7 +92,7 @@ const List = () => {
           <div className="main-relative">
             <div className="main-absolute">
               <Map>
-                <MapOption paths={paths} setCurrentStoryId={setCurrentStoryId} />
+                <MapOption paths={paths} clickMap={clickMap} />
               </Map>
             </div>
           </div>
