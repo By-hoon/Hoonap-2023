@@ -70,19 +70,24 @@ const UserDetail = () => {
         <div></div>
       </Layout>
     );
-
   return (
     <Layout>
-      <div>
-        <div>{nickname}</div>
-      </div>
-      <div className="w-[300px] h-[300px]">
-        <Map>
-          <MapOption
-            paths={paths.map((path, index) => ({ pathArray: path, storyId: storyIds[index] }))}
-            clickMap={clickMap}
-          />
-        </Map>
+      <div className="grid grid-cols-[minmax(420px,_1fr)_1fr]">
+        <div className="main-relative">
+          <div className="main-absolute">
+            {paths[0][0] ? (
+              <Map location={{ latitude: paths[0][0].latitude, longitude: paths[0][0].longitude }}>
+                <MapOption
+                  paths={paths.map((path, index) => ({ pathArray: path, storyId: storyIds[index] }))}
+                  clickMap={clickMap}
+                />
+              </Map>
+            ) : null}
+          </div>
+        </div>
+        <div>
+          <div>{nickname}</div>
+        </div>
       </div>
       <div className="flex">
         {images.map((image) =>

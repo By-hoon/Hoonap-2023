@@ -91,9 +91,16 @@ const List = () => {
         <div className="grid grid-cols-[minmax(420px,_1fr)_1fr]">
           <div className="main-relative">
             <div className="main-absolute">
-              <Map>
-                <MapOption paths={paths} clickMap={clickMap} />
-              </Map>
+              {paths[0] ? (
+                <Map
+                  location={{
+                    latitude: paths[0].pathArray[0].latitude,
+                    longitude: paths[0].pathArray[0].longitude,
+                  }}
+                >
+                  <MapOption paths={paths} clickMap={clickMap} />
+                </Map>
+              ) : null}
             </div>
           </div>
           <div className="flex items-center p-[15px]">
