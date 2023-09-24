@@ -7,6 +7,7 @@ import { Icon } from "@iconify/react";
 import { isExp } from "@/utils/util";
 import { useAuth } from "@/context/authProvoider";
 import BasicImage from "@/components/common/BasicImage";
+import Router from "next/router";
 
 const Gallery = () => {
   const [images, setImages] = useState<{ url: string; userId: string; id: string }[]>([]);
@@ -20,7 +21,11 @@ const Gallery = () => {
 
     const getImageData = async () => {
       const result = await getCollection("images");
-      if (!result) return;
+      if (!result) {
+        alert("게시된 스토리가 없습니다.");
+        Router.push("/");
+        return;
+      }
 
       const newData: { url: string; userId: string; id: string }[] = [];
       result.docs.forEach((doc) => {
@@ -36,6 +41,7 @@ const Gallery = () => {
       const storageImage = window.localStorage.getItem("image");
       if (!storageImage) {
         alert("게시된 스토리가 없습니다.");
+        Router.push("/");
         return;
       }
 

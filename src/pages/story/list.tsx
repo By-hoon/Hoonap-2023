@@ -6,6 +6,7 @@ import Layout from "@/components/common/Layout";
 import { isExp } from "@/utils/util";
 import { useAuth } from "@/context/authProvoider";
 import MapOption from "@/components/MapOption";
+import Router from "next/router";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
@@ -42,6 +43,7 @@ const List = () => {
 
       if (!usersResult.storyIds) {
         alert("게시된 스토리가 없습니다.");
+        Router.push("/");
         return;
       }
       const promises = usersResult.storyIds.map(async (storyId: string) => {
@@ -58,6 +60,7 @@ const List = () => {
       const storagePath = window.localStorage.getItem("path");
       if (!storagePath) {
         alert("게시된 스토리가 없습니다.");
+        Router.push("/");
         return;
       }
 
