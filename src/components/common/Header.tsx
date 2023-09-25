@@ -36,7 +36,7 @@ const Header = () => {
       case "/gallery": {
         return <Title title={title.gallery} />;
       }
-      case "user/detail": {
+      case "/user/detail": {
         return <Title title={title.user} />;
       }
       default:

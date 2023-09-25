@@ -185,7 +185,7 @@ const StoryDetail = () => {
         <div className="main-relative">
           <figure className="main-absolute p-0 bg-black">
             {images.length !== 0 ? (
-              <BasicImage style={"w-full h-full"} url={images[currentIndex]} alt={"detail-image"} />
+              <BasicImage style={"w-full h-full relative"} url={images[currentIndex]} alt={"detail-image"} />
             ) : null}
             {images.length > 1 ? (
               <div>
