@@ -72,7 +72,10 @@ const UserDetail = () => {
     );
   return (
     <Layout>
-      <div className="grid grid-cols-[minmax(420px,_1fr)_1fr]">
+      <div className="w-full max-w-[768px] min-w-[320px] mx-auto my-0">
+        <div className="border-b-2 p-[15px]">
+          <div className="text-[18px] font-semibold">{nickname}</div>
+        </div>
         <div className="main-relative">
           <div className="main-absolute">
             {paths[0][0] ? (
@@ -85,29 +88,26 @@ const UserDetail = () => {
             ) : null}
           </div>
         </div>
-        <div>
-          <div>{nickname}</div>
+        <div className="flex flex-wrap justify-around p-[5px]">
+          {images.map((image) =>
+            image.urls.map((imageUrl) => (
+              <Link
+                key={imageUrl}
+                href={{
+                  pathname: "/story/detail",
+                  query: { storyId: image.id },
+                }}
+                as="/story/detail"
+              >
+                <BasicImage
+                  style={"relative w-[130px] h-[130px] rounded-[5px] border-2 mx-[5px] my-[10px] p-[5px]"}
+                  url={imageUrl}
+                  alt={"user-story-image"}
+                />
+              </Link>
+            ))
+          )}
         </div>
-      </div>
-      <div className="flex">
-        {images.map((image) =>
-          image.urls.map((imageUrl) => (
-            <Link
-              key={imageUrl}
-              href={{
-                pathname: "/story/detail",
-                query: { storyId: image.id },
-              }}
-              as="/story/detail"
-            >
-              <BasicImage
-                style={"relative w-[100px] h-[100px] rounded-[5px] border-2 mx-[5px] my-[10px] p-[5px]"}
-                url={imageUrl}
-                alt={"user-story-image"}
-              />
-            </Link>
-          ))
-        )}
       </div>
     </Layout>
   );
