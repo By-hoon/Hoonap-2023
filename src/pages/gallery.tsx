@@ -74,8 +74,8 @@ const Gallery = () => {
     <Layout>
       <div className="p-[10px]">
         {current ? (
-          <div className="relative grid grid-cols-[minmax(420px,_1fr)_1fr]">
-            <div className="absolute top-0 right-0">
+          <div className="relative md:grid md:grid-cols-[minmax(420px,_1fr)_1fr]">
+            <div className="absolute top-0 right-0 z-10">
               <Icon
                 icon="ep:close-bold"
                 onClick={() => {
