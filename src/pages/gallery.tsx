@@ -92,7 +92,7 @@ const Gallery = () => {
           </div>
         ) : null}
         <div
-          className={`flex items-center p-[15px] 
+          className={`flex flex-wrap items-center p-[15px]
           ${current ? "h-[200px] overflow-y-scroll scrollbar-hide" : ""}`}
         >
           {images.map((imageObj, index) => (
@@ -103,7 +103,9 @@ const Gallery = () => {
               }}
             >
               <BasicImage
-                style={"relative w-[150px] h-[150px] mx-[10px] rounded-[8px] overflow-hidden"}
+                style={
+                  "relative md:w-[150px] md:h-[150px] w-[140px] h-[140px] mx-[10px] rounded-[8px] overflow-hidden"
+                }
                 url={imageObj.url}
                 alt={"gallery-image"}
               />
