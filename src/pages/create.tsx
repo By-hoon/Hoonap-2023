@@ -206,7 +206,7 @@ export default function Create({ uid }: { uid: string }) {
         <div className="md:grid md:grid-cols-[minmax(420px,_5fr)_3fr]">
           <div className="main-relative">{partRender()}</div>
           <div className="p-[15px]">
-            <div className="flex flex-wrap content-center p-[20px] pl-[40px] h-[90%]">
+            <div className="flex flex-wrap content-center p-[20px] h-[90%]">
               <PartButton
                 name={"위치"}
                 icon={"bx:map"}
