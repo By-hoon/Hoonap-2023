@@ -171,28 +171,26 @@ const StoryEdit = () => {
             setPreviewImages={setPreviewImages}
           />
         </div>
-        <div className="main-relative border-b-2">
-          <div className="main-absolute">
-            <div className="min-w-[420px] max-w-[550px] h-[40%] mx-auto my-0 p-[10px] flex flex-wrap content-between">
-              <div className="w-[100%] border-2 border-bc p-[10px] rounded-[15px]">
-                <input
-                  className="w-[100%] focus:outline-none"
-                  type="text"
-                  value={title}
-                  placeholder="게시물에게 제목을 지어주세요."
-                  onChange={changeTitle}
-                  required
-                />
-              </div>
-              <div className="w-[100%] h-[70%] border-2 border-bc p-[10px] rounded-[15px]">
-                <textarea
-                  className="w-[100%] !h-[100%] focus:outline-none resize-none"
-                  value={story}
-                  placeholder="사진들이 담고 있는 이야기를 들려주세요."
-                  onChange={changeStory}
-                  required
-                />
-              </div>
+        <div className="h-[280px] border-b-2">
+          <div className="md:min-w-[420px] md:max-w-[550px] h-full mx-auto my-0 p-[10px] flex flex-wrap content-between">
+            <div className="w-[100%] border-2 border-bc p-[10px] rounded-[15px]">
+              <input
+                className="w-[100%] focus:outline-none"
+                type="text"
+                value={title}
+                placeholder="게시물에게 제목을 지어주세요."
+                onChange={changeTitle}
+                required
+              />
+            </div>
+            <div className="w-[100%] h-[70%] border-2 border-bc p-[10px] rounded-[15px]">
+              <textarea
+                className="w-[100%] !h-[100%] focus:outline-none resize-none"
+                value={story}
+                placeholder="사진들이 담고 있는 이야기를 들려주세요."
+                onChange={changeStory}
+                required
+              />
             </div>
           </div>
         </div>
