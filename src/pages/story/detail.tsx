@@ -228,7 +228,7 @@ const StoryDetail = () => {
               {showMoreMenu ? (
                 <div>
                   <div className="background-shadow" onClick={onClickMoreMenu} />
-                  <div className="absolute bottom-0 right-0 w-full md:w-[300px] h-[80%] text-white font-semibold text-[18px] bg-zinc-800 rounded-[6px] p-[20px] z-20">
+                  <div className="absolute bottom-0 right-0 mobile:top-0 w-[250px] md:w-[300px] h-[80%] mobile:max-h-[380px] text-white font-semibold text-[18px] bg-zinc-800 rounded-[6px] p-[20px] z-20">
                     {userId === user.uid ? (
                       <div>
                         <Link
