@@ -23,7 +23,6 @@ const SaveImage = ({ images, setImage, previewImages, setPreviewImages }: SaveIm
       setImage(fileBlobs);
       return;
     }
-    console.log("run");
     const dataTranster = new DataTransfer();
     const newImages = [...Array.from(images), ...Array.from(fileBlobs)];
 
@@ -56,11 +55,13 @@ const SaveImage = ({ images, setImage, previewImages, setPreviewImages }: SaveIm
 
   return (
     <div className="main-absolute">
-      <div className="h-[85%] p-[20px] flex flex-wrap justify-between overflow-y-scroll scrollbar-hide">
+      <div className="md:h-[85%] mobile:h-[80%] p-[5px] flex flex-wrap justify-between overflow-y-scroll scrollbar-hide">
         {previewImages.map((imageUrl, index) => (
           <BasicImage
             key={index}
-            style={"relative w-[200px] h-[200px] rounded-[10px] border-2 my-[10px] p-[5px]"}
+            style={
+              "relative w-[200px] h-[200px] mobile:w-[140px] mobile:h-[140px] rounded-[10px] border-2 my-[10px] p-[5px]"
+            }
             url={imageUrl}
             alt={"upload-image"}
           >
@@ -75,7 +76,7 @@ const SaveImage = ({ images, setImage, previewImages, setPreviewImages }: SaveIm
       </div>
       <div>
         <label htmlFor="preview">
-          <div className="flex justify-center items-center w-[130px] h-[50px] mx-auto my-[20px] bg-bc text-white text-[18px] font-semibold rounded-[10px] cursor-pointer">
+          <div className="flex justify-center items-center w-[130px] h-[50px] mx-auto mobile:mt-[10px] md:mt-[30px] bg-bc text-white text-[18px] font-semibold rounded-[10px] cursor-pointer">
             사진 업로드
           </div>
         </label>
