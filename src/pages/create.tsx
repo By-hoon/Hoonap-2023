@@ -147,50 +147,60 @@ export default function Create({ uid }: { uid: string }) {
   const partRender = () => {
     switch (part) {
       case "path": {
-        return <SavePath paths={paths} setPaths={setPaths} />;
+        return (
+          <div className="main-relative">
+            <SavePath paths={paths} setPaths={setPaths} />
+          </div>
+        );
       }
       case "image": {
         return (
-          <SaveImage
-            images={images}
-            setImage={setImage}
-            previewImages={previewImages}
-            setPreviewImages={setPreviewImages}
-          />
+          <div className="main-relative">
+            <SaveImage
+              images={images}
+              setImage={setImage}
+              previewImages={previewImages}
+              setPreviewImages={setPreviewImages}
+            />
+          </div>
         );
       }
       case "story": {
         return (
-          <div className="main-absolute">
-            <div className="h-[60%] p-[20px] flex flex-wrap justify-between overflow-y-scroll scrollbar-hide">
+          <div className="p-[10px]">
+            <div className="min-h-[360px] max-h-[438px] p-[10px] flex flex-wrap justify-between overflow-y-scroll scrollbar-hide">
               {previewImages.map((imageUrl, index) => (
                 <BasicImage
                   key={index}
-                  style={"relative w-[150px] h-[150px] rounded-[10px] border-2 my-[10px] p-[5px]"}
+                  style={
+                    "relative w-[200px] h-[200px] mobile:w-[140px] mobile:h-[140px] rounded-[10px] border-2 my-[10px] p-[5px]"
+                  }
                   url={imageUrl}
                   alt={"uploaded-image"}
                 />
               ))}
             </div>
-            <div className="min-w-[420px] max-w-[550px] h-[40%] mx-auto my-0 p-[10px] flex flex-wrap content-between">
-              <div className="w-[100%] border-2 border-bc p-[10px] rounded-[15px]">
-                <input
-                  className="w-[100%] focus:outline-none"
-                  type="text"
-                  value={title}
-                  placeholder="게시물에게 제목을 지어주세요."
-                  onChange={changeTitle}
-                  required
-                />
-              </div>
-              <div className="w-[100%] h-[70%] border-2 border-bc p-[10px] rounded-[15px]">
-                <textarea
-                  className="w-[100%] !h-[100%] focus:outline-none resize-none"
-                  value={story}
-                  placeholder="사진들이 담고 있는 이야기를 들려주세요."
-                  onChange={changeStory}
-                  required
-                />
+            <div className="h-[280px]">
+              <div className="md:min-w-[420px] md:max-w-[550px] h-full mx-auto my-0 p-[10px] flex flex-wrap content-between">
+                <div className="w-[100%] border-2 border-bc p-[10px] rounded-[15px]">
+                  <input
+                    className="w-[100%] focus:outline-none"
+                    type="text"
+                    value={title}
+                    placeholder="게시물에게 제목을 지어주세요."
+                    onChange={changeTitle}
+                    required
+                  />
+                </div>
+                <div className="w-[100%] h-[70%] border-2 border-bc p-[10px] rounded-[15px]">
+                  <textarea
+                    className="w-[100%] !h-[100%] focus:outline-none resize-none"
+                    value={story}
+                    placeholder="사진들이 담고 있는 이야기를 들려주세요."
+                    onChange={changeStory}
+                    required
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -204,7 +214,7 @@ export default function Create({ uid }: { uid: string }) {
     <Layout>
       <div className="p-[10px]">
         <div className="md:grid md:grid-cols-[minmax(420px,_5fr)_3fr]">
-          <div className="main-relative">{partRender()}</div>
+          {partRender()}
           <div className="p-[15px]">
             <div className="flex flex-wrap content-center p-[20px] h-[90%]">
               <PartButton
