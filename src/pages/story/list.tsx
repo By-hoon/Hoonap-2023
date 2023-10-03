@@ -91,7 +91,7 @@ const List = () => {
   return (
     <Layout>
       <div className="p-[10px]">
-        <div className="grid grid-cols-[minmax(420px,_1fr)_1fr]">
+        <div className="md:grid md:grid-cols-[minmax(420px,_1fr)_1fr]">
           <div className="main-relative">
             <div className="main-absolute">
               {paths[0] ? (

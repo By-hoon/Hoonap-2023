@@ -10,18 +10,20 @@ interface PartButtonProps {
 
 const PartButton = ({ name, icon, isComplete, onClick }: PartButtonProps) => {
   return (
-    <div className="flex w-[100%]">
-      <div className="flex font-semibold text-[20px] my-[10px] pl-[10px] hover:text-bc">
-        <div className="flex items-center text-[28px] mr-[10px]">
-          <Icon icon={icon} />
+    <div className="w-[100%]">
+      <div className="flex w-[200px] mx-auto">
+        <div className="flex font-semibold text-[20px] my-[10px] hover:text-bc">
+          <div className="flex items-center text-[28px] mr-[10px]">
+            <Icon icon={icon} />
+          </div>
+          <Button text={name} style="" onClick={onClick} />
         </div>
-        <Button text={name} style="" onClick={onClick} />
+        {isComplete ? (
+          <div className="flex items-center text-green-500 ml-[10px]">
+            <Icon icon="fluent-mdl2:completed-solid" />
+          </div>
+        ) : null}
       </div>
-      {isComplete ? (
-        <div className="flex items-center text-green-500 ml-[10px]">
-          <Icon icon="fluent-mdl2:completed-solid" />
-        </div>
-      ) : null}
     </div>
   );
 };

@@ -47,50 +47,55 @@ const Header = () => {
   if (!mounted) return <></>;
   if (isMobile)
     return (
-      <div>
-        <div ref={sidebarRef}>
-          <div onClick={onClickSidebar}>
+      <div className="header h-[55px] flex justify-between items-center">
+        <div>
+          <div className="w-[58px] text-[24px]" onClick={onClickSidebar} ref={sidebarRef}>
             <Icon icon="material-symbols:menu-rounded" />
           </div>
           {showSidebar ? (
-            <div>
-              {/* 그림자 배경용 div */}
-              <div>
-                <div>
+            <div className="absolute top-0 left-0 w-full h-[100vh] bg-bs/50">
+              <div className="w-[200px] h-full bg-white p-[10px] animate-appearSidebar">
+                <div className="absolute top-[5px] right-[5px] text-[20px]">
                   <Icon icon="material-symbols:close" onClick={onClickSidebar} />
                 </div>
-                <div>
+                <div className="text-[22px] font-semibold mb-[15px]">
                   <Link href="/">Hoonap</Link>
                 </div>
-                <div>
-                  <div>프로필</div>
-                  <div
-                    onClick={() => {
-                      doSignOut();
-                      router.replace("/login");
-                    }}
-                  >
-                    로그아웃
+                <div className="text-[18px] mb-[15px]">
+                  <div className="mb-[5px]">
+                    <span>프로필</span>
+                  </div>
+                  <div>
+                    <span
+                      onClick={() => {
+                        doSignOut();
+                        router.replace("/login");
+                      }}
+                    >
+                      로그아웃
+                    </span>
                   </div>
                 </div>
-                <div>
+                <div className="text-[18px] mb-[15px]">
                   <Link href="/story/list">스토리</Link>
                 </div>
               </div>
             </div>
           ) : null}
         </div>
-        <div>
+        <div className="text-[22px] font-semibold">
           <Link href="/">Hoonap</Link>
         </div>
         <div>
-          <Link href="/create">생성</Link>
+          <Link href="/create" className="submit-button text-[15px] px-[14px] py-[8px]">
+            생성
+          </Link>
         </div>
       </div>
     );
 
   return (
-    <div className="fixed top-0 left-0 w-[100%] h-[70px] px-[10px] border-b-2 border-bs bg-white z-[100]">
+    <div className="header">
       <div className="flex justify-between max-w-[1200px] h-[100%] mx-auto my-0">
         <div className="flex">
           <div className="pt-[12px]">
