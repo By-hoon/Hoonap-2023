@@ -72,13 +72,15 @@ const Signup = () => {
             required
           />
         </div>
-        <div className="text-center mb-[20px]">
+        <div className="text-center">
           <Button text="가입" style="submit-button py-[7px]" type="submit" />
-          <div className="text-[17px] mt-[10px] hover:text-bcd">
-            <Button text="이미 회원이신가요? →" style="" onClick={goSignUp} />
-          </div>
         </div>
       </form>
+      <div className="text-center mb-[20px]">
+        <div className="text-[17px] mt-[10px] hover:text-bcd">
+          <Button text="이미 회원이신가요? →" style="" onClick={goSignUp} />
+        </div>
+      </div>
     </div>
   );
 };

@@ -62,7 +62,7 @@ const Login = () => {
             required
           />
         </div>
-        <div className="text-center mb-[20px]">
+        <div className="text-center">
           <div>
             <Button text="로그인" style="submit-button" type="submit" />
             <Button
@@ -71,11 +71,13 @@ const Login = () => {
               onClick={tryLoginTestAccount}
             />
           </div>
-          <div className="text-[17px] mt-[10px] hover:text-bcd">
-            <Button text="아직 회원이 아니신가요? →" style="" onClick={goSignUp} />
-          </div>
         </div>
       </form>
+      <div className="text-center mb-[20px]">
+        <div className="text-[17px] mt-[10px] hover:text-bcd">
+          <Button text="아직 회원이 아니신가요? →" style="" onClick={goSignUp} />
+        </div>
+      </div>
     </div>
   );
 };
