@@ -11,7 +11,7 @@ import useClickOutside from "@/hooks/useClickOutside";
 import deleteDocument from "@/firebase/firestore/deleteDocument";
 import updateField from "@/firebase/firestore/updateField";
 import { deleteFile } from "@/firebase/storage/delete";
-import { useAuth } from "@/context/authProvoider";
+import { useAuth } from "@/context/authProvider";
 import BasicImage from "@/components/common/BasicImage";
 
 export interface storyProps {

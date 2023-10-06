@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Preview from "@/components/story/Preview";
 import { Icon } from "@iconify/react";
 import { isExp } from "@/utils/util";
-import { useAuth } from "@/context/authProvoider";
+import { useAuth } from "@/context/authProvider";
 import BasicImage from "@/components/common/BasicImage";
 import Router from "next/router";
 

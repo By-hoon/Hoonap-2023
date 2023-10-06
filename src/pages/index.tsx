@@ -3,7 +3,7 @@ import signIn from "@/firebase/auth/signIn";
 import { useRouter } from "next/router";
 import { isExp } from "@/utils/util";
 import { addInfo, expInfo } from "@/shared/constants";
-import { useAuth } from "@/context/authProvoider";
+import { useAuth } from "@/context/authProvider";
 import Button from "@/components/common/Button";
 
 export default function Home() {

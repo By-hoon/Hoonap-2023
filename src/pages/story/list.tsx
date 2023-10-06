@@ -4,7 +4,7 @@ import Preview from "@/components/story/Preview";
 import { useEffect, useState } from "react";
 import Layout from "@/components/common/Layout";
 import { isExp } from "@/utils/util";
-import { useAuth } from "@/context/authProvoider";
+import { useAuth } from "@/context/authProvider";
 import MapOption from "@/components/MapOption";
 import Router from "next/router";
 const Map = dynamic(() => import("@/components/Map"), {
