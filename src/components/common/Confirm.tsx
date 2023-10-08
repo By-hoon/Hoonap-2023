@@ -1,4 +1,4 @@
-interface ConfirmProps {
+export interface ConfirmProps {
   title: string;
   content: string;
   onClickOK: () => void;
