@@ -6,7 +6,7 @@ export interface AlertProps {
 
 const Alert = ({ title, content, onClickOK }: AlertProps) => {
   return (
-    <div>
+    <div className="absolute top-[10px] left-1/2 transform -translate-x-1/2 border z-[200]">
       <div>{title}</div>
       <div>{content}</div>
       {onClickOK ? (

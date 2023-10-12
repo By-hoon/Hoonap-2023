@@ -7,7 +7,7 @@ export interface ConfirmProps {
 
 const Confirm = ({ title, content, onClickOK, onClickCancel }: ConfirmProps) => {
   return (
-    <div>
+    <div className="absolute top-[10px] left-1/2 transform -translate-x-1/2 border z-[200]">
       <div>{title}</div>
       <div>{content}</div>
       <div>
