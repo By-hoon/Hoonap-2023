@@ -1,6 +1,6 @@
 import Alert, { AlertProps } from "@/components/common/Alert";
 import Confirm, { ConfirmProps } from "@/components/common/Confirm";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 
 type Type = {
   confirm: (title: string, content: string) => Promise<boolean>;
@@ -36,12 +36,16 @@ export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const alert = (title: string, content: string): Promise<boolean> => {
-    return new Promise(() => {
+    return new Promise((resolve) => {
       setType("alert");
       setAlertState({
         title: title,
         content: content,
       });
+      setTimeout(() => {
+        setAlertState(undefined);
+        resolve(true);
+      }, 3000);
     });
   };
 
@@ -70,12 +74,6 @@ export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
         return null;
     }
   };
-
-  useEffect(() => {
-    if (!alertState) return;
-
-    setTimeout(() => setAlertState(undefined), 3000);
-  }, [alertState]);
 
   return (
     <PopUpContext.Provider value={{ confirm, alert }}>
