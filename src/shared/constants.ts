@@ -15,8 +15,10 @@ export const alertTitle = {
 
 export const alertContent = {
   invalidId: "이미 있는 아이디입니다.",
+  userNotFound: "없는 사용자입니다.",
   reconfirmEmail: "이메일 형식을 확인해 주세요.",
   reconfirmPassword: "비밀번호를 다시 확인해 주세요.",
+  wrongPassword: "비밀번호를 확인해 주세요",
   tryAgain: "잠시 후 다시 시도해 주세요.",
   unknown: "알 수 없는 오류가 발생하였습니다.",
 };
