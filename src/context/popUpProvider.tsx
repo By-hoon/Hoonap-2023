@@ -66,9 +66,7 @@ export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
       case "alert": {
         if (!alertState) return;
 
-        return (
-          <Alert title={alertState.title} content={alertState.content} onClickOK={alertState.onClickOK} />
-        );
+        return <Alert title={alertState.title} content={alertState.content} />;
       }
       default:
         return null;
