@@ -5,10 +5,11 @@ import updateField from "@/firebase/firestore/updateField";
 import { addFiles } from "@/firebase/storage/add";
 import { isExp } from "@/utils/util";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { storyProps } from "./detail";
 import { deleteFile } from "@/firebase/storage/delete";
 import Button from "@/components/common/Button";
+import { PopUpContext } from "@/context/popUpProvider";
 
 const StoryEdit = () => {
   const router = useRouter();
@@ -29,6 +30,8 @@ const StoryEdit = () => {
   const [oldImages, setOldImages] = useState<string[]>([]);
   const [title, setTitle] = useState("");
   const [story, setStory] = useState("");
+
+  const { confirm } = useContext(PopUpContext);
 
   const changeTitle = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -97,6 +100,9 @@ const StoryEdit = () => {
 
   const editStory = async () => {
     if (paths.length === 0 || !previewImages || title === "" || story === "") return;
+
+    const result = await confirm("스토리를 수정하시겠습니까?", "수정된 내용은 다시 복구할 수 없습니다.");
+    if (!result) return;
 
     const curStoryId = storyId as string;
     const curUserId = userId as string;

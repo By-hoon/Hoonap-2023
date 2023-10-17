@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import getDocument from "@/firebase/firestore/getDocument";
 import Link from "next/link";
@@ -13,6 +13,7 @@ import updateField from "@/firebase/firestore/updateField";
 import { deleteFile } from "@/firebase/storage/delete";
 import { useAuth } from "@/context/authProvider";
 import BasicImage from "@/components/common/BasicImage";
+import { PopUpContext } from "@/context/popUpProvider";
 
 export interface storyProps {
   title: string;
@@ -37,8 +38,9 @@ const StoryDetail = () => {
   const { show: showMoreMenu, ref: moreMenuRef, onClickTarget: onClickMoreMenu } = useClickOutside();
 
   const { user } = useAuth();
-
   const router = useRouter();
+  const { confirm } = useContext(PopUpContext);
+
   const { storyId } = router.query;
 
   const getUserNickname = async (userId: string) => {
@@ -95,6 +97,9 @@ const StoryDetail = () => {
   };
 
   const deleteStory = async () => {
+    const result = await confirm("스토리를 삭제하시겠습니까?", "삭제된 스토리는 다시 복구할 수 없습니다.");
+    if (!result) return;
+
     for (let i = 0; i < images.length; i++) {
       await deleteFile(images[i]);
     }
@@ -109,7 +114,6 @@ const StoryDetail = () => {
       updateUserStoryIds();
     }
 
-    alert("스토리가 삭제되었습니다.");
     router.push("/story/list");
   };
 

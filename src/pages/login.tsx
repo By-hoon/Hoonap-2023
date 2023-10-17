@@ -1,13 +1,17 @@
 import Button from "@/components/common/Button";
+import { PopUpContext } from "@/context/popUpProvider";
 import signIn from "@/firebase/auth/signIn";
+import Alerts from "@/shared/alerts";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const router = useRouter();
+
+  const { alert } = useContext(PopUpContext);
 
   const changeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -18,8 +22,13 @@ const Login = () => {
 
   const tryLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const result = await signIn(email, password);
-    if (!result) return;
+    const userData = await signIn(email, password);
+    if (typeof userData === "string") {
+      const errorCode = userData;
+      const { alertTitle, alertContent } = Alerts(errorCode);
+      await alert(alertTitle, alertContent);
+      return;
+    }
     router.push("/");
   };
 

@@ -1,8 +1,10 @@
 import Button from "@/components/common/Button";
+import { PopUpContext } from "@/context/popUpProvider";
 import signUp from "@/firebase/auth/signUp";
 import setData from "@/firebase/firestore/setData";
+import Alerts from "@/shared/alerts";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -10,6 +12,8 @@ const Signup = () => {
   const [nickname, setNickname] = useState("");
 
   const router = useRouter();
+
+  const { alert } = useContext(PopUpContext);
 
   const changeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -24,7 +28,13 @@ const Signup = () => {
   const trySignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const userData = await signUp(email, password);
-    if (!userData) return;
+    if (typeof userData === "string") {
+      const errorCode = userData;
+      const { alertTitle, alertContent } = Alerts(errorCode);
+      await alert(alertTitle, alertContent);
+      return;
+    }
+
     const userId = userData.user.uid;
     const addResult = await setData("users", userId, { nickname: nickname });
     if (!addResult) return;

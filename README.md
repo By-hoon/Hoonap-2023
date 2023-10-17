@@ -79,8 +79,10 @@ Vercel 배포: https://hoonap-2023.vercel.app/
 src
 ├── components
 │   ├── common
+│   │   ├── Alert.tsx
 │   │   ├── BasicImage.tsx
 │   │   ├── Button.tsx
+│   │   ├── Confirm.tsx
 │   │   ├── Header.tsx
 │   │   ├── Layout.tsx
 │   │   ├── Loading.tsx
@@ -94,7 +96,8 @@ src
 │   ├── Map.tsx
 │   └── MapOption.tsx
 └── context
-│   └── authProvoider.ts
+│   ├── authProvoider.tsx
+│   └── popUpProvider.tsx
 ├── firebase
 │   ├── auth
 │   │   ├── checkUser.ts
@@ -134,6 +137,7 @@ src
 │   ├── login.tsx
 │   └── signup.tsx
 └── shared
+│   ├── alerts.ts
 │   └── constants.ts
 └── styles
 │   └── globals.css
