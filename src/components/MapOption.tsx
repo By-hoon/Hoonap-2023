@@ -19,6 +19,7 @@ export default function MapOption({ paths, clickMap, addPaths, deletePaths }: Ma
   const mapOptionRender = () => {
     switch (router.pathname) {
       case "/create":
+      case "/story/edit":
         return (
           <>
             <Listener
