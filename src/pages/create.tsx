@@ -226,7 +226,7 @@ export default function Create({ uid }: { uid: string }) {
               <PartButton
                 name={"사진"}
                 icon={"icon-park-outline:add-pic"}
-                isComplete={!!images}
+                isComplete={!!images && images?.length !== 0}
                 onClick={() => changePart("image")}
               />
               <PartButton
