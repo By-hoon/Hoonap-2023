@@ -2,11 +2,12 @@ import doSignOut from "@/firebase/auth/signOut";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import Title from "./Title";
 import { title } from "@/shared/constants";
 import useClickOutside from "@/hooks/useClickOutside";
+import { PopUpContext } from "@/context/popUpProvider";
 
 const Header = () => {
   const [mounted, setMounted] = useState(false);
@@ -14,9 +15,20 @@ const Header = () => {
   const { show: showProfileMenu, ref: profileMenuRef, onClickTarget: onClickProfileMenu } = useClickOutside();
 
   const router = useRouter();
+
+  const { confirm } = useContext(PopUpContext);
+
   const isMobile = useMediaQuery({
     query: "(max-width: 768px)",
   });
+
+  const trySignOut = async () => {
+    const result = await confirm("로그아웃 하시겠습니까?", "로그인 페이지로 넘어갑니다.");
+    if (!result) return;
+
+    doSignOut();
+    router.replace("/login");
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -66,14 +78,7 @@ const Header = () => {
                     <span>프로필</span>
                   </div>
                   <div>
-                    <span
-                      onClick={() => {
-                        doSignOut();
-                        router.replace("/login");
-                      }}
-                    >
-                      로그아웃
-                    </span>
+                    <span onClick={trySignOut}>로그아웃</span>
                   </div>
                 </div>
                 <div className="text-[18px] mb-[15px]">
@@ -124,13 +129,7 @@ const Header = () => {
             </div>
             {showProfileMenu ? (
               <div className="absolute top-[30px] left-[-12px] w-[80px] h-[60px] text-center font-normal text-[15px] bg-white rounded-[6px] shadow-basic p-[3px]">
-                <div
-                  className="cursor-pointer"
-                  onClick={() => {
-                    doSignOut();
-                    router.replace("/login");
-                  }}
-                >
+                <div className="cursor-pointer" onClick={trySignOut}>
                   로그아웃
                 </div>
               </div>
