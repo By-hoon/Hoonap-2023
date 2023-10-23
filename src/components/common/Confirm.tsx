@@ -13,12 +13,12 @@ const Confirm = ({ title, content, onClickOK, onClickCancel }: ConfirmProps) => 
         <div className="text-[14px] text-neutral-400 mt-[5px]">{content}</div>
       </div>
       <div className="flex text-center text-[16px]">
-        <div className="cursor-pointer w-[50%] bg-zinc-200 py-[7px]" onClick={onClickCancel}>
+        <button className="cursor-pointer w-[50%] bg-zinc-200 py-[7px]" onClick={onClickCancel}>
           취소
-        </div>
-        <div className="cursor-pointer w-[50%] text-white bg-bc py-[7px]" onClick={onClickOK}>
+        </button>
+        <button className="cursor-pointer w-[50%] text-white bg-bc py-[7px]" autoFocus onClick={onClickOK}>
           확인
-        </div>
+        </button>
       </div>
     </div>
   );
