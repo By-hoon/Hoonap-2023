@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 export interface ConfirmProps {
   title: string;
   content: string;
@@ -6,6 +8,18 @@ export interface ConfirmProps {
 }
 
 const Confirm = ({ title, content, onClickOK, onClickCancel }: ConfirmProps) => {
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+
+      onClickCancel();
+    };
+
+    document.addEventListener("keydown", handleEscape);
+
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [onClickCancel]);
+
   return (
     <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-[300px] bg-white shadow-basic rounded-[10px] overflow-hidden z-[200]">
       <div className="text-center break-keep p-[25px]">
