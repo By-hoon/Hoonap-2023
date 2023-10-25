@@ -55,12 +55,15 @@ export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
         if (!confirmState) return;
 
         return (
-          <Confirm
-            title={confirmState.title}
-            content={confirmState.content}
-            onClickOK={confirmState.onClickOK}
-            onClickCancel={confirmState.onClickCancel}
-          />
+          <>
+            <div className="background-shadow z-[150]" onClickCapture={(e) => e.stopPropagation()} />
+            <Confirm
+              title={confirmState.title}
+              content={confirmState.content}
+              onClickOK={confirmState.onClickOK}
+              onClickCancel={confirmState.onClickCancel}
+            />
+          </>
         );
       }
       case "alert": {
