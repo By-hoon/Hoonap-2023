@@ -1,6 +1,5 @@
 import Layout from "@/components/common/Layout";
 import getCollection from "@/firebase/firestore/getCollection";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import Preview from "@/components/story/Preview";
 import { Icon } from "@iconify/react";
@@ -8,6 +7,7 @@ import { isExp } from "@/utils/util";
 import { useAuth } from "@/context/authProvider";
 import BasicImage from "@/components/common/BasicImage";
 import Router from "next/router";
+import Link from "next/link";
 
 const Gallery = () => {
   const [images, setImages] = useState<{ url: string; userId: string; id: string }[]>([]);
@@ -74,27 +74,37 @@ const Gallery = () => {
     <Layout>
       <div className="p-[10px]">
         {current ? (
-          <div className="relative md:grid md:grid-cols-[minmax(420px,_1fr)_1fr]">
-            <div className="absolute top-0 right-0 z-10">
-              <Icon
-                icon="ep:close-bold"
-                onClick={() => {
-                  setCurrent(undefined);
-                }}
-              />
+          <>
+            <div
+              className="background-shadow z-[110]"
+              onClick={() => {
+                setCurrent(undefined);
+              }}
+            />
+            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 rounded-[10px] overflow-hidden z-[120]">
+              <BasicImage
+                style={"relative w-[768px] h-[768px] mobile:w-[300px] mobile:h-[300px]"}
+                url={current.url}
+                alt={"current-image"}
+              >
+                <div>
+                  <div>
+                    <Link
+                      href={{
+                        pathname: "/story/detail",
+                        query: { storyId: current.id },
+                      }}
+                      as="/story/detail"
+                    >
+                      스토리 보러가기
+                    </Link>
+                  </div>
+                </div>
+              </BasicImage>
             </div>
-            <div className="main-relative">
-              <BasicImage style={"main-absolute"} url={current.url} alt={"gallery-current-image"} />
-            </div>
-            <div className="flex items-center p-[15px]">
-              <Preview currentStoryId={current.id} userId={current.userId} />
-            </div>
-          </div>
+          </>
         ) : null}
-        <div
-          className={`flex flex-wrap items-center p-[15px]
-          ${current ? "h-[200px] overflow-y-scroll scrollbar-hide" : ""}`}
-        >
+        <div className={`flex flex-wrap items-center p-[15px]`}>
           {images.map((imageObj, index) => (
             <div
               key={index}
@@ -103,9 +113,7 @@ const Gallery = () => {
               }}
             >
               <BasicImage
-                style={
-                  "relative md:w-[150px] md:h-[150px] w-[140px] h-[140px] mx-[10px] rounded-[8px] overflow-hidden"
-                }
+                style={"relative md:w-[150px] md:h-[150px] w-[140px] h-[140px] mx-[10px] rounded-[8px]"}
                 url={imageObj.url}
                 alt={"gallery-image"}
               />
