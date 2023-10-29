@@ -1,8 +1,6 @@
 import Layout from "@/components/common/Layout";
 import getCollection from "@/firebase/firestore/getCollection";
 import { useEffect, useState } from "react";
-import Preview from "@/components/story/Preview";
-import { Icon } from "@iconify/react";
 import { isExp } from "@/utils/util";
 import { useAuth } from "@/context/authProvider";
 import BasicImage from "@/components/common/BasicImage";
@@ -81,14 +79,17 @@ const Gallery = () => {
                 setCurrent(undefined);
               }}
             />
-            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 rounded-[10px] overflow-hidden z-[120]">
+            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 rounded-[10px] z-[120]">
               <BasicImage
                 style={"relative w-[768px] h-[768px] mobile:w-[300px] mobile:h-[300px]"}
                 url={current.url}
                 alt={"current-image"}
               >
                 <div>
-                  <div>
+                  <div
+                    className="w-[210px] h-[50px] flex justify-center items-center text-white text-[24px] border rounded-[10px] mx-auto mt-[10px]
+                    mobile:w-[180px] mobile:h-[45px] mobile:text-[20px]"
+                  >
                     <Link
                       href={{
                         pathname: "/story/detail",
