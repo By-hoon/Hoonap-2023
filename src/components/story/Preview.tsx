@@ -1,41 +1,23 @@
-import { useContext, useEffect, useState } from "react";
-import getDocument from "@/firebase/firestore/getDocument";
+import { useState } from "react";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
-import { useRouter } from "next/router";
-import { DocumentData } from "firebase/firestore";
-import { isExp } from "@/utils/util";
 import useClickOutside from "@/hooks/useClickOutside";
-import deleteDocument from "@/firebase/firestore/deleteDocument";
-import updateField from "@/firebase/firestore/updateField";
-import { deleteFile } from "@/firebase/storage/delete";
 import { useAuth } from "@/context/authProvider";
 import BasicImage from "@/components/common/BasicImage";
-import { PopUpContext } from "@/context/popUpProvider";
-import { storyProps } from "@/pages/story/detail";
+import { StoryProps } from "@/pages/story/detail";
 import useUser from "@/hooks/useUser";
 
-interface PreviewProps {
-  currentStoryId: string;
-  userId: string;
+interface PreviewProps extends StoryProps {
+  deleteStory: (storyId: string, userId: string) => void;
 }
 
-const Preview = ({ currentStoryId, userId }: PreviewProps) => {
-  const [title, setTitle] = useState("");
-  const [story, setStory] = useState("");
-  const [images, setImages] = useState<string[]>([]);
-  const [paths, setPaths] = useState<{ latitude: number; longitude: number }[]>([]);
+const Preview = ({ title, story, images, paths, storyId, userId, deleteStory }: PreviewProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const [restExpStory, setRestExpStory] = useState<{ [key: string]: storyProps }>({});
-
+  const { user } = useAuth();
   const { nickname } = useUser(userId);
 
   const { show: showMoreMenu, ref: moreMenuRef, onClickTarget: onClickMoreMenu } = useClickOutside();
-
-  const { user } = useAuth();
-  const router = useRouter();
-  const { confirm } = useContext(PopUpContext);
 
   const preImage = () => {
     if (currentIndex === 0) {
@@ -51,108 +33,6 @@ const Preview = ({ currentStoryId, userId }: PreviewProps) => {
     }
     setCurrentIndex((c) => c + 1);
   };
-
-  const deleteExpStory = () => {
-    const restExpStories = Object.keys(restExpStory);
-
-    if (restExpStories.length === 0) {
-      window.localStorage.clear();
-      return;
-    }
-
-    const newExpPaths: {
-      [key: string]: { paths: { latitude: number; longitude: number }[]; storyId: string };
-    } = {};
-    const newExpImages: { [key: string]: { images: string[]; storyId: string } } = {};
-
-    restExpStories.forEach((key) => {
-      newExpPaths[key] = {
-        paths: restExpStory[key].paths,
-        storyId: restExpStory[key].storyId,
-      };
-      newExpImages[key] = {
-        images: restExpStory[key].images,
-        storyId: restExpStory[key].storyId,
-      };
-    });
-
-    window.localStorage.setItem("story", JSON.stringify(restExpStory));
-    window.localStorage.setItem("path", JSON.stringify(newExpPaths));
-    window.localStorage.setItem("image", JSON.stringify(newExpImages));
-  };
-
-  const deleteStory = async () => {
-    const result = await confirm("스토리를 삭제하시겠습니까?", "삭제된 스토리는 다시 복구할 수 없습니다.");
-    if (!result) return;
-
-    for (let i = 0; i < images.length; i++) {
-      await deleteFile(images[i]);
-    }
-
-    if (isExp(user?.uid as string)) {
-      deleteExpStory();
-    } else {
-      await deleteDocument("stories", currentStoryId);
-      await deleteDocument("paths", currentStoryId);
-      await deleteDocument("images", currentStoryId);
-
-      updateUserStoryIds();
-    }
-
-    router.push("/story/list");
-  };
-
-  const updateUserStoryIds = async () => {
-    const userData = await getDocument("users", userId);
-    if (!userData) return;
-
-    const storyIds = userData.storyIds;
-
-    const newStoryIds = storyIds.length == 1 ? null : storyIds.filter((e: string) => e != currentStoryId);
-
-    await updateField("users", userId, "storyIds", newStoryIds);
-  };
-
-  useEffect(() => {
-    if (!user) return;
-
-    const setStoryData = (result: storyProps | DocumentData) => {
-      setTitle(result.title);
-      setStory(result.story);
-      setImages(result.images);
-      setPaths(result.paths);
-    };
-
-    const getStory = async () => {
-      const result = await getDocument("stories", currentStoryId);
-
-      if (!result) return;
-
-      setStoryData(result);
-    };
-
-    const getExpStory = () => {
-      const storageStory = window.localStorage.getItem("story");
-      if (!storageStory) return;
-
-      const expStory = JSON.parse(storageStory);
-      const result: storyProps = expStory[currentStoryId];
-
-      const { ...newExpStory } = expStory;
-      delete newExpStory[currentStoryId];
-
-      setStoryData(result);
-      setRestExpStory(newExpStory);
-    };
-
-    if (isExp(user.uid)) {
-      getExpStory();
-      return;
-    }
-    getStory();
-  }, [currentStoryId, user]);
-
-  if (!user) return <div></div>;
 
   return (
     <div className="relative md:grid md:grid-cols-[1fr_300px] min-w-[300px] max-w-[964px] md:mt-[95px] md:mx-[30px] lg:mx-auto border rounded-[5px] overflow-hidden">
@@ -201,7 +81,7 @@ const Preview = ({ currentStoryId, userId }: PreviewProps) => {
               <div>
                 <div className="background-shadow" onClick={onClickMoreMenu} />
                 <div className="absolute bottom-0 right-0 mobile:top-0 w-[250px] md:w-[300px] h-[80%] mobile:max-h-[380px] text-white font-semibold text-[18px] bg-zinc-800 rounded-[6px] p-[20px] z-20">
-                  {userId === user.uid ? (
+                  {userId === user?.uid ? (
                     <div>
                       <Link
                         className="cursor-pointer flex items-center text-white mb-[20px]"
@@ -213,8 +93,8 @@ const Preview = ({ currentStoryId, userId }: PreviewProps) => {
                             images,
                             paths: JSON.stringify(paths),
                             userId,
-                            currentStoryId,
-                            restExpStory: JSON.stringify(restExpStory),
+                            storyId,
+                            restExpStory: JSON.stringify({}),
                           },
                         }}
                         as="/story/edit"
@@ -224,7 +104,7 @@ const Preview = ({ currentStoryId, userId }: PreviewProps) => {
                       </Link>
                       <div
                         className="cursor-pointer flex items-center text-red-600 mb-[20px]"
-                        onClick={deleteStory}
+                        onClick={() => deleteStory(storyId, userId)}
                       >
                         <Icon className="text-[28px] mr-[8px]" icon="mingcute:delete-line" />
                         삭제
@@ -244,7 +124,7 @@ const Preview = ({ currentStoryId, userId }: PreviewProps) => {
           <Link
             href={{
               pathname: "/story/detail",
-              query: { storyId: currentStoryId },
+              query: { storyId },
             }}
             as="/story/detail"
           >
