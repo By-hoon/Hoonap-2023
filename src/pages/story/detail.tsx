@@ -15,7 +15,7 @@ import { useAuth } from "@/context/authProvider";
 import BasicImage from "@/components/common/BasicImage";
 import { PopUpContext } from "@/context/popUpProvider";
 
-export interface storyProps {
+export interface StoryProps {
   title: string;
   story: string;
   paths: { latitude: number; longitude: number }[];
@@ -33,7 +33,7 @@ const StoryDetail = () => {
   const [nickname, setNickname] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const [restExpStory, setRestExpStory] = useState<{ [key: string]: storyProps }>({});
+  const [restExpStory, setRestExpStory] = useState<{ [key: string]: StoryProps }>({});
 
   const { show: showMoreMenu, ref: moreMenuRef, onClickTarget: onClickMoreMenu } = useClickOutside();
 
@@ -137,7 +137,7 @@ const StoryDetail = () => {
       return;
     }
 
-    const setStoryData = (result: storyProps | DocumentData) => {
+    const setStoryData = (result: StoryProps | DocumentData) => {
       setTitle(result.title);
       setStory(result.story);
       setImages(result.images);
@@ -160,7 +160,7 @@ const StoryDetail = () => {
       if (!storageStory) return;
 
       const expStory = JSON.parse(storageStory);
-      const result: storyProps = expStory[storyId as string];
+      const result: StoryProps = expStory[storyId as string];
 
       const { ...newExpStory } = expStory;
       delete newExpStory[storyId as string];

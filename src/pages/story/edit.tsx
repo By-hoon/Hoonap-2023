@@ -6,7 +6,7 @@ import { addFiles } from "@/firebase/storage/add";
 import { isExp } from "@/utils/util";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
-import { storyProps } from "./detail";
+import { StoryProps } from "./detail";
 import { deleteFile } from "@/firebase/storage/delete";
 import Button from "@/components/common/Button";
 import { PopUpContext } from "@/context/popUpProvider";
@@ -45,7 +45,7 @@ const StoryEdit = () => {
     const curStoryId = storyId as string;
     const curUserId = userId as string;
 
-    const newExpStory: { [key: string]: storyProps } = {};
+    const newExpStory: { [key: string]: StoryProps } = {};
     const newExpPaths: {
       [key: string]: { paths: { latitude: number; longitude: number }[]; storyId: string };
     } = {};
