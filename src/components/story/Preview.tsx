@@ -6,6 +6,8 @@ import { useAuth } from "@/context/authProvider";
 import BasicImage from "@/components/common/BasicImage";
 import { StoryProps } from "@/pages/story/detail";
 import useUser from "@/hooks/useUser";
+import MenuButton from "./MenuButton";
+import { useRouter } from "next/router";
 
 interface PreviewProps extends StoryProps {
   deleteStory: (storyId: string, userId: string) => void;
@@ -16,6 +18,8 @@ const Preview = ({ title, story, images, paths, storyId, userId, deleteStory }: 
 
   const { user } = useAuth();
   const { nickname } = useUser(userId);
+
+  const router = useRouter();
 
   const { show: showMoreMenu, ref: moreMenuRef, onClickTarget: onClickMoreMenu } = useClickOutside();
 
@@ -54,11 +58,12 @@ const Preview = ({ title, story, images, paths, storyId, userId, deleteStory }: 
             <div>
               <div className="background-shadow !fixed" onClick={onClickMoreMenu} />
               <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] mobile:w-[250px] font-semibold text-[18px] bg-white rounded-[6px] z-30">
-                {userId === user?.uid ? (
-                  <div>
-                    <Link
-                      className="cursor-pointer flex justify-center items-center m-[5px] p-[5px]"
-                      href={{
+                <MenuButton
+                  isShow={userId === user?.uid}
+                  name={"수정"}
+                  onClick={() => {
+                    router.push(
+                      {
                         pathname: "/story/edit",
                         query: {
                           title,
@@ -69,19 +74,17 @@ const Preview = ({ title, story, images, paths, storyId, userId, deleteStory }: 
                           storyId,
                           restExpStory: JSON.stringify({}),
                         },
-                      }}
-                      as="/story/edit"
-                    >
-                      수정
-                    </Link>
-                    <div
-                      className="cursor-pointer flex justify-center items-center text-red-600 m-[5px] p-[5px]"
-                      onClick={() => deleteStory(storyId, userId)}
-                    >
-                      삭제
-                    </div>
-                  </div>
-                ) : null}
+                      },
+                      "/story/edit"
+                    );
+                  }}
+                />
+                <MenuButton
+                  isShow={userId === user?.uid}
+                  name={"삭제"}
+                  style="text-red-600"
+                  onClick={() => deleteStory(storyId, userId)}
+                />
               </div>
             </div>
           ) : null}
