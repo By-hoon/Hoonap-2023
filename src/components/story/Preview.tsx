@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import MapOption from "../MapOption";
 import StoryImages from "./StoryImages";
+import StoryContents from "./StoryContents";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
@@ -92,23 +93,7 @@ const Preview = ({ title, story, images, paths, storyId, userId, deleteStory }: 
         </div>
       </div>
       <StoryImages images={images} size="w-full h-[468px] mobile:h-[300px]" />
-      <div>
-        <div className="flex mt-[5px]">
-          <div className="text-[18px] font-semibold mr-[10px]">{title}</div>
-          <div className="text-[16px] mt-[5px]">{story}</div>
-        </div>
-        <div className="text-[18px] text-bc text-center">
-          <Link
-            href={{
-              pathname: "/story/detail",
-              query: { storyId },
-            }}
-            as="/story/detail"
-          >
-            스토리 보러가기
-          </Link>
-        </div>
-      </div>
+      <StoryContents title={title} story={story} storyId={storyId} />
     </div>
   );
 };
