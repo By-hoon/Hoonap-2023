@@ -1,5 +1,7 @@
+import { ReactNode } from "react";
+
 interface ButtonProps {
-  text: string;
+  text: string | ReactNode;
   style: string;
   onClick?: () => void;
   type?: "button" | "submit" | "reset";

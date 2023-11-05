@@ -1,5 +1,4 @@
 import getDocument from "@/firebase/firestore/getDocument";
-import Image from "next/image";
 import Link from "next/link";
 import useUser from "@/hooks/useUser";
 import Layout from "@/components/common/Layout";
@@ -8,11 +7,14 @@ import Router, { useRouter } from "next/router";
 import BasicImage from "@/components/common/BasicImage";
 import dynamic from "next/dynamic";
 import MapOption from "@/components/MapOption";
+import Button from "@/components/common/Button";
+import { Icon } from "@iconify/react";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
 
 const UserDetail = () => {
+  const [section, setSection] = useState("gallery");
   const [paths, setPaths] = useState<[{ latitude: number; longitude: number }[]]>([[]]);
   const [storyIds, setStoryIds] = useState<string[]>([]);
   const [images, setImages] = useState<{ urls: string[]; id: string }[]>([]);
@@ -28,6 +30,53 @@ const UserDetail = () => {
       pathname: "/story/detail",
       query: { storyId: storyId },
     });
+  };
+
+  const sectionRender = () => {
+    switch (section) {
+      case "gallery": {
+        return (
+          <div className="flex flex-wrap justify-around p-[5px]">
+            {images.map((image) =>
+              image.urls.map((imageUrl) => (
+                <Link
+                  key={imageUrl}
+                  href={{
+                    pathname: "/story/detail",
+                    query: { storyId: image.id },
+                  }}
+                  as="/story/detail"
+                >
+                  <BasicImage
+                    style={"relative w-[130px] h-[130px] rounded-[5px] border-2 mx-[5px] my-[10px] p-[5px]"}
+                    url={imageUrl}
+                    alt={"user-story-image"}
+                  />
+                </Link>
+              ))
+            )}
+          </div>
+        );
+      }
+      case "map": {
+        return (
+          <div className="main-relative">
+            <div className="main-absolute">
+              {paths[0][0] ? (
+                <Map location={{ latitude: paths[0][0].latitude, longitude: paths[0][0].longitude }}>
+                  <MapOption
+                    paths={paths.map((path, index) => ({ pathArray: path, storyId: storyIds[index] }))}
+                    clickMap={clickMap}
+                  />
+                </Map>
+              ) : null}
+            </div>
+          </div>
+        );
+      }
+      default:
+        return null;
+    }
   };
 
   useEffect(() => {
@@ -76,38 +125,25 @@ const UserDetail = () => {
         <div className="border-b-2 p-[15px]">
           <div className="text-[18px] font-semibold">{nickname}</div>
         </div>
-        <div className="main-relative">
-          <div className="main-absolute">
-            {paths[0][0] ? (
-              <Map location={{ latitude: paths[0][0].latitude, longitude: paths[0][0].longitude }}>
-                <MapOption
-                  paths={paths.map((path, index) => ({ pathArray: path, storyId: storyIds[index] }))}
-                  clickMap={clickMap}
-                />
-              </Map>
-            ) : null}
-          </div>
+        <div className="flex justify-between mt-[20px] px-[10px]">
+          <Button
+            text={<Icon icon="solar:gallery-bold" />}
+            style={`w-[50%] flex justify-center text-[28px] text-center pb-[10px] 
+            ${section === "gallery" ? "border-b-2 border-bc" : ""}`}
+            onClick={() => {
+              setSection("gallery");
+            }}
+          />
+          <Button
+            text={<Icon icon="bx:map" />}
+            style={`w-[50%] flex justify-center text-[28px] text-center pb-[10px] 
+            ${section === "map" ? "border-b-2 border-bc" : ""}`}
+            onClick={() => {
+              setSection("map");
+            }}
+          />
         </div>
-        <div className="flex flex-wrap justify-around p-[5px]">
-          {images.map((image) =>
-            image.urls.map((imageUrl) => (
-              <Link
-                key={imageUrl}
-                href={{
-                  pathname: "/story/detail",
-                  query: { storyId: image.id },
-                }}
-                as="/story/detail"
-              >
-                <BasicImage
-                  style={"relative w-[130px] h-[130px] rounded-[5px] border-2 mx-[5px] my-[10px] p-[5px]"}
-                  url={imageUrl}
-                  alt={"user-story-image"}
-                />
-              </Link>
-            ))
-          )}
-        </div>
+        {sectionRender()}
       </div>
     </Layout>
   );
