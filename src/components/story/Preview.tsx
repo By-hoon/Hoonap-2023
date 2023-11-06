@@ -62,7 +62,6 @@ const Preview = ({ title, story, images, paths, storyId, userId, deleteStory }: 
                           paths: JSON.stringify(paths),
                           userId,
                           storyId,
-                          restExpStory: JSON.stringify({}),
                         },
                       },
                       "/story/edit"
