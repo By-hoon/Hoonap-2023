@@ -5,11 +5,7 @@ import StoryImages from "./StoryImages";
 import StoryContents from "./StoryContents";
 import MoreMenu from "./MoreMenu";
 
-interface PreviewProps extends StoryProps {
-  deleteStory: (storyId: string, userId: string) => void;
-}
-
-const Preview = ({ title, story, images, paths, storyId, userId, deleteStory }: PreviewProps) => {
+const Preview = ({ title, story, images, paths, storyId, userId }: StoryProps) => {
   const { nickname } = useUser(userId);
 
   return (
@@ -33,7 +29,6 @@ const Preview = ({ title, story, images, paths, storyId, userId, deleteStory }: 
           images={images}
           storyId={storyId}
           userId={userId}
-          deleteStory={deleteStory}
         />
       </div>
       <StoryImages images={images} size="w-full h-[468px] mobile:h-[300px]" />
