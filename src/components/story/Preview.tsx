@@ -32,7 +32,7 @@ const Preview = ({ title, story, images, paths, storyId, userId }: StoryProps) =
         />
       </div>
       <StoryImages images={images} size="w-full h-[468px] mobile:h-[300px]" />
-      <StoryContents title={title} story={story} storyId={storyId} />
+      <StoryContents title={title} story={story} storyId={storyId} hasLink />
     </div>
   );
 };
