@@ -17,7 +17,7 @@ const UserDetail = () => {
   const [section, setSection] = useState("gallery");
   const [paths, setPaths] = useState<[{ latitude: number; longitude: number }[]]>([[]]);
   const [storyIds, setStoryIds] = useState<string[]>([]);
-  const [images, setImages] = useState<{ urls: string[]; id: string }[]>([]);
+  const [images, setImages] = useState<{ urls: string[]; storyId: string }[]>([]);
 
   const router = useRouter();
   const { userId } = router.query;
@@ -27,7 +27,7 @@ const UserDetail = () => {
   const clickMap = (storyId?: string) => {
     if (!storyId) return;
     Router.push({
-      pathname: "/story/detail",
+      pathname: "/user/story",
       query: { storyId: storyId },
     });
   };
@@ -42,8 +42,8 @@ const UserDetail = () => {
                 <Link
                   key={imageUrl}
                   href={{
-                    pathname: "/story/detail",
-                    query: { storyId: image.id },
+                    pathname: "/user/story",
+                    query: { storyId: image.storyId },
                   }}
                   as="/story/detail"
                 >
@@ -93,14 +93,14 @@ const UserDetail = () => {
 
       const paths: [{ latitude: number; longitude: number }[]] = [[]];
       const storyIds: string[] = [];
-      const images: { urls: string[]; id: string }[] = [];
+      const images: { urls: string[]; storyId: string }[] = [];
 
       const promises = userStoryResult.storyIds.map(async (storyId: string) => {
         const storyResult = await getDocument("stories", storyId);
         if (!storyResult) return;
         paths.push(storyResult.paths);
         storyIds.push(storyId);
-        images.push({ urls: storyResult.images, id: storyId });
+        images.push({ urls: storyResult.images, storyId });
       });
 
       await Promise.all(promises);

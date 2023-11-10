@@ -4,6 +4,7 @@ export const title = {
   stories: "내 스토리 목록",
   gallery: "갤러리",
   user: "사용자 정보",
+  userStory: "사용자 스토리",
 };
 
 export const alertTitle = {
