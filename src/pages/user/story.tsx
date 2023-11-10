@@ -1,14 +1,16 @@
 import Layout from "@/components/common/Layout";
 import DetailView from "@/components/story/DetailView";
 import { StoryProps } from "../story/detail";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import getDocument from "@/firebase/firestore/getDocument";
 
 const Story = () => {
   const [story, setStory] = useState<StoryProps>();
 
-  const { storyId } = Router.query;
+  const router = useRouter();
+
+  const { storyId } = router.query;
 
   useEffect(() => {
     if (!storyId) {
