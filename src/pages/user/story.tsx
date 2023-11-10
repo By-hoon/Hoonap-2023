@@ -1,19 +1,19 @@
 import Layout from "@/components/common/Layout";
 import DetailView from "@/components/story/DetailView";
 import { StoryProps } from "../story/detail";
-import router from "next/router";
+import Router from "next/router";
 import { useEffect, useState } from "react";
 import getDocument from "@/firebase/firestore/getDocument";
 
 const Story = () => {
   const [story, setStory] = useState<StoryProps>();
 
-  const { storyId } = router.query;
+  const { storyId } = Router.query;
 
   useEffect(() => {
     if (!storyId) {
       alert("스토리 정보가 없습니다.");
-      router.push("/story/list");
+      Router.push("/story/list");
       return;
     }
 
