@@ -56,7 +56,7 @@ export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
 
         return (
           <>
-            <div className="background-shadow z-[150]" onClickCapture={(e) => e.stopPropagation()} />
+            <div className="!fixed background-shadow z-[150]" onClickCapture={(e) => e.stopPropagation()} />
             <Confirm
               title={confirmState.title}
               content={confirmState.content}
