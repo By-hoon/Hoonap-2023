@@ -1,31 +1,18 @@
+import Layout from "@/components/common/Layout";
+import DetailView from "@/components/story/DetailView";
+import { StoryProps } from "../story/detail";
+import Router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import getDocument from "@/firebase/firestore/getDocument";
-import Layout from "@/components/common/Layout";
-import Router, { useRouter } from "next/router";
-import { isExp } from "@/utils/util";
-import { useAuth } from "@/context/authProvider";
-import DetailView from "@/components/story/DetailView";
 
-export interface StoryProps {
-  title: string;
-  story: string;
-  paths: { latitude: number; longitude: number }[];
-  images: string[];
-  storyId: string;
-  userId: string;
-}
-
-const StoryDetail = () => {
+const Story = () => {
   const [story, setStory] = useState<StoryProps>();
 
-  const { user } = useAuth();
   const router = useRouter();
 
   const { storyId } = router.query;
 
   useEffect(() => {
-    if (!user) return;
-
     if (!storyId) {
       alert("스토리 정보가 없습니다.");
       Router.push("/story/list");
@@ -47,36 +34,16 @@ const StoryDetail = () => {
       });
     };
 
-    const getExpStory = () => {
-      const storageStory = window.localStorage.getItem("story");
-      if (!storageStory) return;
-
-      const expStory = JSON.parse(storageStory);
-      const result: StoryProps = expStory[storyId as string];
-
-      setStory({
-        title: result.title,
-        story: result.story,
-        paths: result.paths,
-        images: result.images,
-        storyId: storyId as string,
-        userId: result.userId,
-      });
-    };
-
-    if (isExp(user.uid)) {
-      getExpStory();
-      return;
-    }
     getStory();
-  }, [storyId, user]);
+  }, [storyId]);
 
-  if (!user || !story)
+  if (!story) {
     return (
       <Layout>
         <div></div>
       </Layout>
     );
+  }
 
   return (
     <Layout>
@@ -94,4 +61,4 @@ const StoryDetail = () => {
   );
 };
 
-export default StoryDetail;
+export default Story;

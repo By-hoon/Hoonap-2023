@@ -6,7 +6,7 @@ import { addFiles } from "@/firebase/storage/add";
 import { isExp } from "@/utils/util";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
-import { storyProps } from "./detail";
+import { StoryProps } from "./detail";
 import { deleteFile } from "@/firebase/storage/delete";
 import Button from "@/components/common/Button";
 import { PopUpContext } from "@/context/popUpProvider";
@@ -21,7 +21,6 @@ const StoryEdit = () => {
     paths: queryPaths,
     userId,
     storyId,
-    restExpStory: queryRestExpStory,
   } = router.query;
 
   const [paths, setPaths] = useState<{ latitude: number; longitude: number }[]>([]);
@@ -42,16 +41,24 @@ const StoryEdit = () => {
   }, []);
 
   const editExpStory = (imageData: string[]) => {
+    const storageStories = window.localStorage.getItem("story");
+    const storagePaths = window.localStorage.getItem("path");
+    const storageImages = window.localStorage.getItem("image");
+    if (!storageStories || !storagePaths || !storageImages) {
+      alert("게시된 스토리가 없습니다.");
+      router.push("/");
+      return;
+    }
+
+    const expStories: { [key: string]: StoryProps } = JSON.parse(storageStories);
+    const expPaths: { [key: string]: { paths: { latitude: number; longitude: number }[]; storyId: string } } =
+      JSON.parse(storagePaths);
+    const expImages: { [key: string]: { images: string[]; storyId: string } } = JSON.parse(storageImages);
+
     const curStoryId = storyId as string;
     const curUserId = userId as string;
 
-    const newExpStory: { [key: string]: storyProps } = {};
-    const newExpPaths: {
-      [key: string]: { paths: { latitude: number; longitude: number }[]; storyId: string };
-    } = {};
-    const newExpImages: { [key: string]: { images: string[]; storyId: string } } = {};
-
-    newExpStory[curStoryId] = {
+    expStories[curStoryId] = {
       title,
       story,
       paths,
@@ -59,43 +66,19 @@ const StoryEdit = () => {
       storyId: curStoryId,
       userId: curUserId,
     };
-    newExpPaths[curStoryId] = {
+
+    expPaths[curStoryId] = {
       paths,
       storyId: curStoryId,
     };
-    newExpImages[curStoryId] = {
+    expImages[curStoryId] = {
       images: imageData,
       storyId: curStoryId,
     };
 
-    const restExpStory = JSON.parse(queryRestExpStory as string);
-
-    const restExpStories = Object.keys(restExpStory);
-
-    if (restExpStories.length !== 0) {
-      restExpStories.forEach((key) => {
-        newExpStory[key] = {
-          title: restExpStory[key].title,
-          story: restExpStory[key].story,
-          paths: restExpStory[key].paths,
-          images: restExpStory[key].images,
-          storyId: restExpStory[key].storyId,
-          userId: restExpStory[key].userId,
-        };
-        newExpPaths[key] = {
-          paths: restExpStory[key].paths,
-          storyId: restExpStory[key].storyId,
-        };
-        newExpImages[key] = {
-          images: restExpStory[key].images,
-          storyId: restExpStory[key].storyId,
-        };
-      });
-    }
-
-    window.localStorage.setItem("story", JSON.stringify(newExpStory));
-    window.localStorage.setItem("path", JSON.stringify(newExpPaths));
-    window.localStorage.setItem("image", JSON.stringify(newExpImages));
+    window.localStorage.setItem("story", JSON.stringify(expStories));
+    window.localStorage.setItem("path", JSON.stringify(expPaths));
+    window.localStorage.setItem("image", JSON.stringify(expImages));
   };
 
   const editStory = async () => {
