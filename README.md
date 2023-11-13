@@ -62,13 +62,12 @@ Vercel 배포: https://hoonap-2023.vercel.app/
   - 사진 등록
   - 스토리 작성
 - 게시물 목록
-  - 지도에서 다각형 클릭
-  - 스토리 미리보기
 - 게시물 상세정보
 - 게시물 수정
 - 게시물 삭제
 - 갤러리(이미지 목록)
 - 사용자 상세정보
+- 사용자 스토리
 - 에러 페이지
 
 <br>
@@ -92,7 +91,15 @@ src
 │   │   ├── SaveImage.tsx
 │   │   └── SavePath.tsx
 │   ├── story
-│   │   └── Preview.tsx
+│   │   ├── comment
+│   │   │   ├── Comment
+│   │   │   └── CommentInput.tsx
+│   │   ├── DetailView.tsx
+│   │   ├── MenuButton.tsx
+│   │   ├── MoreMenu.tsx
+│   │   ├── Preview.tsx
+│   │   ├── StoryContents.tsx
+│   │   └── StoryImages.tsx
 │   ├── Map.tsx
 │   └── MapOption.tsx
 └── context
@@ -127,7 +134,8 @@ src
 │   │   ├── edit.ts
 │   │   └── list.tsx
 │   ├── user
-│   │   └── detail.tsx
+│   │   ├── detail.ts
+│   │   └── story.tsx
 │   ├── _app.tsx
 │   ├── _document.tsx
 │   ├── 404.tsx
