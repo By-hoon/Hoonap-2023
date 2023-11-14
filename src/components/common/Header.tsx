@@ -8,12 +8,14 @@ import Title from "./Title";
 import { title } from "@/shared/constants";
 import useClickOutside from "@/hooks/useClickOutside";
 import { PopUpContext } from "@/context/popUpProvider";
+import { useAuth } from "@/context/authProvider";
 
 const Header = () => {
   const [mounted, setMounted] = useState(false);
   const { show: showSidebar, ref: sidebarRef, onClickTarget: onClickSidebar } = useClickOutside();
   const { show: showProfileMenu, ref: profileMenuRef, onClickTarget: onClickProfileMenu } = useClickOutside();
 
+  const { user } = useAuth();
   const router = useRouter();
 
   const { confirm } = useContext(PopUpContext);
@@ -81,6 +83,18 @@ const Header = () => {
                     <span>프로필</span>
                   </div>
                   <div>
+                    <span
+                      onClick={() => {
+                        router.push({
+                          pathname: "/user/detail",
+                          query: { userId: user?.uid },
+                        });
+                      }}
+                    >
+                      내 정보
+                    </span>
+                  </div>
+                  <div>
                     <span onClick={trySignOut}>로그아웃</span>
                   </div>
                 </div>
@@ -131,7 +145,18 @@ const Header = () => {
               프로필
             </div>
             {showProfileMenu ? (
-              <div className="absolute top-[30px] left-[-12px] w-[80px] h-[60px] text-center font-normal text-[15px] bg-white rounded-[6px] shadow-basic p-[3px]">
+              <div className="absolute top-[30px] left-[-12px] w-[80px] h-[60px] text-center font-normal text-[15px] bg-white rounded-[6px] shadow-basic p-[5px]">
+                <div
+                  className="cursor-pointer"
+                  onClick={() => {
+                    router.push({
+                      pathname: "/user/detail",
+                      query: { userId: user?.uid },
+                    });
+                  }}
+                >
+                  내 정보
+                </div>
                 <div className="cursor-pointer" onClick={trySignOut}>
                   로그아웃
                 </div>
