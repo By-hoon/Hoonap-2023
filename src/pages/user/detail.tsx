@@ -9,12 +9,14 @@ import dynamic from "next/dynamic";
 import MapOption from "@/components/MapOption";
 import Button from "@/components/common/Button";
 import { Icon } from "@iconify/react";
+import { StoryProps } from "../story/detail";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
 
 const UserDetail = () => {
   const [section, setSection] = useState("gallery");
+  const [stories, setStories] = useState<StoryProps[]>([]);
   const [paths, setPaths] = useState<[{ latitude: number; longitude: number }[]]>([[]]);
   const [storyIds, setStoryIds] = useState<string[]>([]);
   const [images, setImages] = useState<{ urls: string[]; storyId: string }[]>([]);
@@ -28,7 +30,7 @@ const UserDetail = () => {
     if (!storyId) return;
     Router.push({
       pathname: "/user/story",
-      query: { storyId: storyId },
+      query: { storyId: storyId, stories: JSON.stringify(stories) },
     });
   };
 
@@ -43,7 +45,7 @@ const UserDetail = () => {
                   key={imageUrl}
                   href={{
                     pathname: "/user/story",
-                    query: { storyId: image.storyId },
+                    query: { storyId: image.storyId, stories: JSON.stringify(stories) },
                   }}
                   as="/story/detail"
                 >
@@ -91,6 +93,7 @@ const UserDetail = () => {
 
       if (!userStoryResult) return;
 
+      const stories: StoryProps[] = [];
       const paths: [{ latitude: number; longitude: number }[]] = [[]];
       const storyIds: string[] = [];
       const images: { urls: string[]; storyId: string }[] = [];
@@ -98,6 +101,14 @@ const UserDetail = () => {
       const promises = userStoryResult.storyIds.map(async (storyId: string) => {
         const storyResult = await getDocument("stories", storyId);
         if (!storyResult) return;
+        stories.push({
+          title: storyResult.title,
+          story: storyResult.story,
+          paths: storyResult.paths,
+          images: storyResult.images,
+          storyId,
+          userId: storyResult.userId,
+        });
         paths.push(storyResult.paths);
         storyIds.push(storyId);
         images.push({ urls: storyResult.images, storyId });
@@ -106,6 +117,7 @@ const UserDetail = () => {
       await Promise.all(promises);
       paths.shift();
 
+      setStories(stories);
       setPaths(paths);
       setStoryIds(storyIds);
       setImages(images);

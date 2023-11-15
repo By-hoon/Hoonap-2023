@@ -3,14 +3,14 @@ import DetailView from "@/components/story/DetailView";
 import { StoryProps } from "../story/detail";
 import Router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import getDocument from "@/firebase/firestore/getDocument";
 
 const Story = () => {
-  const [story, setStory] = useState<StoryProps>();
+  const [current, setCurrent] = useState<StoryProps>();
+  const [rest, setRest] = useState<StoryProps[]>([]);
 
   const router = useRouter();
 
-  const { storyId } = router.query;
+  const { storyId, stories } = router.query;
 
   useEffect(() => {
     if (!storyId) {
@@ -19,42 +19,41 @@ const Story = () => {
       return;
     }
 
-    const getStory = async () => {
-      const result = await getDocument("stories", storyId as string);
-
-      if (!result) return;
-
-      setStory({
-        title: result.title,
-        story: result.story,
-        paths: result.paths,
-        images: result.images,
-        storyId: storyId as string,
-        userId: result.userId,
-      });
-    };
-
-    getStory();
+    const restStories: StoryProps[] = [];
+    JSON.parse(stories as string).forEach((story: StoryProps) => {
+      if (story.storyId === storyId) {
+        setCurrent({
+          title: story.title,
+          story: story.story,
+          paths: story.paths,
+          images: story.images,
+          storyId: storyId,
+          userId: story.userId,
+        });
+        return;
+      }
+      restStories.push(story);
+    });
+    setRest(restStories);
   }, [storyId]);
 
-  if (!story) {
+  if (!current) {
     return (
       <Layout>
         <div></div>
       </Layout>
     );
   }
-
   return (
     <Layout>
       <div className="p-[10px]">
         <DetailView
-          title={story.title}
-          story={story.story}
-          paths={story.paths}
-          images={story.images}
-          storyId={story.storyId}
-          userId={story.userId}
+          title={current.title}
+          story={current.story}
+          paths={current.paths}
+          images={current.images}
+          storyId={current.storyId}
+          userId={current.userId}
         />
       </div>
     </Layout>
