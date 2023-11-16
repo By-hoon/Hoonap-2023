@@ -28,10 +28,13 @@ const UserDetail = () => {
 
   const clickMap = (storyId?: string) => {
     if (!storyId) return;
-    Router.push({
-      pathname: "/user/story",
-      query: { storyId: storyId, stories: JSON.stringify(stories) },
-    });
+    router.push(
+      {
+        pathname: "/user/story",
+        query: { storyId: storyId, stories: JSON.stringify(stories) },
+      },
+      "/user/story"
+    );
   };
 
   const sectionRender = () => {

@@ -85,10 +85,13 @@ const Header = () => {
                   <div>
                     <span
                       onClick={() => {
-                        router.push({
-                          pathname: "/user/detail",
-                          query: { userId: user?.uid },
-                        });
+                        router.push(
+                          {
+                            pathname: "/user/detail",
+                            query: { userId: user?.uid },
+                          },
+                          "/user/detail"
+                        );
                       }}
                     >
                       내 정보
@@ -149,10 +152,13 @@ const Header = () => {
                 <div
                   className="cursor-pointer"
                   onClick={() => {
-                    router.push({
-                      pathname: "/user/detail",
-                      query: { userId: user?.uid },
-                    });
+                    router.push(
+                      {
+                        pathname: "/user/detail",
+                        query: { userId: user?.uid },
+                      },
+                      "/user/detail"
+                    );
                   }}
                 >
                   내 정보
