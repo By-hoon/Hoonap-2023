@@ -3,6 +3,7 @@ import DetailView from "@/components/story/DetailView";
 import { StoryProps } from "../story/detail";
 import Router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import BasicImage from "@/components/common/BasicImage";
 
 const Story = () => {
   const [current, setCurrent] = useState<StoryProps>();
@@ -11,7 +12,6 @@ const Story = () => {
   const router = useRouter();
 
   const { storyId, stories } = router.query;
-
   useEffect(() => {
     if (!storyId) {
       alert("스토리 정보가 없습니다.");
@@ -55,6 +55,29 @@ const Story = () => {
           storyId={current.storyId}
           userId={current.userId}
         />
+      </div>
+      <div className="flex justify-between mt-[20px]">
+        {rest.map((restStory) => (
+          <div
+            key={restStory.storyId}
+            className="cursor-pointer"
+            onClick={() => {
+              router.push(
+                {
+                  pathname: "/user/story",
+                  query: { storyId: restStory.storyId, stories },
+                },
+                "/story/detail"
+              );
+            }}
+          >
+            <BasicImage
+              style={"relative md:w-[300px] md:h-[300px] w-[150px] h-[150px] mx-[10px] rounded-[8px]"}
+              url={restStory.images[0]}
+              alt={"rest-story-image"}
+            />
+          </div>
+        ))}
       </div>
     </Layout>
   );
