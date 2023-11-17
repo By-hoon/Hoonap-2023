@@ -9,6 +9,7 @@ import { title } from "@/shared/constants";
 import useClickOutside from "@/hooks/useClickOutside";
 import { PopUpContext } from "@/context/popUpProvider";
 import { useAuth } from "@/context/authProvider";
+import useUser from "@/hooks/useUser";
 
 const Header = () => {
   const [mounted, setMounted] = useState(false);
@@ -16,9 +17,10 @@ const Header = () => {
   const { show: showProfileMenu, ref: profileMenuRef, onClickTarget: onClickProfileMenu } = useClickOutside();
 
   const { user } = useAuth();
-  const router = useRouter();
-
+  const { nickname } = useUser(user?.uid);
   const { confirm } = useContext(PopUpContext);
+
+  const router = useRouter();
 
   const isMobile = useMediaQuery({
     query: "(max-width: 768px)",
@@ -75,34 +77,39 @@ const Header = () => {
                 <div className="absolute top-[5px] right-[5px] text-[20px]">
                   <Icon icon="material-symbols:close" onClick={onClickSidebar} />
                 </div>
-                <div className="text-[22px] font-semibold mb-[15px]">
+                <div className="text-[22px] font-semibold mb-[20px]">
                   <Link href="/">Hoonap</Link>
                 </div>
-                <div className="text-[18px] mb-[15px]">
-                  <div className="mb-[5px]">
-                    <span>프로필</span>
-                  </div>
-                  <div>
-                    <span
-                      onClick={() => {
-                        router.push(
-                          {
-                            pathname: "/user/detail",
-                            query: { userId: user?.uid },
-                          },
-                          "/user/detail"
-                        );
-                      }}
-                    >
-                      내 정보
-                    </span>
-                  </div>
-                  <div>
-                    <span onClick={trySignOut}>로그아웃</span>
+                <div className="mb-[10px]">
+                  <div className="text-[17px] font-semibold my-[5px]">{nickname}</div>
+                  <div className="text-[16px]">
+                    <div className="px-[5px] py-[3px]">
+                      <span
+                        onClick={() => {
+                          router.push(
+                            {
+                              pathname: "/user/detail",
+                              query: { userId: user?.uid },
+                            },
+                            "/user/detail"
+                          );
+                        }}
+                      >
+                        내 정보
+                      </span>
+                    </div>
+                    <div className="px-[5px] py-[3px]">
+                      <span onClick={trySignOut}>로그아웃</span>
+                    </div>
                   </div>
                 </div>
-                <div className="text-[18px] mb-[15px]">
-                  <Link href="/story/list">스토리</Link>
+                <div className="flex flex-wrap text-[18px] mb-[15px]">
+                  <div className="w-full my-[5px]">
+                    <Link href="/story/list">스토리</Link>
+                  </div>
+                  <div className="w-full my-[5px]">
+                    <Link href="/gallery">갤러리</Link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -148,23 +155,26 @@ const Header = () => {
               프로필
             </div>
             {showProfileMenu ? (
-              <div className="absolute top-[30px] left-[-12px] w-[80px] h-[60px] text-center font-normal text-[15px] bg-white rounded-[6px] shadow-basic p-[5px]">
-                <div
-                  className="cursor-pointer"
-                  onClick={() => {
-                    router.push(
-                      {
-                        pathname: "/user/detail",
-                        query: { userId: user?.uid },
-                      },
-                      "/user/detail"
-                    );
-                  }}
-                >
-                  내 정보
-                </div>
-                <div className="cursor-pointer" onClick={trySignOut}>
-                  로그아웃
+              <div className="absolute top-[35px] right-0 w-[160px] font-normal bg-white rounded-[6px] shadow-basic py-[5px]">
+                <div className="font-semibold py-[5px] px-[7px]">{nickname}</div>
+                <div className="text-[16px]">
+                  <div
+                    className="header-menu-button"
+                    onClick={() => {
+                      router.push(
+                        {
+                          pathname: "/user/detail",
+                          query: { userId: user?.uid },
+                        },
+                        "/user/detail"
+                      );
+                    }}
+                  >
+                    내 정보
+                  </div>
+                  <div className="header-menu-button" onClick={trySignOut}>
+                    로그아웃
+                  </div>
                 </div>
               </div>
             ) : null}
