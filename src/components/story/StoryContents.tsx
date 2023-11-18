@@ -1,18 +1,23 @@
 import Link from "next/link";
+import CommentInput from "./comment/CommentInput";
 
 interface StoryContentsProps {
   title: string;
   story: string;
   storyId: string;
+  userId: string;
   hasLink?: boolean;
 }
 
-const StoryContents = ({ title, story, storyId, hasLink = false }: StoryContentsProps) => {
+const StoryContents = ({ title, story, storyId, userId, hasLink = false }: StoryContentsProps) => {
   return (
     <div>
       <div>
-        <div className="text-[22px]">{title}</div>
-        <div className="text-[18px] mt-[5px]">{story}</div>
+        <div className="text-[20px]">{title}</div>
+        <div className="text-[16px]">{story}</div>
+      </div>
+      <div className="mt-[5px]">
+        <CommentInput storyId={storyId} userId={userId} />
       </div>
       {hasLink ? (
         <div className="text-[18px] text-bc text-center">
