@@ -37,7 +37,7 @@ const DetailView = ({ title, story, images, paths, storyId, userId }: StoryProps
             userId={userId}
           />
         </div>
-        <StoryContents title={title} story={story} storyId={storyId} />
+        <StoryContents title={title} story={story} storyId={storyId} userId={userId} />
       </div>
     </div>
   );
