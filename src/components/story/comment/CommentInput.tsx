@@ -17,10 +17,21 @@ const CommentInput = ({ storyId, userId }: { storyId: string; userId: string }) 
     commentData[`${Date.now()} ${userId}`] = { comment, writedAt: Date.now(), writedBy: userId };
 
     if (isExp(userId)) {
-      console.log(commentData);
+      addExpComment(commentData);
+      return;
     }
 
     const commentsResulut = await setData("comments", storyId, commentData);
+  };
+
+  const addExpComment = (commentData: { [key: string]: {} }) => {
+    const storageComments = window.localStorage.getItem("comments");
+
+    const expComments = storageComments ? JSON.parse(storageComments) : {};
+
+    Object.assign(expComments, commentData);
+
+    window.localStorage.setItem("comments", JSON.stringify(expComments));
   };
 
   return (
