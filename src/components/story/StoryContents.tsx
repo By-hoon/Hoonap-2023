@@ -17,7 +17,7 @@ const StoryContents = ({ title, story, storyId, userId, hasLink = false }: Story
         <div className="text-[16px]">{story}</div>
       </div>
       <div className="mt-[5px]">
-        <CommentInput storyId={storyId} userId={userId} />
+        <CommentInput storyId={storyId} />
       </div>
       {hasLink ? (
         <div className="text-[18px] text-bc text-center">

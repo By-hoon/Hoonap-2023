@@ -3,9 +3,12 @@ import Button from "@/components/common/Button";
 import { Icon } from "@iconify/react";
 import { isExp } from "@/utils/util";
 import setData from "@/firebase/firestore/setData";
+import { useAuth } from "@/context/authProvider";
 
-const CommentInput = ({ storyId, userId }: { storyId: string; userId: string }) => {
+const CommentInput = ({ storyId }: { storyId: string }) => {
   const [comment, setComment] = useState("");
+
+  const { user } = useAuth();
 
   const onChangeComment = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
@@ -13,10 +16,14 @@ const CommentInput = ({ storyId, userId }: { storyId: string; userId: string }) 
 
   const addComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const commentData: { [key: string]: {} } = {};
-    commentData[`${Date.now()} ${userId}`] = { comment, writedAt: Date.now(), writedBy: userId };
+    setComment("");
 
-    if (isExp(userId)) {
+    const writerId = user?.uid || "unknown";
+
+    const commentData: { [key: string]: {} } = {};
+    commentData[`${Date.now()} ${writerId}`] = { comment, writedAt: Date.now(), writedBy: writerId };
+
+    if (isExp(writerId)) {
       addExpComment(commentData);
       return;
     }
