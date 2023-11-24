@@ -1,15 +1,16 @@
-interface CommentProps {
+export interface CommentProps {
+  commentId: string;
   comment: string;
-  createdAt: number;
-  userId: string;
+  writedAt: number;
+  writedBy: string;
 }
 
-const Comment = ({ comment, createdAt, userId }: CommentProps) => {
+const Comment = ({ commentId, comment, writedAt, writedBy }: CommentProps) => {
   return (
     <div>
       <div>
-        <div>{userId}</div>
-        <div>{createdAt}</div>
+        <div>{writedBy}</div>
+        <div>{writedAt}</div>
       </div>
       <div>{comment}</div>
     </div>
