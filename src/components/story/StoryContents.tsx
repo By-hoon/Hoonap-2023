@@ -1,5 +1,5 @@
 import Link from "next/link";
-import CommentInput from "./comment/CommentInput";
+import Comments from "./comment/Comments";
 
 interface StoryContentsProps {
   title: string;
@@ -16,8 +16,8 @@ const StoryContents = ({ title, story, storyId, userId, hasLink = false }: Story
         <div className="text-[20px]">{title}</div>
         <div className="text-[16px]">{story}</div>
       </div>
-      <div className="mt-[5px]">
-        <CommentInput storyId={storyId} />
+      <div>
+        <Comments storyId={storyId} userId={userId} />
       </div>
       {hasLink ? (
         <div className="text-[18px] text-bc text-center">
