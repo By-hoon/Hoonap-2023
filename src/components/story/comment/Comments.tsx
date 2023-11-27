@@ -34,7 +34,9 @@ const Comments = ({ storyId, userId }: { storyId: string; userId: string }) => {
         if (comments.length === 0) return <></>;
         return (
           <div ref={ref}>
-            <div onClick={onClickTarget}>{comments.length}개의 댓글</div>
+            <div className="cursor-pointer" onClick={onClickTarget}>
+              {comments.length}개의 댓글
+            </div>
             {show ? (
               <>
                 <div className="background-shadow !fixed" onClick={onClickTarget} />

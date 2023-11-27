@@ -1,3 +1,5 @@
+import useUser from "@/hooks/useUser";
+
 export interface CommentProps {
   commentId: string;
   comment: string;
@@ -6,11 +8,13 @@ export interface CommentProps {
 }
 
 const Comment = ({ commentId, comment, writedAt, writedBy }: CommentProps) => {
+  const { nickname } = useUser(writedBy);
+
   return (
-    <div>
-      <div>
-        <div>{writedBy}</div>
-        <div>{writedAt}</div>
+    <div className="my-[10px]">
+      <div className="flex text-[12px] mb-[2px]">
+        <div className="font-semibold">{nickname}</div>
+        <div className="text-zinc-600 ml-[5px]">{writedAt}</div>
       </div>
       <div>{comment}</div>
     </div>
