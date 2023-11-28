@@ -1,9 +1,9 @@
-import getDocument from "@/firebase/firestore/getDocument";
 import { useEffect, useState } from "react";
 import Comment, { CommentProps } from "./Comment";
 import CommentInput from "./CommentInput";
 import { useRouter } from "next/router";
 import useClickOutside from "@/hooks/useClickOutside";
+import getSnapshot from "@/firebase/firestore/getSnapshot";
 
 const Comments = ({ storyId, userId }: { storyId: string; userId: string }) => {
   const [comments, setComments] = useState<CommentProps[]>([]);
@@ -11,21 +11,17 @@ const Comments = ({ storyId, userId }: { storyId: string; userId: string }) => {
 
   const router = useRouter();
 
+  const commentsProcess = (data: { [key: string]: any }) => {
+    const newData: CommentProps[] = [];
+    Object.keys(data).forEach((key) => {
+      newData.push(Object.assign(data[key], { commentId: key }));
+    });
+
+    return newData;
+  };
+
   useEffect(() => {
-    const getStory = async () => {
-      const result = await getDocument("comments", storyId as string);
-
-      if (!result) return;
-
-      const newComments: CommentProps[] = [];
-      Object.keys(result).forEach((key) => {
-        newComments.push(Object.assign(result[key], { commentId: key }));
-      });
-
-      setComments(newComments);
-    };
-
-    getStory();
+    return getSnapshot("comments", storyId, setComments, commentsProcess);
   }, [storyId]);
 
   const commentRender = () => {
