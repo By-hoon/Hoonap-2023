@@ -38,7 +38,8 @@ const Comments = ({ storyId, userId }: { storyId: string; userId: string }) => {
             {show ? (
               <>
                 <div className="background-shadow !fixed" onClick={onClickTarget} />
-                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] mobile:w-[250px] bg-white rounded-[6px] z-30">
+                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] mobile:w-[250px] bg-white rounded-[6px] p-[10px] z-30">
+                  <div className="text-[18px] text-center font-semibold border-b pb-[5px]">댓글 목록</div>
                   {comments.map(({ commentId, comment, writedAt, writedBy }) => (
                     <div key={commentId}>
                       <Comment
@@ -49,7 +50,7 @@ const Comments = ({ storyId, userId }: { storyId: string; userId: string }) => {
                       />
                     </div>
                   ))}
-                  <div className="mt-[5px]">
+                  <div className="pt-[5px] border-t">
                     <CommentInput storyId={storyId} />
                   </div>
                 </div>
