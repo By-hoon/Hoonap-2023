@@ -12,6 +12,8 @@ const Comments = ({ storyId, userId }: { storyId: string; userId: string }) => {
   const router = useRouter();
 
   const commentsProcess = (data: { [key: string]: any }) => {
+    if (!data) return [];
+
     const newData: CommentProps[] = [];
     Object.keys(data).forEach((key) => {
       newData.push(Object.assign(data[key], { commentId: key }));
