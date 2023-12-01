@@ -40,16 +40,18 @@ const Comments = ({ storyId, userId }: { storyId: string; userId: string }) => {
                 <div className="background-shadow !fixed" onClick={onClickTarget} />
                 <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] mobile:w-[250px] bg-white rounded-[6px] p-[10px] z-30">
                   <div className="text-[18px] text-center font-semibold border-b pb-[5px]">댓글 목록</div>
-                  {comments.map(({ commentId, comment, writedAt, writedBy }) => (
-                    <div key={commentId}>
-                      <Comment
-                        commentId={commentId}
-                        comment={comment}
-                        writedAt={writedAt}
-                        writedBy={writedBy}
-                      />
-                    </div>
-                  ))}
+                  <div className="md:max-h-[500px] mobile:max-h-[400px] overflow-y-scroll scrollbar-hide">
+                    {comments.map(({ commentId, comment, writedAt, writedBy }) => (
+                      <div key={commentId}>
+                        <Comment
+                          commentId={commentId}
+                          comment={comment}
+                          writedAt={writedAt}
+                          writedBy={writedBy}
+                        />
+                      </div>
+                    ))}
+                  </div>
                   <div className="pt-[5px] border-t">
                     <CommentInput storyId={storyId} />
                   </div>
@@ -61,13 +63,13 @@ const Comments = ({ storyId, userId }: { storyId: string; userId: string }) => {
       }
       case "/story/detail": {
         return (
-          <>
+          <div className="md:max-h-[500px] overflow-y-scroll scrollbar-hide">
             {comments.map(({ commentId, comment, writedAt, writedBy }) => (
               <div key={commentId}>
                 <Comment commentId={commentId} comment={comment} writedAt={writedAt} writedBy={writedBy} />
               </div>
             ))}
-          </>
+          </div>
         );
       }
       default:
