@@ -48,6 +48,7 @@ const Comments = ({ storyId, userId }: { storyId: string; userId: string }) => {
                           comment={comment}
                           writedAt={writedAt}
                           writedBy={writedBy}
+                          storyId={storyId}
                         />
                       </div>
                     ))}
@@ -66,7 +67,13 @@ const Comments = ({ storyId, userId }: { storyId: string; userId: string }) => {
           <div className="md:max-h-[500px] overflow-y-scroll scrollbar-hide">
             {comments.map(({ commentId, comment, writedAt, writedBy }) => (
               <div key={commentId}>
-                <Comment commentId={commentId} comment={comment} writedAt={writedAt} writedBy={writedBy} />
+                <Comment
+                  commentId={commentId}
+                  comment={comment}
+                  writedAt={writedAt}
+                  writedBy={writedBy}
+                  storyId={storyId}
+                />
               </div>
             ))}
           </div>

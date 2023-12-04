@@ -2,7 +2,7 @@ interface MenuButtonProps {
   isShow?: boolean;
   name: string;
   style?: string;
-  onClick: () => void;
+  onClick: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 const MenuButton = ({ isShow = true, name, style = "", onClick }: MenuButtonProps) => {

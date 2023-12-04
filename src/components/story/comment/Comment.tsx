@@ -9,7 +9,11 @@ export interface CommentProps {
   writedBy: string;
 }
 
-const Comment = ({ commentId, comment, writedAt, writedBy }: CommentProps) => {
+interface CommentAndStoryIdProps extends CommentProps {
+  storyId: string;
+}
+
+const Comment = ({ commentId, comment, writedAt, writedBy, storyId }: CommentAndStoryIdProps) => {
   const { nickname } = useUser(writedBy);
 
   return (
@@ -22,7 +26,13 @@ const Comment = ({ commentId, comment, writedAt, writedBy }: CommentProps) => {
           </div>
           <div>{comment}</div>
         </div>
-        <CommentMenu commentId={commentId} comment={comment} writedAt={writedAt} writedBy={writedBy} />
+        <CommentMenu
+          commentId={commentId}
+          comment={comment}
+          writedAt={writedAt}
+          writedBy={writedBy}
+          storyId={storyId}
+        />
       </div>
     </div>
   );
