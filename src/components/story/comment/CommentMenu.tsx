@@ -5,6 +5,7 @@ import { CommentProps } from "./Comment";
 import { Icon } from "@iconify/react";
 import { useCallback, useState } from "react";
 import updateField from "@/firebase/firestore/updateField";
+import deleteField from "@/firebase/firestore/deleteField";
 
 interface CommentMenuProps extends CommentProps {
   storyId: string;
@@ -29,6 +30,12 @@ const CommentMenu = ({ commentId, comment, writedAt, writedBy, storyId }: Commen
       writedBy: user?.uid,
     });
     onClickTarget();
+  };
+
+  const deleteComment = async (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    await deleteField("comments", storyId, commentId);
+    onClickTarget;
   };
 
   return (
@@ -60,9 +67,7 @@ const CommentMenu = ({ commentId, comment, writedAt, writedBy, storyId }: Commen
               <MenuButton
                 name={"삭제"}
                 style="text-red-600 text-white bg-red-500 !m-0"
-                onClick={() => {
-                  console.log("삭제");
-                }}
+                onClick={deleteComment}
               />
             </div>
           </div>
