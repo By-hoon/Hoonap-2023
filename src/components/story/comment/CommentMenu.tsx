@@ -74,10 +74,7 @@ const CommentMenu = ({ commentId, comment, writedAt, writedBy, storyId }: Commen
         </>
       ) : null}
       {writedBy === user?.uid ? (
-        <div
-          className="cursor-pointer h-full flex justify-center items-center text-[24px]"
-          onClick={onClickTarget}
-        >
+        <div className="cursor-pointer h-full flex-middle text-[24px]" onClick={onClickTarget}>
           <Icon icon="pepicons-pencil:dots-y" />
         </div>
       ) : null}

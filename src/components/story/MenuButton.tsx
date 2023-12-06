@@ -9,10 +9,7 @@ const MenuButton = ({ isShow = true, name, style = "", onClick }: MenuButtonProp
   if (!isShow) return <></>;
 
   return (
-    <div
-      className={`cursor-pointer flex justify-center items-center m-[5px] p-[5px] ${style}`}
-      onClick={onClick}
-    >
+    <div className={`cursor-pointer flex-middle m-[5px] p-[5px] ${style}`} onClick={onClick}>
       {name}
     </div>
   );

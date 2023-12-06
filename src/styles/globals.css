@@ -27,4 +27,8 @@
   .background-shadow {
     @apply absolute top-0 right-0 w-full h-full bg-zinc-800 bg-opacity-50 z-10;
   }
+
+  .flex-middle {
+    @apply flex justify-center items-center;
+  }
 }
