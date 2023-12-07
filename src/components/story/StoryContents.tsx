@@ -13,8 +13,8 @@ const StoryContents = ({ title, story, storyId, userId, hasLink = false }: Story
   return (
     <div>
       <div>
-        <div className="text-[20px]">{title}</div>
-        <div className="text-[16px]">{story}</div>
+        <div className="text-[20px] break-all">{title}</div>
+        <div className="text-[16px] break-all">{story}</div>
       </div>
       <div>
         <Comments storyId={storyId} userId={userId} />
