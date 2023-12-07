@@ -22,6 +22,12 @@ const CommentMenu = ({ commentId, comment, writedAt, writedBy, storyId }: Commen
     setNewComment(e.target.value);
   }, []);
 
+  const closeMenu = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    setNewComment(comment);
+    onClickTarget();
+  };
+
   const updateComment = async (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     await updateField("comments", storyId, commentId, {
@@ -35,20 +41,14 @@ const CommentMenu = ({ commentId, comment, writedAt, writedBy, storyId }: Commen
   const deleteComment = async (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     await deleteField("comments", storyId, commentId);
-    onClickTarget;
+    onClickTarget();
   };
 
   return (
     <div ref={ref}>
       {show ? (
         <>
-          <div
-            className="background-shadow !fixed"
-            onClick={(e) => {
-              e.stopPropagation();
-              onClickTarget();
-            }}
-          />
+          <div className="background-shadow !fixed" onClick={closeMenu} />
           <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] mobile:w-[250px] font-semibold text-[18px] bg-white rounded-[6px] z-40 overflow-hidden">
             <div className="mb-[10px] px-[10px] pt-[10px]">
               <div className="grid grid-cols-[1fr_50px] rounded-[5px] p-[5px] border-2 focus-within:border-bc">
@@ -63,7 +63,7 @@ const CommentMenu = ({ commentId, comment, writedAt, writedBy, storyId }: Commen
               </div>
             </div>
             <div className="grid grid-cols-[1fr_1fr]">
-              <MenuButton name={"취소"} style="bg-zinc-200 !m-0" onClick={onClickTarget} />
+              <MenuButton name={"취소"} style="bg-zinc-200 !m-0" onClick={closeMenu} />
               <MenuButton
                 name={"삭제"}
                 style="text-red-600 text-white bg-red-500 !m-0"
