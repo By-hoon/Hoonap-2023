@@ -44,6 +44,12 @@ export default async function updateField(name: string, id: string, field: strin
         });
         return;
       }
+
+      case `${field}`: {
+        await updateDoc(docRef, {
+          [field]: data,
+        });
+      }
     }
   } catch (error) {
     console.log(error);

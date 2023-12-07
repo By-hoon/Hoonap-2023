@@ -57,18 +57,28 @@ Vercel 배포: https://hoonap-2023.vercel.app/
 - 회원가입
 - 로그인, 로그아웃
 
-- 게시물 작성
-  - 위치 지정(naver map api)
-  - 사진 등록
+- 사용자 정보
+
+  - 사용자 스토리맵
+  - 사용자 스토리(이미지) 목록
+
+- 스토리
+
   - 스토리 작성
-- 게시물 목록
-- 게시물 상세정보
-- 게시물 수정
-- 게시물 삭제
-- 갤러리(이미지 목록)
-- 사용자 상세정보
-- 사용자 스토리
-- 에러 페이지
+    - 위치 지정(naver map api)
+    - 사진 등록
+    - 스토리 내용 입력
+  - 스토리 열람
+    - 스토리 목록
+    - 갤러리(이미지 목록)
+  - 스토리 위치 확인
+  - 스토리 수정
+  - 스토리 삭제
+
+- 댓글
+  - 댓글 작성
+  - 댓글 수정
+  - 댓글 삭제
 
 <br>
 
@@ -92,8 +102,10 @@ src
 │   │   └── SavePath.tsx
 │   ├── story
 │   │   ├── comment
-│   │   │   ├── Comment
-│   │   │   └── CommentInput.tsx
+│   │   │   ├── Comment.tsx
+│   │   │   ├── CommentInput.tsx
+│   │   │   ├── CommentMenu.tsx
+│   │   │   └── Comments.tsx
 │   │   ├── DetailView.tsx
 │   │   ├── MenuButton.tsx
 │   │   ├── MoreMenu.tsx
@@ -115,8 +127,10 @@ src
 │   ├── firestore
 │   │   ├── addData.ts
 │   │   ├── deleteDocument.ts
+│   │   ├── deleteField.ts
 │   │   ├── getDocument.ts
 │   │   ├── getCollection.ts
+│   │   ├── getSnapshot.ts
 │   │   ├── setData.ts
 │   │   └── updateField.ts
 │   ├── storage

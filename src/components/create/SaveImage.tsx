@@ -66,7 +66,7 @@ const SaveImage = ({ images, setImage, previewImages, setPreviewImages }: SaveIm
             alt={"upload-image"}
           >
             <div
-              className="absolute top-0 left-0 flex justify-center items-center w-[100%] h-[100%] rounded-[10px] cursor-pointer"
+              className="absolute top-0 left-0 flex-middle w-[100%] h-[100%] rounded-[10px] cursor-pointer"
               onClick={() => deleteImage(index)}
             >
               <Icon icon="ant-design:delete-filled" className="text-[30px] text-white" />
@@ -76,7 +76,7 @@ const SaveImage = ({ images, setImage, previewImages, setPreviewImages }: SaveIm
       </div>
       <div>
         <label htmlFor="preview">
-          <div className="flex justify-center items-center w-[130px] h-[50px] mx-auto mobile:mt-[10px] md:mt-[30px] bg-bc text-white text-[18px] font-semibold rounded-[10px] cursor-pointer">
+          <div className="flex-middle w-[130px] h-[50px] mx-auto mobile:mt-[10px] md:mt-[30px] bg-bc text-white text-[18px] font-semibold rounded-[10px] cursor-pointer">
             사진 업로드
           </div>
         </label>

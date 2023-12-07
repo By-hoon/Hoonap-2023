@@ -87,7 +87,7 @@ const Gallery = () => {
               >
                 <div>
                   <div
-                    className="w-[210px] h-[50px] flex justify-center items-center text-white text-[24px] border rounded-[10px] mx-auto mt-[10px]
+                    className="w-[210px] h-[50px] flex-middle text-white text-[24px] border rounded-[10px] mx-auto mt-[10px]
                     mobile:w-[180px] mobile:h-[45px] mobile:text-[20px]"
                   >
                     <Link

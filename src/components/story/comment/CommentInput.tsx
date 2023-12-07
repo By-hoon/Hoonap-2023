@@ -1,9 +1,14 @@
 import { useCallback, useState } from "react";
 import Button from "@/components/common/Button";
 import { Icon } from "@iconify/react";
+import { isExp } from "@/utils/util";
+import setData from "@/firebase/firestore/setData";
+import { useAuth } from "@/context/authProvider";
 
-const CommentInput = () => {
+const CommentInput = ({ storyId }: { storyId: string }) => {
   const [comment, setComment] = useState("");
+
+  const { user } = useAuth();
 
   const onChangeComment = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
@@ -11,14 +16,36 @@ const CommentInput = () => {
 
   const addComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(comment);
+    setComment("");
+
+    const writerId = user?.uid || "unknown";
+
+    const commentData: { [key: string]: {} } = {};
+    commentData[`${Date.now()} ${writerId}`] = { comment, writedAt: Date.now(), writedBy: writerId };
+
+    if (isExp(writerId)) {
+      addExpComment(commentData);
+      return;
+    }
+
+    const commentsResulut = await setData("comments", storyId, commentData);
+  };
+
+  const addExpComment = (commentData: { [key: string]: {} }) => {
+    const storageComments = window.localStorage.getItem("comments");
+
+    const expComments = storageComments ? JSON.parse(storageComments) : {};
+
+    Object.assign(expComments, commentData);
+
+    window.localStorage.setItem("comments", JSON.stringify(expComments));
   };
 
   return (
     <form onSubmit={addComment}>
-      <div>
+      <div className="flex">
         <input
-          className=""
+          className="w-full outline-none"
           type="text"
           value={comment}
           placeholder="댓글 추가"
