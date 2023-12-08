@@ -86,11 +86,9 @@ const Gallery = () => {
                 alt={"current-image"}
               >
                 <div>
-                  <div
-                    className="w-[210px] h-[50px] flex-middle text-white text-[24px] border rounded-[10px] mx-auto mt-[10px]
-                    mobile:w-[180px] mobile:h-[45px] mobile:text-[20px]"
-                  >
+                  <div className="absolute bottom-0 left-0 w-full h-[80px] mobile:h-[60px] flex-middle bg-black bg-opacity-30">
                     <Link
+                      className="w-[210px] h-[50px] text-white text-[24px] text-center mobile:w-[180px] mobile:h-[40px] mobile:text-[20px] border rounded-[10px] px-[10px] py-[5px]"
                       href={{
                         pathname: "/story/detail",
                         query: { storyId: current.id },
