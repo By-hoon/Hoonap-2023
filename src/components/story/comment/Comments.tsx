@@ -35,6 +35,9 @@ const Comments = ({ storyId, userId }: { storyId: string; userId: string }) => {
             <div className="cursor-pointer" onClick={onClickTarget}>
               {comments.length}개의 댓글
             </div>
+            <div className="mt-[5px]">
+              <CommentInput storyId={storyId} />
+            </div>
             {show ? (
               <>
                 <div className="background-shadow !fixed" onClick={onClickTarget} />
@@ -64,18 +67,23 @@ const Comments = ({ storyId, userId }: { storyId: string; userId: string }) => {
       }
       case "/story/detail": {
         return (
-          <div className="md:max-h-[500px] overflow-y-scroll scrollbar-hide">
-            {comments.map(({ commentId, comment, writedAt, writedBy }) => (
-              <div key={commentId}>
-                <Comment
-                  commentId={commentId}
-                  comment={comment}
-                  writedAt={writedAt}
-                  writedBy={writedBy}
-                  storyId={storyId}
-                />
-              </div>
-            ))}
+          <div className="mobile:relative w-full h-full md:grid md:grid-rows-[1fr_36px]">
+            <div className="border-y overflow-y-scroll scrollbar-hide mobile:mb-[36px]">
+              {comments.map(({ commentId, comment, writedAt, writedBy }) => (
+                <div key={commentId}>
+                  <Comment
+                    commentId={commentId}
+                    comment={comment}
+                    writedAt={writedAt}
+                    writedBy={writedBy}
+                    storyId={storyId}
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="w-full py-[5px] mobile:fixed mobile:bottom-0 mobile:right-0 mobile:px-[25px] mobile:py-[10px] mobile:bg-white">
+              <CommentInput storyId={storyId} />
+            </div>
           </div>
         );
       }
@@ -84,14 +92,7 @@ const Comments = ({ storyId, userId }: { storyId: string; userId: string }) => {
     }
   };
 
-  return (
-    <div className="w-full">
-      {commentRender()}
-      <div className="mt-[5px]">
-        <CommentInput storyId={storyId} />
-      </div>
-    </div>
-  );
+  return <div className="w-full h-full">{commentRender()}</div>;
 };
 
 export default Comments;
