@@ -7,6 +7,11 @@ export const title = {
   userStory: "사용자 스토리",
 };
 
+export const commentSortTypes = [
+  { code: "latest", name: "최신순 정렬" },
+  { code: "earliest", name: "오래된순 정렬" },
+];
+
 export const alertTitle = {
   id: "아이디 오류",
   password: "비밀번호 오류",

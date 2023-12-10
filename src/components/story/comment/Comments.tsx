@@ -4,12 +4,28 @@ import CommentInput from "./CommentInput";
 import { useRouter } from "next/router";
 import useClickOutside from "@/hooks/useClickOutside";
 import getSnapshot from "@/firebase/firestore/getSnapshot";
+import { Icon } from "@iconify/react";
+import { commentSortTypes } from "@/shared/constants";
 
-const Comments = ({ storyId, userId }: { storyId: string; userId: string }) => {
+const Comments = ({ storyId, userId: storyUserId }: { storyId: string; userId: string }) => {
   const [comments, setComments] = useState<CommentProps[]>([]);
+  const [sortType, setSortType] = useState(commentSortTypes[0]);
   const { show, ref, onClickTarget } = useClickOutside();
+  const { show: showSortMenu, ref: sortMenuRef, onClickTarget: onClickSortMenu } = useClickOutside();
 
   const router = useRouter();
+
+  const doSortComments = (type: { code: string; name: string }) => {
+    const newComments = [...comments];
+    newComments.sort((a, b) => {
+      if (type.code === "earliest") return a.writedAt - b.writedAt;
+
+      return b.writedAt - a.writedAt;
+    });
+
+    setComments(newComments);
+    setSortType(type);
+  };
 
   const commentsProcess = (data: { [key: string]: any }) => {
     if (!data) return [];
@@ -67,8 +83,24 @@ const Comments = ({ storyId, userId }: { storyId: string; userId: string }) => {
       }
       case "/story/detail": {
         return (
-          <div className="mobile:relative w-full h-full md:grid md:grid-rows-[1fr_36px]">
-            <div className="border-y overflow-y-scroll scrollbar-hide mobile:mb-[36px]">
+          <div className="mobile:relative w-full h-full md:grid md:grid-rows-[auto_1fr_36px]">
+            <div
+              ref={sortMenuRef}
+              className="cursor-pointer flex items-center text-[14px] pt-[5px] border-t mobile:mt-[5px]"
+              onClick={onClickSortMenu}
+            >
+              {sortType.name} <Icon icon="mingcute:down-line" className="text-[18px] ml-[5px]" />
+              {showSortMenu ? (
+                <div>
+                  {commentSortTypes.map((commentSortType) => (
+                    <div key={commentSortType.code} onClick={() => doSortComments(commentSortType)}>
+                      {commentSortType.name}
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+            <div className="border-b overflow-y-scroll scrollbar-hide mobile:mb-[36px]">
               {comments.map(({ commentId, comment, writedAt, writedBy }) => (
                 <div key={commentId}>
                   <Comment
