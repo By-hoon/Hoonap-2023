@@ -35,6 +35,8 @@ const Comments = ({ storyId, userId: storyUserId }: { storyId: string; userId: s
       newData.push(Object.assign(data[key], { commentId: key }));
     });
 
+    newData.sort((a, b) => b.writedAt - a.writedAt);
+    setSortType(commentSortTypes[0]);
     return newData;
   };
 
