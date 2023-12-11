@@ -65,15 +65,28 @@ const Comments = ({ storyId, userId: storyUserId }: { storyId: string; userId: s
                   <div className="text-[18px] text-center font-semibold border-b pb-[5px]">댓글 목록</div>
                   <div
                     ref={sortMenuRef}
-                    className="cursor-pointer flex items-center text-[14px] pt-[5px] border-t mobile:mt-[5px]"
-                    onClick={onClickSortMenu}
+                    className="relative flex text-[14px] pt-[5px] border-t mobile:mt-[5px]"
                   >
-                    {sortType.name} <Icon icon="mingcute:down-line" className="text-[18px] ml-[5px]" />
+                    <div className="cursor-pointer flex items-center text-[14px]" onClick={onClickSortMenu}>
+                      {sortType.name} <Icon icon="mingcute:down-line" className="text-[18px] ml-[5px]" />
+                    </div>
                     {showSortMenu ? (
-                      <div>
+                      <div className="absolute top-[5px] right-0 text-[14px] bg-white rounded-[6px] shadow-basic pl-[10px] py-[5px]">
                         {commentSortTypes.map((commentSortType) => (
-                          <div key={commentSortType.code} onClick={(e) => doSortComments(e, commentSortType)}>
-                            {commentSortType.name}
+                          <div className="grid grid-cols-[1fr_30px]" key={commentSortType.code}>
+                            <div
+                              className="cursor-pointer"
+                              onClick={(e) => doSortComments(e, commentSortType)}
+                            >
+                              {commentSortType.name}
+                            </div>
+                            <div className="flex-middle">
+                              <Icon
+                                icon={`grommet-icons:radial${
+                                  commentSortType.code === sortType.code ? "-selected" : ""
+                                }`}
+                              />
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -104,17 +117,24 @@ const Comments = ({ storyId, userId: storyUserId }: { storyId: string; userId: s
       case "/story/detail": {
         return (
           <div className="mobile:relative w-full h-full md:grid md:grid-rows-[auto_1fr_36px]">
-            <div
-              ref={sortMenuRef}
-              className="cursor-pointer flex items-center text-[14px] pt-[5px] border-t mobile:mt-[5px]"
-              onClick={onClickSortMenu}
-            >
-              {sortType.name} <Icon icon="mingcute:down-line" className="text-[18px] ml-[5px]" />
+            <div ref={sortMenuRef} className="relative flex pt-[5px] border-t mobile:mt-[5px]">
+              <div className="cursor-pointer flex items-center text-[14px]" onClick={onClickSortMenu}>
+                {sortType.name} <Icon icon="mingcute:down-line" className="text-[18px] ml-[5px]" />
+              </div>
               {showSortMenu ? (
-                <div>
+                <div className="absolute top-[5px] right-0 text-[14px] bg-white rounded-[6px] shadow-basic pl-[10px] py-[5px]">
                   {commentSortTypes.map((commentSortType) => (
-                    <div key={commentSortType.code} onClick={(e) => doSortComments(e, commentSortType)}>
-                      {commentSortType.name}
+                    <div className="grid grid-cols-[1fr_30px]" key={commentSortType.code}>
+                      <div className="cursor-pointer" onClick={(e) => doSortComments(e, commentSortType)}>
+                        {commentSortType.name}
+                      </div>
+                      <div className="flex-middle">
+                        <Icon
+                          icon={`grommet-icons:radial${
+                            commentSortType.code === sortType.code ? "-selected" : ""
+                          }`}
+                        />
+                      </div>
                     </div>
                   ))}
                 </div>

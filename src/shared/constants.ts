@@ -8,8 +8,8 @@ export const title = {
 };
 
 export const commentSortTypes = [
-  { code: "latest", name: "최신순 정렬" },
-  { code: "earliest", name: "오래된순 정렬" },
+  { code: "latest", name: "최신 댓글" },
+  { code: "earliest", name: "오래된 댓글" },
 ];
 
 export const alertTitle = {
