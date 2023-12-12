@@ -1,14 +1,18 @@
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import Button from "@/components/common/Button";
 import { Icon } from "@iconify/react";
 import { isExp } from "@/utils/util";
 import setData from "@/firebase/firestore/setData";
 import { useAuth } from "@/context/authProvider";
+import { PopUpContext } from "@/context/popUpProvider";
+import { alertTitle, alertContent } from "@/shared/constants";
 
 const CommentInput = ({ storyId }: { storyId: string }) => {
   const [comment, setComment] = useState("");
 
   const { user } = useAuth();
+
+  const { alert } = useContext(PopUpContext);
 
   const onChangeComment = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
@@ -24,21 +28,11 @@ const CommentInput = ({ storyId }: { storyId: string }) => {
     commentData[`${Date.now()} ${writerId}`] = { comment, writedAt: Date.now(), writedBy: writerId };
 
     if (isExp(writerId)) {
-      addExpComment(commentData);
+      await alert(alertTitle.exp, alertContent.invalidExp);
       return;
     }
 
     const commentsResulut = await setData("comments", storyId, commentData);
-  };
-
-  const addExpComment = (commentData: { [key: string]: {} }) => {
-    const storageComments = window.localStorage.getItem("comments");
-
-    const expComments = storageComments ? JSON.parse(storageComments) : {};
-
-    Object.assign(expComments, commentData);
-
-    window.localStorage.setItem("comments", JSON.stringify(expComments));
   };
 
   return (

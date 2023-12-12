@@ -6,6 +6,7 @@ import useClickOutside from "@/hooks/useClickOutside";
 import getSnapshot from "@/firebase/firestore/getSnapshot";
 import { Icon } from "@iconify/react";
 import { commentSortTypes } from "@/shared/constants";
+import { isExp } from "@/utils/util";
 
 const Comments = ({ storyId, userId: storyUserId }: { storyId: string; userId: string }) => {
   const [comments, setComments] = useState<CommentProps[]>([]);
@@ -43,8 +44,10 @@ const Comments = ({ storyId, userId: storyUserId }: { storyId: string; userId: s
   };
 
   useEffect(() => {
+    if (isExp(storyUserId)) return;
+
     return getSnapshot("comments", storyId, setComments, commentsProcess);
-  }, [storyId]);
+  }, [storyId, storyUserId]);
 
   const commentRender = () => {
     switch (router.pathname) {

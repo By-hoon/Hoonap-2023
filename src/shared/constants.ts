@@ -17,6 +17,7 @@ export const alertTitle = {
   password: "비밀번호 오류",
   server: "서버 오류",
   unknown: "알 수 없는 오류",
+  exp: "체험하기 오류",
 };
 
 export const alertContent = {
@@ -27,6 +28,7 @@ export const alertContent = {
   wrongPassword: "비밀번호를 확인해 주세요",
   tryAgain: "잠시 후 다시 시도해 주세요.",
   unknown: "알 수 없는 오류가 발생하였습니다.",
+  invalidExp: "체험하기에서 이용할 수 없는 기능입니다.",
 };
 
 export const expInfo = [
@@ -38,5 +40,5 @@ export const expInfo = [
 
 export const addInfo = {
   expSubtitle: "체험 안내사항",
-  expRestricts: ["내 정보 조회"],
+  expRestricts: ["내 정보 조회", "댓글"],
 };
