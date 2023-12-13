@@ -22,7 +22,7 @@ const Confirm = ({ title, content, onClickOK, onClickCancel }: ConfirmProps) => 
 
   return (
     <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-[300px] bg-white shadow-basic rounded-[10px] overflow-hidden z-[200]">
-      <div className="text-center break-keep p-[25px]">
+      <div className="text-center break-all p-[25px]">
         <div className="text-[17px] font-semibold">{title}</div>
         <div className="text-[14px] text-neutral-400 mt-[5px]">{content}</div>
       </div>
