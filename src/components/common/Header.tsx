@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import Title from "./Title";
-import { title } from "@/shared/constants";
+import { confirmContent, confirmTitle, title } from "@/shared/constants";
 import useClickOutside from "@/hooks/useClickOutside";
 import { PopUpContext } from "@/context/popUpProvider";
 import { useAuth } from "@/context/authProvider";
@@ -27,7 +27,7 @@ const Header = () => {
   });
 
   const trySignOut = async () => {
-    const result = await confirm("로그아웃 하시겠습니까?", "로그인 페이지로 넘어갑니다.");
+    const result = await confirm(confirmTitle.signOut, confirmContent.signOut);
     if (!result) return;
 
     doSignOut();

@@ -10,6 +10,7 @@ import { StoryProps } from "./detail";
 import { deleteFile } from "@/firebase/storage/delete";
 import Button from "@/components/common/Button";
 import { PopUpContext } from "@/context/popUpProvider";
+import { confirmContent, confirmTitle } from "@/shared/constants";
 
 const StoryEdit = () => {
   const router = useRouter();
@@ -84,7 +85,7 @@ const StoryEdit = () => {
   const editStory = async () => {
     if (paths.length === 0 || !previewImages || title === "" || story === "") return;
 
-    const result = await confirm("스토리를 수정하시겠습니까?", "수정된 내용은 다시 복구할 수 없습니다.");
+    const result = await confirm(confirmTitle.editStory, confirmContent.editStory);
     if (!result) return;
 
     const curStoryId = storyId as string;

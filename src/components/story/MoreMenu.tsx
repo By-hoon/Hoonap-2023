@@ -13,6 +13,7 @@ import getDocument from "@/firebase/firestore/getDocument";
 import updateField from "@/firebase/firestore/updateField";
 import { deleteFile } from "@/firebase/storage/delete";
 import { isExp } from "@/utils/util";
+import { confirmContent, confirmTitle } from "@/shared/constants";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
@@ -58,7 +59,7 @@ const MoreMenu = ({ title, story, images, paths, storyId, userId }: StoryProps) 
   };
 
   const deleteStory = async () => {
-    const result = await confirm("스토리를 삭제하시겠습니까?", "삭제된 스토리는 다시 복구할 수 없습니다.");
+    const result = await confirm(confirmTitle.deleteStory, confirmContent.deleteStory);
     if (!result) return;
 
     for (let i = 0; i < images.length; i++) {

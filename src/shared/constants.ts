@@ -31,6 +31,18 @@ export const alertContent = {
   invalidExp: "체험하기에서 이용할 수 없는 기능입니다.",
 };
 
+export const confirmTitle = {
+  signOut: "로그아웃 하시겠습니까?",
+  deleteStory: "스토리를 삭제하시겠습니까?",
+  editStory: "스토리를 수정하시겠습니까?",
+};
+
+export const confirmContent = {
+  signOut: "로그인 페이지로 넘어갑니다.",
+  deleteStory: "삭제된 스토리는 다시 복구할 수 없습니다.",
+  editStory: "수정된 내용은 다시 복구할 수 없습니다.",
+};
+
 export const expInfo = [
   "스토리는 3개까지 생성할 수 있어요",
   "체험하기에서 생성하신 스토리 정보들은 로컬에 저장돼요",
