@@ -49,6 +49,9 @@ const Header = () => {
       case "/story/list": {
         return <Title title={title.stories} />;
       }
+      case "/story/edit": {
+        return <Title title={title.editStory} />;
+      }
       case "/gallery": {
         return <Title title={title.gallery} />;
       }

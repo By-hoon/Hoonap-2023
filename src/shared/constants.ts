@@ -1,7 +1,8 @@
 export const title = {
   create: "스토리 생성",
   story: "스토리 상세정보",
-  stories: "내 스토리 목록",
+  editStory: "스토리 수정",
+  stories: "스토리 목록",
   gallery: "갤러리",
   user: "사용자 정보",
   userStory: "사용자 스토리",
