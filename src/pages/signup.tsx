@@ -1,8 +1,10 @@
 import Button from "@/components/common/Button";
+import withHead from "@/components/hoc/withHead";
 import { PopUpContext } from "@/context/popUpProvider";
 import signUp from "@/firebase/auth/signUp";
 import setData from "@/firebase/firestore/setData";
 import Alerts from "@/shared/alerts";
+import { headDescription, headTitle } from "@/shared/constants";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 
@@ -95,4 +97,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default withHead(Signup, headTitle.signup, headDescription.signup);

@@ -1,7 +1,9 @@
 import Button from "@/components/common/Button";
+import withHead from "@/components/hoc/withHead";
 import { PopUpContext } from "@/context/popUpProvider";
 import signIn from "@/firebase/auth/signIn";
 import Alerts from "@/shared/alerts";
+import { headDescription, headTitle } from "@/shared/constants";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 
@@ -91,4 +93,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default withHead(Login, headTitle.login, headDescription.login);

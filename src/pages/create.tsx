@@ -15,8 +15,10 @@ import { deleteFiles } from "@/firebase/storage/delete";
 import Button from "@/components/common/Button";
 import BasicImage from "@/components/common/BasicImage";
 import PartButton from "@/components/create/PartButton";
+import withHead from "@/components/hoc/withHead";
+import { headDescription, headTitle } from "@/shared/constants";
 
-export default function Create({ uid }: { uid: string }) {
+const Create = ({ uid }: { uid: string }) => {
   const [part, setPart] = useState("path");
   const [paths, setPaths] = useState<Array<{ latitude: number; longitude: number }>>([]);
   const [images, setImage] = useState<FileList>();
@@ -262,7 +264,9 @@ export default function Create({ uid }: { uid: string }) {
       </div>
     </Layout>
   );
-}
+};
+
+export default withHead(Create, headTitle.create, headDescription.create);
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const uid = await checkUser(context);

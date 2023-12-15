@@ -4,6 +4,8 @@ import { StoryProps } from "../story/detail";
 import Router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import BasicImage from "@/components/common/BasicImage";
+import withHead from "@/components/hoc/withHead";
+import { headDescription, headTitle } from "@/shared/constants";
 
 const Story = () => {
   const [current, setCurrent] = useState<StoryProps>();
@@ -83,4 +85,4 @@ const Story = () => {
   );
 };
 
-export default Story;
+export default withHead(Story, headTitle.userStory, headDescription.userStory);

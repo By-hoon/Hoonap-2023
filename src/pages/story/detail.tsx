@@ -5,6 +5,8 @@ import Router, { useRouter } from "next/router";
 import { isExp } from "@/utils/util";
 import { useAuth } from "@/context/authProvider";
 import DetailView from "@/components/story/DetailView";
+import withHead from "@/components/hoc/withHead";
+import { headDescription, headTitle } from "@/shared/constants";
 
 export interface StoryProps {
   title: string;
@@ -94,4 +96,4 @@ const StoryDetail = () => {
   );
 };
 
-export default StoryDetail;
+export default withHead(StoryDetail, headTitle.storyDetail, headDescription.storyDetail);

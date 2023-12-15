@@ -6,6 +6,8 @@ import { useAuth } from "@/context/authProvider";
 import BasicImage from "@/components/common/BasicImage";
 import Router from "next/router";
 import Link from "next/link";
+import withHead from "@/components/hoc/withHead";
+import { headDescription, headTitle } from "@/shared/constants";
 
 const Gallery = () => {
   const [images, setImages] = useState<{ url: string; userId: string; id: string }[]>([]);
@@ -124,4 +126,4 @@ const Gallery = () => {
   );
 };
 
-export default Gallery;
+export default withHead(Gallery, headTitle.gallery, headDescription.gallery);

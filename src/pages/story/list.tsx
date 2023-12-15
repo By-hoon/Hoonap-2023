@@ -6,6 +6,8 @@ import { useAuth } from "@/context/authProvider";
 import Router from "next/router";
 import { StoryProps } from "./detail";
 import getCollection from "@/firebase/firestore/getCollection";
+import withHead from "@/components/hoc/withHead";
+import { headDescription, headTitle } from "@/shared/constants";
 
 const List = () => {
   const [stories, setStories] = useState<{ [key: string]: StoryProps }>({});
@@ -98,4 +100,4 @@ const List = () => {
   );
 };
 
-export default List;
+export default withHead(List, headTitle.storyList, headDescription.storyList);

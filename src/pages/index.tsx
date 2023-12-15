@@ -2,11 +2,12 @@ import Layout from "@/components/common/Layout";
 import signIn from "@/firebase/auth/signIn";
 import { useRouter } from "next/router";
 import { isExp } from "@/utils/util";
-import { addInfo, expInfo } from "@/shared/constants";
+import { addInfo, expInfo, headDescription, headTitle } from "@/shared/constants";
 import { useAuth } from "@/context/authProvider";
 import Button from "@/components/common/Button";
+import withHead from "@/components/hoc/withHead";
 
-export default function Home() {
+const Home = () => {
   const { user } = useAuth();
 
   const router = useRouter();
@@ -78,4 +79,6 @@ export default function Home() {
     );
 
   return <Layout>Home</Layout>;
-}
+};
+
+export default withHead(Home, headTitle.main, headDescription.main);
