@@ -100,6 +100,8 @@ src
 │   │   ├── PartButton.tsx
 │   │   ├── SaveImage.tsx
 │   │   └── SavePath.tsx
+│   ├── hoc
+│   │   └── withHead.tsx
 │   ├── story
 │   │   ├── comment
 │   │   │   ├── Comment.tsx
