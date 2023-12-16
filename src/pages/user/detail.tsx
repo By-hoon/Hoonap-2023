@@ -10,6 +10,8 @@ import MapOption from "@/components/MapOption";
 import Button from "@/components/common/Button";
 import { Icon } from "@iconify/react";
 import { StoryProps } from "../story/detail";
+import withHead from "@/components/hoc/withHead";
+import { headDescription, headTitle } from "@/shared/constants";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
@@ -164,4 +166,4 @@ const UserDetail = () => {
   );
 };
 
-export default UserDetail;
+export default withHead(UserDetail, headTitle.userDetail, headDescription.userDetail);

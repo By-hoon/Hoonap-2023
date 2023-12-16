@@ -10,7 +10,8 @@ import { StoryProps } from "./detail";
 import { deleteFile } from "@/firebase/storage/delete";
 import Button from "@/components/common/Button";
 import { PopUpContext } from "@/context/popUpProvider";
-import { confirmContent, confirmTitle } from "@/shared/constants";
+import { confirmContent, confirmTitle, headDescription, headTitle } from "@/shared/constants";
+import withHead from "@/components/hoc/withHead";
 
 const StoryEdit = () => {
   const router = useRouter();
@@ -196,4 +197,4 @@ const StoryEdit = () => {
   );
 };
 
-export default StoryEdit;
+export default withHead(StoryEdit, headTitle.storyEdit, headDescription.storyEdit);

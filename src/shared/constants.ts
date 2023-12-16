@@ -13,6 +13,32 @@ export const commentSortTypes = [
   { code: "earliest", name: "오래된 댓글" },
 ];
 
+export const headTitle = {
+  main: "메인 페이지",
+  storyList: "스토리 목록",
+  storyEdit: "스토리 수정",
+  storyDetail: "스토리 상세정보",
+  userDetail: "사용자 상세정보",
+  userStory: "사용자 스토리",
+  create: "스토리 생성",
+  gallery: "갤러리",
+  login: "로그인",
+  signup: "회원가입",
+};
+
+export const headDescription = {
+  main: "메인 페이지 입니다.",
+  storyList: "스토리 목록 페이지입니다.",
+  storyEdit: "스토리 수정 페이지입니다.",
+  storyDetail: "스토리 상세정보 페이지입니다.",
+  userDetail: "사용자 상세정보 페이지입니다.",
+  userStory: "사용자 스토리 페이지입니다.",
+  create: "스토리 생성 페이지입니다.",
+  gallery: "갤러리 페이지입니다.",
+  login: "로그인 페이지입니다.",
+  signup: "회원가입 페이지입니다.",
+};
+
 export const alertTitle = {
   id: "아이디 오류",
   password: "비밀번호 오류",
