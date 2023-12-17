@@ -6,7 +6,7 @@ function withHead<P extends object>(Component: ComponentType<P>, title: string, 
     return (
       <>
         <Head>
-          <title>Hoonap | {title}</title>
+          <title>{`Hoonap | ${title}`}</title>
           <meta name="description" content={`Hoonap의 ${description}`} />
         </Head>
 
