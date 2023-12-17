@@ -21,7 +21,7 @@ const Gallery = () => {
 
     const getImageData = async () => {
       const result = await getCollection("images");
-      if (!result) {
+      if (!result || result.empty) {
         alert("게시된 스토리가 없습니다.");
         Router.push("/");
         return;

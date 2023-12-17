@@ -20,7 +20,8 @@ const List = () => {
 
     const getStoriesData = async () => {
       const result = await getCollection("stories");
-      if (!result) {
+
+      if (!result || result.empty) {
         alert("게시된 스토리가 없습니다.");
         Router.push("/");
         return;
