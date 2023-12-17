@@ -52,7 +52,12 @@ const Comments = ({ storyId, userId: storyUserId }: { storyId: string; userId: s
   const commentRender = () => {
     switch (router.pathname) {
       case "/story/list": {
-        if (comments.length === 0) return <></>;
+        if (comments.length === 0)
+          return (
+            <div className="mt-[5px]">
+              <CommentInput storyId={storyId} />
+            </div>
+          );
         return (
           <div ref={ref}>
             <div className="cursor-pointer" onClick={onClickTarget}>
