@@ -5,7 +5,7 @@ import StoryImages from "./StoryImages";
 import StoryContents from "./StoryContents";
 import MoreMenu from "./MoreMenu";
 
-const Preview = ({ title, story, images, paths, storyId, userId }: StoryProps) => {
+const Preview = ({ title, story, images, paths, createdAt, storyId, userId }: StoryProps) => {
   const { nickname } = useUser(userId);
 
   return (
@@ -27,6 +27,7 @@ const Preview = ({ title, story, images, paths, storyId, userId }: StoryProps) =
           story={story}
           paths={paths}
           images={images}
+          createdAt={createdAt}
           storyId={storyId}
           userId={userId}
         />

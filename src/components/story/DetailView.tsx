@@ -5,7 +5,7 @@ import MoreMenu from "./MoreMenu";
 import StoryImages from "./StoryImages";
 import StoryContents from "./StoryContents";
 
-const DetailView = ({ title, story, images, paths, storyId, userId }: StoryProps) => {
+const DetailView = ({ title, story, images, paths, createdAt, storyId, userId }: StoryProps) => {
   const { nickname } = useUser(userId);
 
   return (
@@ -33,6 +33,7 @@ const DetailView = ({ title, story, images, paths, storyId, userId }: StoryProps
             story={story}
             paths={paths}
             images={images}
+            createdAt={createdAt}
             storyId={storyId}
             userId={userId}
           />

@@ -90,6 +90,7 @@ const Create = ({ uid }: { uid: string }) => {
       images: fileUrls,
       title,
       story,
+      createdAt: Date.now(),
       userId: uid,
       storyId,
     };
@@ -128,6 +129,7 @@ const Create = ({ uid }: { uid: string }) => {
       images: fileUrls,
       title,
       story,
+      createdAt: Date.now(),
       userId: uid,
     };
 

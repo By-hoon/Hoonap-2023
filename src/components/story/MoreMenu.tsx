@@ -18,7 +18,7 @@ const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
 
-const MoreMenu = ({ title, story, images, paths, storyId, userId }: StoryProps) => {
+const MoreMenu = ({ title, story, images, paths, createdAt, storyId, userId }: StoryProps) => {
   const { user } = useAuth();
 
   const router = useRouter();

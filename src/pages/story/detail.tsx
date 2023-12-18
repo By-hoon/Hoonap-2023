@@ -13,6 +13,7 @@ export interface StoryProps {
   story: string;
   paths: { latitude: number; longitude: number }[];
   images: string[];
+  createdAt: number;
   storyId: string;
   userId: string;
 }
@@ -44,6 +45,7 @@ const StoryDetail = () => {
         story: result.story,
         paths: result.paths,
         images: result.images,
+        createdAt: result.createdAt,
         storyId: storyId as string,
         userId: result.userId,
       });
@@ -61,6 +63,7 @@ const StoryDetail = () => {
         story: result.story,
         paths: result.paths,
         images: result.images,
+        createdAt: result.createdAt,
         storyId: storyId as string,
         userId: result.userId,
       });
@@ -88,6 +91,7 @@ const StoryDetail = () => {
           story={story.story}
           paths={story.paths}
           images={story.images}
+          createdAt={story.createdAt}
           storyId={story.storyId}
           userId={story.userId}
         />

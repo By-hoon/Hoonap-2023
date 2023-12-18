@@ -36,6 +36,7 @@ const List = () => {
           story: storyData.story,
           paths: storyData.paths,
           images: storyData.images,
+          createdAt: storyData.createdAt,
           storyId,
           userId: storyData.userId,
         };
@@ -61,6 +62,7 @@ const List = () => {
           story: expStories[key].story,
           paths: expStories[key].paths,
           images: expStories[key].images,
+          createdAt: expStories[key].createdAt,
           storyId: key,
           userId: expStories[key].userId,
         };
@@ -91,6 +93,7 @@ const List = () => {
               story={stories[key].story}
               paths={stories[key].paths}
               images={stories[key].images}
+              createdAt={stories[key].createdAt}
               storyId={stories[key].storyId}
               userId={stories[key].userId}
             />
