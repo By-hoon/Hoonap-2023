@@ -75,6 +75,7 @@ const MoreMenu = ({ title, story, images, paths, storyId, userId }: StoryProps) 
     await deleteDocument("stories", storyId);
     await deleteDocument("paths", storyId);
     await deleteDocument("images", storyId);
+    await deleteDocument("comments", storyId);
 
     updateUserStoryIds(storyId, userId);
 
