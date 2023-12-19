@@ -111,6 +111,7 @@ const UserDetail = () => {
           story: storyResult.story,
           paths: storyResult.paths,
           images: storyResult.images,
+          createdAt: storyResult.createdAt,
           storyId,
           userId: storyResult.userId,
         });

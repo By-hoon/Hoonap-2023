@@ -29,6 +29,7 @@ const Story = () => {
           story: story.story,
           paths: story.paths,
           images: story.images,
+          createdAt: story.createdAt,
           storyId: storyId,
           userId: story.userId,
         });
@@ -37,7 +38,7 @@ const Story = () => {
       restStories.push(story);
     });
     setRest(restStories);
-  }, [storyId]);
+  }, [stories, storyId]);
 
   if (!current) {
     return (
@@ -54,6 +55,7 @@ const Story = () => {
           story={current.story}
           paths={current.paths}
           images={current.images}
+          createdAt={current.createdAt}
           storyId={current.storyId}
           userId={current.userId}
         />

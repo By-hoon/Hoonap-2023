@@ -65,6 +65,7 @@ const StoryEdit = () => {
       story,
       paths,
       images: imageData,
+      createdAt: expStories[curStoryId].createdAt,
       storyId: curStoryId,
       userId: curUserId,
     };
