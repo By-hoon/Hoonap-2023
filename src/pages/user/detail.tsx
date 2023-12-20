@@ -17,6 +17,7 @@ const Map = dynamic(() => import("@/components/Map"), {
 });
 
 const UserDetail = () => {
+  const [nickname, setNickname] = useState("");
   const [section, setSection] = useState("gallery");
   const [stories, setStories] = useState<StoryProps[]>([]);
   const [paths, setPaths] = useState<[{ latitude: number; longitude: number }[]]>([[]]);
@@ -25,8 +26,6 @@ const UserDetail = () => {
 
   const router = useRouter();
   const { userId } = router.query;
-
-  const { nickname } = useUser(userId as string);
 
   const clickMap = (storyId?: string) => {
     if (!storyId) return;
@@ -96,7 +95,11 @@ const UserDetail = () => {
     const getUserData = async () => {
       const userStoryResult = await getDocument("users", userId as string);
 
-      if (!userStoryResult) return;
+      if (!userStoryResult) {
+        setNickname("unknown");
+        return;
+      }
+      setNickname(userStoryResult.nickname);
 
       const stories: StoryProps[] = [];
       const paths: [{ latitude: number; longitude: number }[]] = [[]];
