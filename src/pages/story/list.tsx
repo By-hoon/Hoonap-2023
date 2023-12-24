@@ -1,17 +1,20 @@
 import Preview from "@/components/story/Preview";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Layout from "@/components/common/Layout";
 import { isExp } from "@/utils/util";
 import { useAuth } from "@/context/authProvider";
 import Router from "next/router";
 import { StoryProps } from "./detail";
-import getCollection from "@/firebase/firestore/getCollection";
 import withHead from "@/components/hoc/withHead";
 import { headDescription, headTitle } from "@/shared/constants";
+import getPage from "@/firebase/firestore/getPage";
 
 const List = () => {
-  const [stories, setStories] = useState<{ [key: string]: StoryProps }>({});
+  const [stories, setStories] = useState<StoryProps[]>([]);
+  const [size, setSize] = useState(3);
+  const [last, setLast] = useState(0);
 
+  const storyRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -19,30 +22,25 @@ const List = () => {
     const userId = user.uid;
 
     const getStoriesData = async () => {
-      const result = await getCollection("stories");
+      const result = await getPage("stories", size, "createdAt", "desc", last === 0 ? undefined : last);
 
-      if (!result || result.empty) {
+      if (!result) {
+        alert("에러 발생");
+        return;
+      }
+      if (result.empty && last === 0) {
         alert("게시된 스토리가 없습니다.");
         Router.push("/");
         return;
       }
+      if (result.empty && last !== 0) {
+        alert("더 이상 불러올 스토리가 없습니다.");
+        return;
+      }
 
-      const newStories: { [key: string]: StoryProps } = {};
-      result.docs.forEach((doc) => {
-        const storyData = doc.data();
-        const storyId = doc.id;
-        newStories[storyId] = {
-          title: storyData.title,
-          story: storyData.story,
-          paths: storyData.paths,
-          images: storyData.images,
-          createdAt: storyData.createdAt,
-          storyId,
-          userId: storyData.userId,
-        };
-      });
+      const newStories = result.docs.map((doc) => Object.assign(doc.data(), { storyId: doc.id }));
 
-      setStories(newStories);
+      setStories((cur) => cur.concat(newStories as StoryProps[]));
     };
 
     const getExpStoriesData = () => {
@@ -55,18 +53,15 @@ const List = () => {
 
       const expStories = JSON.parse(storageStories);
 
-      const newStories: { [key: string]: StoryProps } = {};
-      Object.keys(expStories).forEach((key) => {
-        newStories[key] = {
-          title: expStories[key].title,
-          story: expStories[key].story,
-          paths: expStories[key].paths,
-          images: expStories[key].images,
-          createdAt: expStories[key].createdAt,
-          storyId: key,
-          userId: expStories[key].userId,
-        };
-      });
+      const newStories: StoryProps[] = Object.keys(expStories).map((key) => ({
+        title: expStories[key].title,
+        story: expStories[key].story,
+        paths: expStories[key].paths,
+        images: expStories[key].images,
+        createdAt: expStories[key].createdAt,
+        storyId: key,
+        userId: expStories[key].userId,
+      }));
       setStories(newStories);
     };
 
@@ -75,7 +70,25 @@ const List = () => {
       return;
     }
     getStoriesData();
-  }, [user]);
+  }, [last, size, user]);
+
+  useEffect(() => {
+    const onIntersect: IntersectionObserverCallback = (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && stories.length !== 0) {
+          setLast(stories[stories.length - 1].createdAt);
+          observer.unobserve(entry.target);
+        }
+      });
+    };
+
+    let observer: IntersectionObserver;
+    if (storyRef.current) {
+      observer = new IntersectionObserver(onIntersect, { threshold: 0.9 });
+      observer.observe(storyRef.current);
+    }
+    return () => observer && observer.disconnect();
+  }, [stories, storyRef]);
 
   if (!user)
     return (
@@ -86,16 +99,16 @@ const List = () => {
   return (
     <Layout>
       <div className="p-[10px]">
-        {Object.keys(stories).map((key) => (
-          <div key={key}>
+        {stories.map((story) => (
+          <div key={story.storyId} ref={storyRef}>
             <Preview
-              title={stories[key].title}
-              story={stories[key].story}
-              paths={stories[key].paths}
-              images={stories[key].images}
-              createdAt={stories[key].createdAt}
-              storyId={stories[key].storyId}
-              userId={stories[key].userId}
+              title={story.title}
+              story={story.story}
+              paths={story.paths}
+              images={story.images}
+              createdAt={story.createdAt}
+              storyId={story.storyId}
+              userId={story.userId}
             />
           </div>
         ))}
