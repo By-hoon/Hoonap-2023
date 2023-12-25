@@ -17,6 +17,7 @@ const BasicImage = ({ style, url, alt, children }: BasicImageProps) => {
         className="!relative object-contain"
         sizes="(max-width: 768px) 50vw, 100vw"
         fill
+        priority
       />
       {children}
     </figure>
