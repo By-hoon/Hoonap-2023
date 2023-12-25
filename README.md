@@ -130,8 +130,9 @@ src
 │   │   ├── addData.ts
 │   │   ├── deleteDocument.ts
 │   │   ├── deleteField.ts
-│   │   ├── getDocument.ts
 │   │   ├── getCollection.ts
+│   │   ├── getDocument.ts
+│   │   ├── getPage.ts
 │   │   ├── getSnapshot.ts
 │   │   ├── setData.ts
 │   │   └── updateField.ts
