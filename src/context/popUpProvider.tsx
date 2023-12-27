@@ -1,6 +1,6 @@
 import Alert, { AlertProps } from "@/components/common/Alert";
 import Confirm, { ConfirmProps } from "@/components/common/Confirm";
-import { createContext, useState } from "react";
+import { createContext, useCallback, useState } from "react";
 
 type Type = {
   confirm: (title: string, content: string) => Promise<boolean>;
@@ -17,7 +17,7 @@ export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
   const [confirmState, setConfirmState] = useState<ConfirmProps>();
   const [alertState, setAlertState] = useState<AlertProps>();
 
-  const confirm = (title: string, content: string): Promise<boolean> => {
+  const confirm = useCallback((title: string, content: string): Promise<boolean> => {
     return new Promise((resolve) => {
       setType("confirm");
       setConfirmState({
@@ -33,9 +33,9 @@ export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
         },
       });
     });
-  };
+  }, []);
 
-  const alert = (title: string, content: string): Promise<boolean> => {
+  const alert = useCallback((title: string, content: string): Promise<boolean> => {
     return new Promise((resolve) => {
       setType("alert");
       setAlertState({
@@ -47,7 +47,7 @@ export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
         resolve(true);
       }, 3000);
     });
-  };
+  }, []);
 
   const popUpRender = () => {
     switch (type) {
