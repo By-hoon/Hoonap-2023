@@ -86,15 +86,7 @@ const StoryDetail = () => {
   return (
     <Layout>
       <div className="p-[10px]">
-        <DetailView
-          title={story.title}
-          story={story.story}
-          paths={story.paths}
-          images={story.images}
-          createdAt={story.createdAt}
-          storyId={story.storyId}
-          userId={story.userId}
-        />
+        <DetailView story={story} />
       </div>
     </Layout>
   );

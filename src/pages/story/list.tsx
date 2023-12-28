@@ -101,15 +101,7 @@ const List = () => {
       <div className="p-[10px]">
         {stories.map((story) => (
           <div key={story.storyId} ref={storyRef}>
-            <Preview
-              title={story.title}
-              story={story.story}
-              paths={story.paths}
-              images={story.images}
-              createdAt={story.createdAt}
-              storyId={story.storyId}
-              userId={story.userId}
-            />
+            <Preview story={story} />
           </div>
         ))}
       </div>

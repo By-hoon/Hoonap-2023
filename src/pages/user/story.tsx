@@ -50,15 +50,7 @@ const Story = () => {
   return (
     <Layout>
       <div className="p-[10px]">
-        <DetailView
-          title={current.title}
-          story={current.story}
-          paths={current.paths}
-          images={current.images}
-          createdAt={current.createdAt}
-          storyId={current.storyId}
-          userId={current.userId}
-        />
+        <DetailView story={current} />
       </div>
       <div className="flex justify-between mt-[20px]">
         {rest.map((restStory) => (
