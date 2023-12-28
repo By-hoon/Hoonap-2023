@@ -14,8 +14,8 @@ const StoryContents = ({ title, story, storyId, userId, hasLink = false }: Story
     <div>
       <div className={`${!hasLink ? "h-full md:grid md:grid-rows-[1fr_500px]" : ""}`}>
         <div>
-          <div className="text-[20px] break-all">{title}</div>
-          <div className="text-[16px] break-all">{story}</div>
+          <div className="text-[16px] break-all">{title}</div>
+          <div className="text-[14px] break-all">{story}</div>
         </div>
         <div>
           <Comments storyId={storyId} userId={userId} />

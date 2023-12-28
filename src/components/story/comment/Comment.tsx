@@ -24,7 +24,7 @@ const Comment = ({ commentId, comment, writedAt, writedBy, storyId }: CommentAnd
             <div className="font-semibold">{nickname}</div>
             <div className="text-zinc-600 ml-[5px]">{getElapsedTime(writedAt)}</div>
           </div>
-          <div className="break-all">{comment}</div>
+          <div className="text-[14px] break-all">{comment}</div>
         </div>
         <CommentMenu
           commentId={commentId}

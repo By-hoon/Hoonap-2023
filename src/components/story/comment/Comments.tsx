@@ -60,10 +60,10 @@ const Comments = ({ storyId, userId: storyUserId }: { storyId: string; userId: s
           );
         return (
           <div ref={ref}>
-            <div className="cursor-pointer" onClick={onClickTarget}>
+            <div className="cursor-pointer text-zinc-600 text-[15px] my-[5px]" onClick={onClickTarget}>
               {comments.length}개의 댓글
             </div>
-            <div className="mt-[5px]">
+            <div>
               <CommentInput storyId={storyId} />
             </div>
             {show ? (
