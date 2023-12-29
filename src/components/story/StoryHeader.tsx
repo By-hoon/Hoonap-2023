@@ -2,6 +2,7 @@ import useUser from "@/hooks/useUser";
 import { StoryProps } from "@/pages/story/detail";
 import Link from "next/link";
 import MoreMenu from "./MoreMenu";
+import { useAuth } from "@/context/authProvider";
 
 interface StoryHeaderProps {
   story: StoryProps;
@@ -10,11 +11,13 @@ interface StoryHeaderProps {
 
 const StoryHeader = ({ story, style }: StoryHeaderProps) => {
   const { nickname } = useUser(story.userId);
+  const { user } = useAuth();
 
   return (
     <div className={`flex justify-between ${style}`}>
-      <div className="h-full flex items-center text-[18px]">
+      <div className="h-full flex flex-wrap items-center">
         <Link
+          className="text-[18px]"
           href={{
             pathname: "/user/detail",
             query: { userId: story.userId },
@@ -23,6 +26,17 @@ const StoryHeader = ({ story, style }: StoryHeaderProps) => {
         >
           {nickname}
         </Link>
+        {user?.uid !== story.userId ? (
+          <div
+            className="cursor-pointer text-[14px] text-bc ml-[5px]"
+            onClick={() => {
+              console.log(user?.uid);
+              console.log(story.userId);
+            }}
+          >
+            단골하기
+          </div>
+        ) : null}
       </div>
       <MoreMenu
         title={story.title}
