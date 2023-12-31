@@ -8,6 +8,7 @@ import { StoryProps } from "./detail";
 import withHead from "@/components/hoc/withHead";
 import { headDescription, headTitle } from "@/shared/constants";
 import getPage from "@/firebase/firestore/getPage";
+import useRegular from "@/hooks/useRegular";
 
 const List = () => {
   const [stories, setStories] = useState<StoryProps[]>([]);
@@ -16,6 +17,8 @@ const List = () => {
 
   const storyRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
+
+  const { regular } = useRegular(user?.uid);
 
   useEffect(() => {
     if (!user) return;
@@ -101,7 +104,7 @@ const List = () => {
       <div className="p-[10px]">
         {stories.map((story) => (
           <div key={story.storyId} ref={storyRef}>
-            <Preview story={story} />
+            <Preview story={story} regular={regular} />
           </div>
         ))}
       </div>

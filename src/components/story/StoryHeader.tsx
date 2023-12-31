@@ -9,11 +9,12 @@ import deleteFieldFunc from "@/firebase/firestore/deleteField";
 
 interface StoryHeaderProps {
   story: StoryProps;
+  regular: { [key: string]: boolean };
   style: string;
 }
 
-const StoryHeader = ({ story, style }: StoryHeaderProps) => {
-  const [isRegular, setIsRegular] = useState(false);
+const StoryHeader = ({ story, regular, style }: StoryHeaderProps) => {
+  const [isRegular, setIsRegular] = useState(regular[story.userId]);
   const { nickname } = useUser(story.userId);
   const { user } = useAuth();
 
