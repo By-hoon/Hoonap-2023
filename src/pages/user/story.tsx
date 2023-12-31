@@ -6,12 +6,16 @@ import { useEffect, useState } from "react";
 import BasicImage from "@/components/common/BasicImage";
 import withHead from "@/components/hoc/withHead";
 import { headDescription, headTitle } from "@/shared/constants";
+import useRegular from "@/hooks/useRegular";
+import { useAuth } from "@/context/authProvider";
 
 const Story = () => {
   const [current, setCurrent] = useState<StoryProps>();
   const [rest, setRest] = useState<StoryProps[]>([]);
 
   const router = useRouter();
+  const { user } = useAuth();
+  const { regular } = useRegular(user?.uid);
 
   const { storyId, stories } = router.query;
   useEffect(() => {
@@ -50,7 +54,7 @@ const Story = () => {
   return (
     <Layout>
       <div className="p-[10px]">
-        <DetailView story={current} />
+        <DetailView story={current} regular={regular} />
       </div>
       <div className="flex justify-between mt-[20px]">
         {rest.map((restStory) => (

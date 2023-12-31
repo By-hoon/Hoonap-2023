@@ -4,7 +4,7 @@ import Link from "next/link";
 import MoreMenu from "./MoreMenu";
 import { useAuth } from "@/context/authProvider";
 import updateField from "@/firebase/firestore/updateField";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import deleteFieldFunc from "@/firebase/firestore/deleteField";
 
 interface StoryHeaderProps {
@@ -17,6 +17,10 @@ const StoryHeader = ({ story, regular, style }: StoryHeaderProps) => {
   const [isRegular, setIsRegular] = useState(regular[story.userId]);
   const { nickname } = useUser(story.userId);
   const { user } = useAuth();
+
+  useEffect(() => {
+    setIsRegular(regular[story.userId]);
+  }, [regular, story.userId]);
 
   if (!user) return <></>;
 
