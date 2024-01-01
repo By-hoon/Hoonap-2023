@@ -25,15 +25,21 @@ const StoryHeader = ({ story, regular, style }: StoryHeaderProps) => {
   if (!user) return <></>;
 
   const registerRegular = async () => {
-    await updateField("regulars", user.uid, story.userId, {
-      date: Date.now(),
-    });
+    const curDate = Date.now();
 
+    await updateField("regulars", user.uid, story.userId, {
+      date: curDate,
+    });
+    await updateField("regular-owner", story.userId, user.uid, {
+      date: curDate,
+    });
     setIsRegular(true);
   };
 
   const deleteRegular = async () => {
     await deleteFieldFunc("regulars", user.uid, story.userId);
+    await deleteFieldFunc("regular-owner", story.userId, user.uid);
+
     setIsRegular(false);
   };
 
