@@ -76,9 +76,13 @@ Vercel 배포: https://hoonap-2023.vercel.app/
   - 스토리 삭제
 
 - 댓글
+
   - 댓글 작성
   - 댓글 수정
   - 댓글 삭제
+
+- 단골
+  - 단골 등록·취소
 
 <br>
 
@@ -113,6 +117,7 @@ src
 │   │   ├── MoreMenu.tsx
 │   │   ├── Preview.tsx
 │   │   ├── StoryContents.tsx
+│   │   ├── StoryHeader.tsx
 │   │   └── StoryImages.tsx
 │   ├── Map.tsx
 │   └── MapOption.tsx
@@ -144,6 +149,7 @@ src
 └── hooks
 │   ├── useClickOutside.ts
 │   ├── useMyLocation.ts
+│   ├── useRegular.ts
 │   └── useUser.ts
 ├── pages
 │   ├── story

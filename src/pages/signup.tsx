@@ -38,8 +38,12 @@ const Signup = () => {
     }
 
     const userId = userData.user.uid;
-    const addResult = await setData("users", userId, { nickname: nickname });
-    if (!addResult) return;
+    const usersResult = await setData("users", userId, { nickname: nickname });
+    const regularsResult = await setData("regulars", userId, {});
+    const regularOwnerResult = await setData("regular-owner", userId, {});
+    if (!usersResult) return;
+    if (!regularsResult) return;
+    if (!regularOwnerResult) return;
     router.push("/");
   };
 

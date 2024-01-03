@@ -7,6 +7,7 @@ import { useAuth } from "@/context/authProvider";
 import DetailView from "@/components/story/DetailView";
 import withHead from "@/components/hoc/withHead";
 import { headDescription, headTitle } from "@/shared/constants";
+import useRegular from "@/hooks/useRegular";
 
 export interface StoryProps {
   title: string;
@@ -22,6 +23,8 @@ const StoryDetail = () => {
   const [story, setStory] = useState<StoryProps>();
 
   const { user } = useAuth();
+  const { regular } = useRegular(user?.uid);
+
   const router = useRouter();
 
   const { storyId } = router.query;
@@ -86,15 +89,7 @@ const StoryDetail = () => {
   return (
     <Layout>
       <div className="p-[10px]">
-        <DetailView
-          title={story.title}
-          story={story.story}
-          paths={story.paths}
-          images={story.images}
-          createdAt={story.createdAt}
-          storyId={story.storyId}
-          userId={story.userId}
-        />
+        <DetailView story={story} regular={regular} />
       </div>
     </Layout>
   );
