@@ -45,6 +45,7 @@ export const alertTitle = {
   server: "서버 오류",
   unknown: "알 수 없는 오류",
   exp: "체험하기 오류",
+  access: "접근 제한",
 };
 
 export const alertContent = {
@@ -56,6 +57,7 @@ export const alertContent = {
   tryAgain: "잠시 후 다시 시도해 주세요.",
   unknown: "알 수 없는 오류가 발생하였습니다.",
   invalidExp: "체험하기에서 이용할 수 없는 기능입니다.",
+  nothingStory: "스토리 정보가 없습니다.",
 };
 
 export const confirmTitle = {

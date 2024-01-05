@@ -10,7 +10,14 @@ import { StoryProps } from "./detail";
 import { deleteFile } from "@/firebase/storage/delete";
 import Button from "@/components/common/Button";
 import { PopUpContext } from "@/context/popUpProvider";
-import { confirmContent, confirmTitle, headDescription, headTitle } from "@/shared/constants";
+import {
+  alertContent,
+  alertTitle,
+  confirmContent,
+  confirmTitle,
+  headDescription,
+  headTitle,
+} from "@/shared/constants";
 import withHead from "@/components/hoc/withHead";
 
 const StoryEdit = () => {
@@ -32,7 +39,7 @@ const StoryEdit = () => {
   const [title, setTitle] = useState("");
   const [story, setStory] = useState("");
 
-  const { confirm } = useContext(PopUpContext);
+  const { alert, confirm } = useContext(PopUpContext);
 
   const changeTitle = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -46,11 +53,7 @@ const StoryEdit = () => {
     const storageStories = window.localStorage.getItem("story");
     const storagePaths = window.localStorage.getItem("path");
     const storageImages = window.localStorage.getItem("image");
-    if (!storageStories || !storagePaths || !storageImages) {
-      alert("게시된 스토리가 없습니다.");
-      router.push("/");
-      return;
-    }
+    if (!storageStories || !storagePaths || !storageImages) return;
 
     const expStories: { [key: string]: StoryProps } = JSON.parse(storageStories);
     const expPaths: { [key: string]: { paths: { latitude: number; longitude: number }[]; storyId: string } } =
@@ -130,7 +133,11 @@ const StoryEdit = () => {
   };
 
   useEffect(() => {
-    if (!queryPaths || !queryTitle || !queryStory || !queryImageUrls) return;
+    if (!queryPaths || !queryTitle || !queryStory || !queryImageUrls) {
+      alert(alertTitle.access, alertContent.nothingStory);
+      router.push("/");
+      return;
+    }
 
     setPaths(JSON.parse(queryPaths as string));
     setTitle(queryTitle as string);
@@ -140,7 +147,7 @@ const StoryEdit = () => {
     const newQueryImageUrls = typeof stringImages === "string" ? [stringImages] : stringImages;
     setPreviewImages(newQueryImageUrls);
     setOldImages(newQueryImageUrls);
-  }, [queryImageUrls, queryPaths, queryStory, queryTitle]);
+  }, [alert, queryImageUrls, queryPaths, queryStory, queryTitle, router]);
 
   if (!queryImageUrls)
     return (
