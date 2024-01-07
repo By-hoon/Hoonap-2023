@@ -2,12 +2,13 @@ import Layout from "@/components/common/Layout";
 import DetailView from "@/components/story/DetailView";
 import { StoryProps } from "../story/detail";
 import Router, { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import BasicImage from "@/components/common/BasicImage";
 import withHead from "@/components/hoc/withHead";
-import { headDescription, headTitle } from "@/shared/constants";
+import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/constants";
 import useRegular from "@/hooks/useRegular";
 import { useAuth } from "@/context/authProvider";
+import { PopUpContext } from "@/context/popUpProvider";
 
 const Story = () => {
   const [current, setCurrent] = useState<StoryProps>();
@@ -17,10 +18,12 @@ const Story = () => {
   const { user } = useAuth();
   const { regular } = useRegular(user?.uid);
 
+  const { alert } = useContext(PopUpContext);
+
   const { storyId, stories } = router.query;
   useEffect(() => {
     if (!storyId) {
-      alert("스토리 정보가 없습니다.");
+      alert(alertTitle.access, alertContent.noUser);
       Router.push("/story/list");
       return;
     }
@@ -42,7 +45,7 @@ const Story = () => {
       restStories.push(story);
     });
     setRest(restStories);
-  }, [stories, storyId]);
+  }, [alert, stories, storyId]);
 
   if (!current) {
     return (

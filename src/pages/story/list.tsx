@@ -1,14 +1,15 @@
 import Preview from "@/components/story/Preview";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Layout from "@/components/common/Layout";
 import { isExp } from "@/utils/util";
 import { useAuth } from "@/context/authProvider";
 import Router from "next/router";
 import { StoryProps } from "./detail";
 import withHead from "@/components/hoc/withHead";
-import { headDescription, headTitle } from "@/shared/constants";
+import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/constants";
 import getPage from "@/firebase/firestore/getPage";
 import useRegular from "@/hooks/useRegular";
+import { PopUpContext } from "@/context/popUpProvider";
 
 const List = () => {
   const [stories, setStories] = useState<StoryProps[]>([]);
@@ -20,6 +21,8 @@ const List = () => {
 
   const { regular } = useRegular(user?.uid);
 
+  const { alert } = useContext(PopUpContext);
+
   useEffect(() => {
     if (!user) return;
     const userId = user.uid;
@@ -28,16 +31,16 @@ const List = () => {
       const result = await getPage("stories", size, "createdAt", "desc", last === 0 ? undefined : last);
 
       if (!result) {
-        alert("에러 발생");
+        alert(alertTitle.server, alertContent.unknown);
         return;
       }
       if (result.empty && last === 0) {
-        alert("게시된 스토리가 없습니다.");
+        alert(alertTitle.access, alertContent.nothingStory);
         Router.push("/");
         return;
       }
       if (result.empty && last !== 0) {
-        alert("더 이상 불러올 스토리가 없습니다.");
+        alert("", alertContent.noMoreStory);
         return;
       }
 
@@ -49,7 +52,7 @@ const List = () => {
     const getExpStoriesData = () => {
       const storageStories = window.localStorage.getItem("story");
       if (!storageStories) {
-        alert("게시된 스토리가 없습니다.");
+        alert(alertTitle.access, alertContent.nothingStory);
         Router.push("/");
         return;
       }
@@ -73,7 +76,7 @@ const List = () => {
       return;
     }
     getStoriesData();
-  }, [last, size, user]);
+  }, [alert, last, size, user]);
 
   useEffect(() => {
     const onIntersect: IntersectionObserverCallback = (entries, observer) => {

@@ -1,19 +1,22 @@
 import Layout from "@/components/common/Layout";
 import getCollection from "@/firebase/firestore/getCollection";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { isExp } from "@/utils/util";
 import { useAuth } from "@/context/authProvider";
 import BasicImage from "@/components/common/BasicImage";
 import Router from "next/router";
 import Link from "next/link";
 import withHead from "@/components/hoc/withHead";
-import { headDescription, headTitle } from "@/shared/constants";
+import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/constants";
+import { PopUpContext } from "@/context/popUpProvider";
 
 const Gallery = () => {
   const [images, setImages] = useState<{ url: string; userId: string; id: string }[]>([]);
   const [current, setCurrent] = useState<{ url: string; userId: string; id: string }>();
 
   const { user } = useAuth();
+
+  const { alert } = useContext(PopUpContext);
 
   useEffect(() => {
     if (!user) return;
@@ -22,7 +25,7 @@ const Gallery = () => {
     const getImageData = async () => {
       const result = await getCollection("images");
       if (!result || result.empty) {
-        alert("게시된 스토리가 없습니다.");
+        alert(alertTitle.access, alertContent.nothingStory);
         Router.push("/");
         return;
       }
@@ -40,7 +43,7 @@ const Gallery = () => {
     const getExpImageData = () => {
       const storageImage = window.localStorage.getItem("image");
       if (!storageImage) {
-        alert("게시된 스토리가 없습니다.");
+        alert(alertTitle.access, alertContent.nothingStory);
         Router.push("/");
         return;
       }

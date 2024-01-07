@@ -1,6 +1,6 @@
 import SaveImage from "@/components/create/SaveImage";
 import SavePath from "@/components/create/SavePath";
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import Image from "next/image";
 import setData from "@/firebase/firestore/setData";
 import getDocument from "@/firebase/firestore/getDocument";
@@ -16,7 +16,8 @@ import Button from "@/components/common/Button";
 import BasicImage from "@/components/common/BasicImage";
 import PartButton from "@/components/create/PartButton";
 import withHead from "@/components/hoc/withHead";
-import { headDescription, headTitle } from "@/shared/constants";
+import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/constants";
+import { PopUpContext } from "@/context/popUpProvider";
 
 const Create = ({ uid }: { uid: string }) => {
   const [part, setPart] = useState("path");
@@ -27,6 +28,8 @@ const Create = ({ uid }: { uid: string }) => {
   const [story, setStory] = useState("");
 
   const router = useRouter();
+
+  const { alert } = useContext(PopUpContext);
 
   const changeTitle = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -39,7 +42,7 @@ const Create = ({ uid }: { uid: string }) => {
   const changePart = (newPart: string) => {
     if (newPart === "story") {
       if (previewImages.length === 0) {
-        alert("스토리 작성은 이미지 입력 후 가능합니다.");
+        alert(alertTitle.access, alertContent.storyAfterImage);
         return;
       }
     }
@@ -77,7 +80,7 @@ const Create = ({ uid }: { uid: string }) => {
     const expImage = storageImage ? JSON.parse(storageImage) : {};
 
     if (Object.keys(expStory).length >= 3) {
-      alert("체험 계정은 3개까지만 스토리 등록이 가능합니다.");
+      alert(alertTitle.exp, alertContent.expCreate);
       router.push("/story/list");
       return;
     }

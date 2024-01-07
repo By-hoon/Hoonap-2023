@@ -58,6 +58,10 @@ export const alertContent = {
   unknown: "알 수 없는 오류가 발생하였습니다.",
   invalidExp: "체험하기에서 이용할 수 없는 기능입니다.",
   nothingStory: "스토리 정보가 없습니다.",
+  noUser: "사용자 정보가 없습니다.",
+  noMoreStory: "더 이상 불러올 스토리가 없습니다.",
+  storyAfterImage: "스토리 작성은 이미지 입력 후 가능합니다.",
+  expCreate: "체험 계정은 3개까지만 스토리 등록이 가능합니다.",
 };
 
 export const confirmTitle = {

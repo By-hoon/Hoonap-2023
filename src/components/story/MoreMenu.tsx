@@ -33,11 +33,7 @@ const MoreMenu = ({ title, story, images, paths, createdAt, storyId, userId }: S
     const storagePaths = window.localStorage.getItem("path");
     const storageImages = window.localStorage.getItem("image");
 
-    if (!storageStories || !storagePaths || !storageImages) {
-      alert("게시된 스토리가 없습니다.");
-      router.push("/");
-      return;
-    }
+    if (!storageStories || !storagePaths || !storageImages) return;
 
     const expStories: { [key: string]: StoryProps } = JSON.parse(storageStories);
     const expPaths: { [key: string]: { paths: { latitude: number; longitude: number }[]; storyId: string } } =

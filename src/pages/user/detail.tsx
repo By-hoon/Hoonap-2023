@@ -2,7 +2,7 @@ import getDocument from "@/firebase/firestore/getDocument";
 import Link from "next/link";
 import useUser from "@/hooks/useUser";
 import Layout from "@/components/common/Layout";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Router, { useRouter } from "next/router";
 import BasicImage from "@/components/common/BasicImage";
 import dynamic from "next/dynamic";
@@ -11,7 +11,8 @@ import Button from "@/components/common/Button";
 import { Icon } from "@iconify/react";
 import { StoryProps } from "../story/detail";
 import withHead from "@/components/hoc/withHead";
-import { headDescription, headTitle } from "@/shared/constants";
+import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/constants";
+import { PopUpContext } from "@/context/popUpProvider";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
@@ -26,6 +27,8 @@ const UserDetail = () => {
 
   const router = useRouter();
   const { userId } = router.query;
+
+  const { alert } = useContext(PopUpContext);
 
   const clickMap = (storyId?: string) => {
     if (!storyId) return;
@@ -87,7 +90,7 @@ const UserDetail = () => {
 
   useEffect(() => {
     if (!userId) {
-      alert("사용자 정보가 없습니다.");
+      alert(alertTitle.access, alertContent.noUser);
       Router.push("/story/list");
       return;
     }
@@ -132,7 +135,7 @@ const UserDetail = () => {
       setImages(images);
     };
     getUserData();
-  }, [userId]);
+  }, [alert, userId]);
 
   if (!userId)
     return (

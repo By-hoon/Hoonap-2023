@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import getDocument from "@/firebase/firestore/getDocument";
 import Layout from "@/components/common/Layout";
 import Router, { useRouter } from "next/router";
@@ -6,8 +6,9 @@ import { isExp } from "@/utils/util";
 import { useAuth } from "@/context/authProvider";
 import DetailView from "@/components/story/DetailView";
 import withHead from "@/components/hoc/withHead";
-import { headDescription, headTitle } from "@/shared/constants";
+import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/constants";
 import useRegular from "@/hooks/useRegular";
+import { PopUpContext } from "@/context/popUpProvider";
 
 export interface StoryProps {
   title: string;
@@ -27,13 +28,14 @@ const StoryDetail = () => {
 
   const router = useRouter();
 
+  const { alert } = useContext(PopUpContext);
   const { storyId } = router.query;
 
   useEffect(() => {
     if (!user) return;
 
     if (!storyId) {
-      alert("스토리 정보가 없습니다.");
+      alert(alertTitle.access, alertContent.nothingStory);
       Router.push("/story/list");
       return;
     }
@@ -77,7 +79,7 @@ const StoryDetail = () => {
       return;
     }
     getStory();
-  }, [storyId, user]);
+  }, [alert, storyId, user]);
 
   if (!user || !story)
     return (
