@@ -10,6 +10,7 @@ import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/c
 import getPage from "@/firebase/firestore/getPage";
 import useRegular from "@/hooks/useRegular";
 import { PopUpContext } from "@/context/popUpProvider";
+import { Icon } from "@iconify/react";
 
 const List = () => {
   const [stories, setStories] = useState<StoryProps[]>([]);
@@ -110,6 +111,32 @@ const List = () => {
             <Preview story={story} regular={regular} />
           </div>
         ))}
+      </div>
+      <div className="fixed top-[50%] right-[5px] -translate-y-1/2 w-[130px] border">
+        <div
+          onClick={() => {
+            console.log("기본 스토리 목록");
+          }}
+        >
+          <Icon icon="ic:round-home" />
+          <div>기본</div>
+        </div>
+        <div
+          onClick={() => {
+            console.log("내 스토리 목록");
+          }}
+        >
+          <Icon icon="icon-park-outline:me" />
+          <div>My</div>
+        </div>
+        <div
+          onClick={() => {
+            console.log("단골 스토리 목록");
+          }}
+        >
+          <Icon icon="icon-park-outline:every-user" />
+          <div>단골</div>
+        </div>
       </div>
     </Layout>
   );
