@@ -24,7 +24,7 @@ const StoryDetail = () => {
   const [story, setStory] = useState<StoryProps>();
 
   const { user } = useAuth();
-  const { regular } = useRegular(user?.uid);
+  const { regular, setRegular } = useRegular(user?.uid);
 
   const router = useRouter();
 
@@ -91,7 +91,7 @@ const StoryDetail = () => {
   return (
     <Layout>
       <div className="p-[10px]">
-        <DetailView story={story} regular={regular} />
+        <DetailView story={story} regular={regular} setRegular={setRegular} />
       </div>
     </Layout>
   );

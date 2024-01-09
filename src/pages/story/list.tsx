@@ -20,7 +20,7 @@ const List = () => {
   const storyRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
 
-  const { regular } = useRegular(user?.uid);
+  const { regular, setRegular } = useRegular(user?.uid);
 
   const { alert } = useContext(PopUpContext);
 
@@ -108,7 +108,7 @@ const List = () => {
       <div className="p-[10px]">
         {stories.map((story) => (
           <div key={story.storyId} ref={storyRef}>
-            <Preview story={story} regular={regular} />
+            <Preview story={story} regular={regular} setRegular={setRegular} />
           </div>
         ))}
       </div>
