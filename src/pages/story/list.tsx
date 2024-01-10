@@ -14,6 +14,7 @@ import { Icon } from "@iconify/react";
 
 const List = () => {
   const [stories, setStories] = useState<StoryProps[]>([]);
+  const [category, setCategory] = useState("basic");
   const [size, setSize] = useState(3);
   const [last, setLast] = useState(0);
 
@@ -23,6 +24,22 @@ const List = () => {
   const { regular, setRegular } = useRegular(user?.uid);
 
   const { alert } = useContext(PopUpContext);
+
+  const changeCategory = (target: string) => {
+    if (!user) return;
+    if (isExp(user.uid)) {
+      alert(alertTitle.exp, alertContent.invalidExp);
+      return;
+    }
+    if (target === category) {
+      alert("", alertContent.sameCategory);
+      return;
+    }
+
+    setCategory(target);
+    setStories([]);
+    setLast(0);
+  };
 
   useEffect(() => {
     if (!user) return;
@@ -44,9 +61,28 @@ const List = () => {
         alert("", alertContent.noMoreStory);
         return;
       }
+      const newStories: StoryProps[] = [];
+      result.docs.forEach((doc) => {
+        if (category === "basic") {
+          newStories.push(Object.assign(doc.data(), { storyId: doc.id }) as StoryProps);
+          return;
+        }
 
-      const newStories = result.docs.map((doc) => Object.assign(doc.data(), { storyId: doc.id }));
+        if (category === "my") {
+          if (doc.data().userId !== user.uid) return;
+          newStories.push(Object.assign(doc.data(), { storyId: doc.id }) as StoryProps);
+        }
 
+        if (category === "regular") {
+          if (!regular[doc.data().userId]) return;
+          newStories.push(Object.assign(doc.data(), { storyId: doc.id }) as StoryProps);
+        }
+      });
+
+      if (stories.length === 0 && newStories.length === 0) {
+        alert("", alertContent.nothingStory);
+        return;
+      }
       setStories((cur) => cur.concat(newStories as StoryProps[]));
     };
 
@@ -77,7 +113,7 @@ const List = () => {
       return;
     }
     getStoriesData();
-  }, [alert, last, size, user]);
+  }, [alert, category, last, size, user]);
 
   useEffect(() => {
     const onIntersect: IntersectionObserverCallback = (entries, observer) => {
@@ -115,7 +151,7 @@ const List = () => {
       <div className="fixed top-[50%] right-[5px] -translate-y-1/2 w-[130px] border">
         <div
           onClick={() => {
-            console.log("기본 스토리 목록");
+            changeCategory("basic");
           }}
         >
           <Icon icon="ic:round-home" />
@@ -123,7 +159,7 @@ const List = () => {
         </div>
         <div
           onClick={() => {
-            console.log("내 스토리 목록");
+            changeCategory("my");
           }}
         >
           <Icon icon="icon-park-outline:me" />
@@ -131,7 +167,7 @@ const List = () => {
         </div>
         <div
           onClick={() => {
-            console.log("단골 스토리 목록");
+            changeCategory("regular");
           }}
         >
           <Icon icon="icon-park-outline:every-user" />
