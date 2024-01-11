@@ -11,9 +11,11 @@ import getPage from "@/firebase/firestore/getPage";
 import useRegular from "@/hooks/useRegular";
 import { PopUpContext } from "@/context/popUpProvider";
 import { Icon } from "@iconify/react";
+import getDocument from "@/firebase/firestore/getDocument";
 
 const List = () => {
   const [stories, setStories] = useState<StoryProps[]>([]);
+  const [regulars, setRegulars] = useState<{ id: string; nickname: string }[]>([]);
   const [category, setCategory] = useState("basic");
   const [size, setSize] = useState(3);
   const [last, setLast] = useState(0);
@@ -116,6 +118,32 @@ const List = () => {
   }, [alert, category, last, size, user]);
 
   useEffect(() => {
+    const regularKeys = Object.keys(regular);
+    if (regularKeys.length === 0) {
+      setRegulars([]);
+      return;
+    }
+
+    const getRegularUserData = async () => {
+      const newRegulars: { id: string; nickname: string }[] = [];
+      const promise = regularKeys.map(async (regularKey) => {
+        const result = await getDocument("users", regularKey);
+        if (!result) {
+          newRegulars.push({ id: regularKey, nickname: "unknown" });
+          return;
+        }
+
+        newRegulars.push({ id: regularKey, nickname: result.nickname });
+      });
+      await Promise.all(promise);
+
+      setRegulars(newRegulars);
+    };
+
+    getRegularUserData();
+  }, [regular]);
+
+  useEffect(() => {
     const onIntersect: IntersectionObserverCallback = (entries, observer) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting && stories.length !== 0) {
@@ -173,6 +201,24 @@ const List = () => {
           <Icon icon="icon-park-outline:every-user" />
           <div>단골</div>
         </div>
+      </div>
+      <div className="fixed top-[50%] left-[5px] -translate-y-1/2 w-[130px] border">
+        {regulars.map((regularUser) => (
+          <div
+            key={regularUser.id}
+            onClick={() => {
+              Router.push(
+                {
+                  pathname: "/user/detail",
+                  query: { userId: regularUser.id },
+                },
+                "/user/detail"
+              );
+            }}
+          >
+            {regularUser.nickname}
+          </div>
+        ))}
       </div>
     </Layout>
   );
