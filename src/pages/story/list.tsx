@@ -176,35 +176,39 @@ const List = () => {
           </div>
         ))}
       </div>
-      <div className="fixed top-[50%] right-[5px] -translate-y-1/2 w-[130px] border">
+      <div className="fixed top-[50%] right-[5px] lg:right-[10%] -translate-y-1/2 w-[90px] border rounded-[5px] p-[5px] shadow-basic">
         <div
+          className="cursor-pointer flex items-center my-[5px]"
           onClick={() => {
             changeCategory("basic");
           }}
         >
-          <Icon icon="ic:round-home" />
-          <div>기본</div>
+          <Icon className="text-[24px]" icon="ic:round-home" />
+          <div className="text-[14px] ml-[8px]">기본</div>
         </div>
         <div
+          className="cursor-pointer flex items-center my-[5px]"
           onClick={() => {
             changeCategory("my");
           }}
         >
-          <Icon icon="icon-park-outline:me" />
-          <div>My</div>
+          <Icon className="text-[24px]" icon="icon-park-outline:me" />
+          <div className="text-[14px] ml-[8px]">사용자</div>
         </div>
         <div
+          className="cursor-pointer flex items-center my-[5px]"
           onClick={() => {
             changeCategory("regular");
           }}
         >
-          <Icon icon="icon-park-outline:every-user" />
-          <div>단골</div>
+          <Icon className="text-[24px]" icon="icon-park-outline:every-user" />
+          <div className="text-[14px] ml-[8px]">단골</div>
         </div>
       </div>
-      <div className="fixed top-[50%] left-[5px] -translate-y-1/2 w-[130px] border">
+      <div className="fixed top-[50%] left-[5px] lg:left-[10%] -translate-y-1/2 w-[100px] text-[14px] text-center border rounded-[5px] p-[5px] shadow-basic">
         {regulars.map((regularUser) => (
           <div
+            className="cursor-pointer"
             key={regularUser.id}
             onClick={() => {
               Router.push(
