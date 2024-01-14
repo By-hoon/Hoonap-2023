@@ -62,6 +62,7 @@ export const alertContent = {
   noMoreStory: "더 이상 불러올 스토리가 없습니다.",
   storyAfterImage: "스토리 작성은 이미지 입력 후 가능합니다.",
   expCreate: "체험 계정은 3개까지만 스토리 등록이 가능합니다.",
+  sameCategory: "현재 적용되어있는 카테고리입니다.",
 };
 
 export const confirmTitle = {

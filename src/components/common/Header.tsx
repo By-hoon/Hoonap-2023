@@ -69,7 +69,7 @@ const Header = () => {
   if (!mounted) return <></>;
   if (isMobile)
     return (
-      <div className="header h-[55px] flex justify-between items-center">
+      <div className="header h-[45px] flex justify-between items-center">
         <div>
           <div className="w-[58px] text-[24px]" onClick={onClickSidebar} ref={sidebarRef}>
             <Icon icon="material-symbols:menu-rounded" />
@@ -122,7 +122,7 @@ const Header = () => {
           <Link href="/">Hoonap</Link>
         </div>
         <div>
-          <Link href="/create" className="submit-button text-[15px] px-[14px] py-[8px]">
+          <Link href="/create" className="submit-button text-[14px] px-[11px] py-[6px]">
             생성
           </Link>
         </div>

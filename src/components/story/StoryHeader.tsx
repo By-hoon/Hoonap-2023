@@ -4,23 +4,19 @@ import Link from "next/link";
 import MoreMenu from "./MoreMenu";
 import { useAuth } from "@/context/authProvider";
 import updateField from "@/firebase/firestore/updateField";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import deleteFieldFunc from "@/firebase/firestore/deleteField";
 
 interface StoryHeaderProps {
   story: StoryProps;
   regular: { [key: string]: boolean };
+  setRegular: Dispatch<SetStateAction<{ [key: string]: boolean }>>;
   style: string;
 }
 
-const StoryHeader = ({ story, regular, style }: StoryHeaderProps) => {
-  const [isRegular, setIsRegular] = useState(regular[story.userId]);
+const StoryHeader = ({ story, regular, setRegular, style }: StoryHeaderProps) => {
   const { nickname } = useUser(story.userId);
   const { user } = useAuth();
-
-  useEffect(() => {
-    setIsRegular(regular[story.userId]);
-  }, [regular, story.userId]);
 
   if (!user) return <></>;
 
@@ -33,14 +29,20 @@ const StoryHeader = ({ story, regular, style }: StoryHeaderProps) => {
     await updateField("regular-owner", story.userId, user.uid, {
       date: curDate,
     });
-    setIsRegular(true);
+
+    const newRegular = JSON.parse(JSON.stringify(regular));
+
+    setRegular(Object.assign(newRegular, { [story.userId]: true }));
   };
 
   const deleteRegular = async () => {
     await deleteFieldFunc("regulars", user.uid, story.userId);
     await deleteFieldFunc("regular-owner", story.userId, user.uid);
 
-    setIsRegular(false);
+    const newRegular = JSON.parse(JSON.stringify(regular));
+    delete newRegular[story.userId];
+
+    setRegular(newRegular);
   };
 
   return (
@@ -58,7 +60,7 @@ const StoryHeader = ({ story, regular, style }: StoryHeaderProps) => {
         </Link>
         {user?.uid !== story.userId ? (
           <>
-            {isRegular ? (
+            {regular[story.userId] ? (
               <div className="cursor-pointer text-[14px] text-zinc-400 ml-[5px]" onClick={deleteRegular}>
                 단골중
               </div>

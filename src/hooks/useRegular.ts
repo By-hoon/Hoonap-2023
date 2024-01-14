@@ -21,7 +21,7 @@ const useRegular = (userId: string | undefined) => {
     getRegularData();
   }, [userId]);
 
-  return { regular };
+  return { regular, setRegular };
 };
 
 export default useRegular;

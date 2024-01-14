@@ -16,7 +16,7 @@ const Story = () => {
 
   const router = useRouter();
   const { user } = useAuth();
-  const { regular } = useRegular(user?.uid);
+  const { regular, setRegular } = useRegular(user?.uid);
 
   const { alert } = useContext(PopUpContext);
 
@@ -57,7 +57,7 @@ const Story = () => {
   return (
     <Layout>
       <div className="p-[10px]">
-        <DetailView story={current} regular={regular} />
+        <DetailView story={current} regular={regular} setRegular={setRegular} />
       </div>
       <div className="flex justify-between mt-[20px]">
         {rest.map((restStory) => (
