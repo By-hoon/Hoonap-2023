@@ -169,43 +169,49 @@ const List = () => {
     );
   return (
     <Layout>
-      <div className="p-[10px]">
+      <div className="p-[10px] py-[45px]">
         {stories.map((story) => (
           <div key={story.storyId} ref={storyRef}>
             <Preview story={story} regular={regular} setRegular={setRegular} />
           </div>
         ))}
       </div>
-      <div className="fixed top-[50%] right-[5px] lg:right-[10%] -translate-y-1/2 w-[90px] border rounded-[5px] p-[5px] shadow-basic">
+      <div
+        className="fixed md:top-[50%] md:right-[5px] lg:right-[10%] md:-translate-y-1/2 md:w-[90px] md:border md:rounded-[5px] md:shadow-basic
+      mobile:bottom-0 mobile:left-0 mobile:flex-middle mobile:w-full mobile:h-[45px] mobile:z-[30] p-[5px] bg-white"
+      >
         <div
-          className="cursor-pointer flex items-center my-[5px]"
+          className="cursor-pointer flex items-center md:my-[5px] mobile:mx-[5px]"
           onClick={() => {
             changeCategory("basic");
           }}
         >
           <Icon className="text-[24px]" icon="ic:round-home" />
-          <div className="text-[14px] ml-[8px]">기본</div>
+          <div className="text-[14px] md:ml-[8px] mobile:mx-[3px]">기본</div>
         </div>
         <div
-          className="cursor-pointer flex items-center my-[5px]"
+          className="cursor-pointer flex items-center md:my-[5px] mobile:mx-[5px]"
           onClick={() => {
             changeCategory("my");
           }}
         >
           <Icon className="text-[24px]" icon="icon-park-outline:me" />
-          <div className="text-[14px] ml-[8px]">사용자</div>
+          <div className="text-[14px] md:ml-[8px] mobile:mx-[3px]">사용자</div>
         </div>
         <div
-          className="cursor-pointer flex items-center my-[5px]"
+          className="cursor-pointer flex items-center md:my-[5px] mobile:mx-[5px]"
           onClick={() => {
             changeCategory("regular");
           }}
         >
           <Icon className="text-[24px]" icon="icon-park-outline:every-user" />
-          <div className="text-[14px] ml-[8px]">단골</div>
+          <div className="text-[14px] md:ml-[8px] mobile:mx-[3px]">단골</div>
         </div>
       </div>
-      <div className="fixed top-[50%] left-[5px] lg:left-[10%] -translate-y-1/2 w-[100px] text-[14px] text-center border rounded-[5px] p-[5px] shadow-basic">
+      <div
+        className="fixed flex md:top-[50%] md:left-[5px] lg:left-[10%] md:-translate-y-1/2 md:justify-center md:w-[100px] text-[14px] md:border md:rounded-[5px] md:shadow-basic
+      mobile:top-[45px] mobile:left-0 mobile:items-center mobile:w-full mobile:h-[45px] mobile:border-b mobile:z-[30] p-[5px] bg-white"
+      >
         {regulars.map((regularUser) => (
           <div
             className="cursor-pointer"
