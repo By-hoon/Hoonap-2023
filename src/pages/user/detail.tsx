@@ -13,6 +13,7 @@ import { StoryProps } from "../story/detail";
 import withHead from "@/components/hoc/withHead";
 import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/constants";
 import { PopUpContext } from "@/context/popUpProvider";
+import { isExp } from "@/utils/util";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
@@ -95,6 +96,11 @@ const UserDetail = () => {
       return;
     }
 
+    if (isExp(userId as string)) {
+      alert(alertTitle.exp, alertContent.invalidExp);
+      Router.push("/");
+      return;
+    }
     const getUserData = async () => {
       const userStoryResult = await getDocument("users", userId as string);
 
