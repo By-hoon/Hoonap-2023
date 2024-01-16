@@ -14,6 +14,7 @@ import withHead from "@/components/hoc/withHead";
 import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/constants";
 import { PopUpContext } from "@/context/popUpProvider";
 import { isExp } from "@/utils/util";
+import { useAuth } from "@/context/authProvider";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
@@ -29,11 +30,13 @@ const UserDetail = () => {
   const router = useRouter();
   const { userId } = router.query;
 
+  const { user: accessUser } = useAuth();
+
   const { alert } = useContext(PopUpContext);
 
   const clickMap = (storyId?: string) => {
     if (!storyId) return;
-    router.push(
+    Router.push(
       {
         pathname: "/user/story",
         query: { storyId: storyId, stories: JSON.stringify(stories) },
@@ -92,7 +95,7 @@ const UserDetail = () => {
   useEffect(() => {
     if (!userId) {
       alert(alertTitle.access, alertContent.noUser);
-      Router.push("/story/list");
+      Router.push("/");
       return;
     }
 
@@ -154,6 +157,26 @@ const UserDetail = () => {
       <div className="w-full max-w-[768px] min-w-[320px] mx-auto my-0">
         <div className="border-b-2 p-[15px]">
           <div className="text-[18px] font-semibold">{nickname}</div>
+          {
+            accessUser?.uid === userId ? (
+              <Button
+                text={"내 정보 수정"}
+                style={
+                  "text-[14px] bg-zinc-200 hover:bg-zinc-300 rounded-[15px] px-[10px] py-[6px] mt-[10px]"
+                }
+                onClick={() => {
+                  Router.push(
+                    {
+                      pathname: "/user/edit",
+                      query: { userId },
+                    },
+                    "/user/edit"
+                  );
+                }}
+              />
+            ) : null
+            // TODO: 단골 여부 버튼 추가
+          }
         </div>
         <div className="flex justify-between mt-[20px] px-[10px]">
           <Button
