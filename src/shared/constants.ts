@@ -6,6 +6,7 @@ export const title = {
   gallery: "갤러리",
   user: "사용자 정보",
   userStory: "사용자 스토리",
+  userEdit: "사용자 정보 수정",
 };
 
 export const commentSortTypes = [
