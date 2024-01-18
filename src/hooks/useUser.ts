@@ -19,7 +19,7 @@ const useUser = (userId: string | undefined) => {
     getUserData();
   }, [userId]);
 
-  return { nickname };
+  return { nickname, setNickname };
 };
 
 export default useUser;
