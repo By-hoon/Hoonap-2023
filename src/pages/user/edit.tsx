@@ -3,6 +3,7 @@ import Button from "@/components/common/Button";
 import Layout from "@/components/common/Layout";
 import withHead from "@/components/hoc/withHead";
 import { PopUpContext } from "@/context/popUpProvider";
+import updateField from "@/firebase/firestore/updateField";
 import useUser from "@/hooks/useUser";
 import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/constants";
 import Router, { useRouter } from "next/router";
@@ -36,7 +37,21 @@ const UserEdit = () => {
     setNickname(e.target.value);
   };
 
-  const editUser = async () => {};
+  const editUser = async () => {
+    if (nickname === "") {
+      alert(alertTitle.input, `닉네임 ${alertContent.requireValue}`);
+      return;
+    }
+    await updateField("users", userId as string, "nickname", nickname);
+
+    Router.push(
+      {
+        pathname: "/user/detail",
+        query: { userId },
+      },
+      "/user/detail"
+    );
+  };
 
   useEffect(() => {
     if (!userId) {
