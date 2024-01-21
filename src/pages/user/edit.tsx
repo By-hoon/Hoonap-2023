@@ -4,6 +4,7 @@ import Layout from "@/components/common/Layout";
 import withHead from "@/components/hoc/withHead";
 import { PopUpContext } from "@/context/popUpProvider";
 import updateField from "@/firebase/firestore/updateField";
+import { addFile } from "@/firebase/storage/add";
 import useUser from "@/hooks/useUser";
 import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/constants";
 import Router, { useRouter } from "next/router";
@@ -38,11 +39,18 @@ const UserEdit = () => {
   };
 
   const editUser = async () => {
+    const curUser = userId as string;
     if (nickname === "") {
       alert(alertTitle.input, `닉네임 ${alertContent.requireValue}`);
       return;
     }
-    await updateField("users", userId as string, "nickname", nickname);
+
+    await updateField("users", curUser, "nickname", nickname);
+
+    if (fileData) {
+      const fileUrl = await addFile(fileData, curUser);
+      await updateField("users", curUser, "profileImage", fileUrl);
+    }
 
     Router.push(
       {

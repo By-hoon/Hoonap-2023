@@ -38,7 +38,7 @@ const Signup = () => {
     }
 
     const userId = userData.user.uid;
-    const usersResult = await setData("users", userId, { nickname: nickname });
+    const usersResult = await setData("users", userId, { nickname: nickname, profileImage: "" });
     const regularsResult = await setData("regulars", userId, {});
     const regularOwnerResult = await setData("regular-owner", userId, {});
     if (!usersResult) return;

@@ -4,7 +4,7 @@ import { deleteFiles } from "./delete";
 
 const storage = getStorage();
 
-export async function addFile(file: Blob, name: string) {
+export async function uploadFile(file: Blob, name: string) {
   const storageRef = ref(storage, name);
 
   try {
@@ -27,9 +27,9 @@ export const addFiles = async (files: FileList, uid: string) => {
 
     let result: string | false = false;
     if (isExp(uid)) {
-      result = await addFile(imagesArr[i], `exp/${fileName}`);
+      result = await uploadFile(imagesArr[i], `exp/${fileName}`);
     } else {
-      result = await addFile(imagesArr[i], `story/${fileName}`);
+      result = await uploadFile(imagesArr[i], `story/${fileName}`);
     }
     if (!result) {
       await deleteFiles(fileUrls);
@@ -38,4 +38,20 @@ export const addFiles = async (files: FileList, uid: string) => {
     fileUrls.push(result);
   }
   return fileUrls;
+};
+
+export const addFile = async (file: File, uid: string) => {
+  const fileName = crypto.randomUUID();
+
+  let result: string | false = false;
+
+  if (isExp(uid)) {
+    result = await uploadFile(file, `exp/${fileName}`);
+  } else {
+    result = await uploadFile(file, `story/${fileName}`);
+  }
+
+  if (!result) return false;
+
+  return result;
 };
