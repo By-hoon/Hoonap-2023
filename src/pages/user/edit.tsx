@@ -5,6 +5,7 @@ import withHead from "@/components/hoc/withHead";
 import { PopUpContext } from "@/context/popUpProvider";
 import updateField from "@/firebase/firestore/updateField";
 import { addFile } from "@/firebase/storage/add";
+import { deleteFile } from "@/firebase/storage/delete";
 import useUser from "@/hooks/useUser";
 import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/constants";
 import Router, { useRouter } from "next/router";
@@ -17,7 +18,7 @@ const UserEdit = () => {
   const router = useRouter();
   const { userId } = router.query;
 
-  const { nickname, setNickname } = useUser(userId as string);
+  const { nickname, setNickname, profileImage } = useUser(userId as string);
 
   const { alert } = useContext(PopUpContext);
 
@@ -48,8 +49,9 @@ const UserEdit = () => {
     await updateField("users", curUser, "nickname", nickname);
 
     if (fileData) {
-      const fileUrl = await addFile(fileData, curUser);
+      const fileUrl = await addFile(fileData, curUser, "profile-image");
       await updateField("users", curUser, "profileImage", fileUrl);
+      await deleteFile(profileImage);
     }
 
     Router.push(
@@ -76,7 +78,9 @@ const UserEdit = () => {
           <label htmlFor="preview">
             <div className="cursor-pointer w-[200px] h-[200px] mobile:w-[140px] mobile:h-[140px] rounded-[10px] border-2 p-[5px]">
               {previewImage ? (
-                <BasicImage style={"w-full h-full"} url={previewImage} alt={"upload-image"} />
+                <BasicImage style={"relative w-full h-full"} url={previewImage} alt={"upload-image"} />
+              ) : profileImage !== "" ? (
+                <BasicImage style={"relative w-full h-full"} url={profileImage} alt={"upload-image"} />
               ) : (
                 <div className="relative w-full h-full bg-zinc-200">
                   <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[15px] text-zinc-400 font-semibold">

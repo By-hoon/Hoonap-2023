@@ -40,18 +40,8 @@ export const addFiles = async (files: FileList, uid: string) => {
   return fileUrls;
 };
 
-export const addFile = async (file: File, uid: string) => {
+export const addFile = async (file: File, uid: string, group: string) => {
   const fileName = crypto.randomUUID();
 
-  let result: string | false = false;
-
-  if (isExp(uid)) {
-    result = await uploadFile(file, `exp/${fileName}`);
-  } else {
-    result = await uploadFile(file, `story/${fileName}`);
-  }
-
-  if (!result) return false;
-
-  return result;
+  return await uploadFile(file, `${group}/${fileName}`);
 };
