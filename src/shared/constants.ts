@@ -6,6 +6,7 @@ export const title = {
   gallery: "갤러리",
   user: "사용자 정보",
   userStory: "사용자 스토리",
+  userEdit: "사용자 정보 수정",
 };
 
 export const commentSortTypes = [
@@ -20,6 +21,7 @@ export const headTitle = {
   storyDetail: "스토리 상세정보",
   userDetail: "사용자 상세정보",
   userStory: "사용자 스토리",
+  userEdit: "사용자 정보 수정",
   create: "스토리 생성",
   gallery: "갤러리",
   login: "로그인",
@@ -33,6 +35,7 @@ export const headDescription = {
   storyDetail: "스토리 상세정보 페이지입니다.",
   userDetail: "사용자 상세정보 페이지입니다.",
   userStory: "사용자 스토리 페이지입니다.",
+  userEdit: "사용자 정보 수정 페이지입니다.",
   create: "스토리 생성 페이지입니다.",
   gallery: "갤러리 페이지입니다.",
   login: "로그인 페이지입니다.",
@@ -46,6 +49,7 @@ export const alertTitle = {
   unknown: "알 수 없는 오류",
   exp: "체험하기 오류",
   access: "접근 제한",
+  input: "입력 오류",
 };
 
 export const alertContent = {
@@ -63,6 +67,7 @@ export const alertContent = {
   storyAfterImage: "스토리 작성은 이미지 입력 후 가능합니다.",
   expCreate: "체험 계정은 3개까지만 스토리 등록이 가능합니다.",
   sameCategory: "현재 적용되어있는 카테고리입니다.",
+  requireValue: "입력은 필수입니다.",
 };
 
 export const confirmTitle = {

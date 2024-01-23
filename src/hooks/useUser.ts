@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 const useUser = (userId: string | undefined) => {
   const [nickname, setNickname] = useState("");
+  const [profileImage, setProfileImage] = useState("");
 
   useEffect(() => {
     if (!userId) return;
@@ -14,12 +15,13 @@ const useUser = (userId: string | undefined) => {
         return;
       }
       setNickname(result.nickname);
+      setProfileImage(result.profileImage);
     };
 
     getUserData();
   }, [userId]);
 
-  return { nickname };
+  return { nickname, setNickname, profileImage };
 };
 
 export default useUser;

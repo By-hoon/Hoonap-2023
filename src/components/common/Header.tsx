@@ -61,6 +61,9 @@ const Header = () => {
       case "/user/story": {
         return <Title title={title.userStory} />;
       }
+      case "/user/edit": {
+        return <Title title={title.userEdit} />;
+      }
       default:
         return null;
     }
