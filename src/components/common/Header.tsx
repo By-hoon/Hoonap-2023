@@ -134,8 +134,8 @@ const Header = () => {
 
   return (
     <div className="header">
-      <div className="flex justify-between max-w-[1200px] h-[100%] mx-auto my-0">
-        <div className="flex">
+      <div className="grid grid-cols-[1fr_1fr_1fr] max-w-[1200px] h-[100%] mx-auto my-0">
+        <div className="flex justify-start">
           <div className="pt-[12px]">
             <Link href="/" className="font-extrabold text-[24px]">
               Hoonap
@@ -154,8 +154,10 @@ const Header = () => {
             </div>
           </div>
         </div>
-        <div className="flex items-end font-semibold text-[18px] px-[10px] pb-[10px]">{titleRender()}</div>
-        <div className="flex items-center">
+        <div className="flex justify-center items-end font-semibold text-[18px] px-[10px] pb-[10px]">
+          {titleRender()}
+        </div>
+        <div className="flex justify-end items-center">
           <div ref={profileMenuRef} className="relative flex  font-semibold text-[18px] mr-[30px]">
             <div className="cursor-pointer" onClick={onClickProfileMenu}>
               프로필
