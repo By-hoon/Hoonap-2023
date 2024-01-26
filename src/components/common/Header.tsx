@@ -10,6 +10,7 @@ import useClickOutside from "@/hooks/useClickOutside";
 import { PopUpContext } from "@/context/popUpProvider";
 import { useAuth } from "@/context/authProvider";
 import useUser from "@/hooks/useUser";
+import BasicImage from "./BasicImage";
 
 const Header = () => {
   const [mounted, setMounted] = useState(false);
@@ -17,7 +18,7 @@ const Header = () => {
   const { show: showProfileMenu, ref: profileMenuRef, onClickTarget: onClickProfileMenu } = useClickOutside();
 
   const { user } = useAuth();
-  const { nickname } = useUser(user?.uid);
+  const { nickname, profileImage } = useUser(user?.uid);
   const { confirm } = useContext(PopUpContext);
 
   const router = useRouter();
@@ -87,6 +88,13 @@ const Header = () => {
                   <Link href="/">Hoonap</Link>
                 </div>
                 <div className="mb-[10px]">
+                  <BasicImage
+                    style={
+                      "relative w-[100px] h-[100px] bg-black rounded-[50%] mx-auto mt-[5px] mb-[10px] overflow-hidden"
+                    }
+                    url={profileImage}
+                    alt={"upload-image"}
+                  />
                   <div className="text-[17px] font-semibold my-[5px]">{nickname}</div>
                   <div className="text-[16px]">
                     <div className="px-[5px] py-[3px]">
@@ -164,6 +172,13 @@ const Header = () => {
             </div>
             {showProfileMenu ? (
               <div className="absolute top-[35px] right-0 w-[160px] font-normal bg-white rounded-[6px] shadow-basic py-[5px]">
+                <BasicImage
+                  style={
+                    "relative w-[100px] h-[100px] bg-black rounded-[50%] mx-auto my-[5px] overflow-hidden"
+                  }
+                  url={profileImage}
+                  alt={"upload-image"}
+                />
                 <div className="font-semibold py-[5px] px-[7px]">{nickname}</div>
                 <div className="text-[16px]">
                   <div
