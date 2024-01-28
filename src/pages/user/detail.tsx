@@ -24,6 +24,7 @@ const Map = dynamic(() => import("@/components/Map"), {
 
 const UserDetail = () => {
   const [nickname, setNickname] = useState("");
+  const [profileImage, setProfileImage] = useState("");
   const [section, setSection] = useState("gallery");
   const [stories, setStories] = useState<StoryProps[]>([]);
   const [paths, setPaths] = useState<[{ latitude: number; longitude: number }[]]>([[]]);
@@ -140,7 +141,9 @@ const UserDetail = () => {
         setNickname("unknown");
         return;
       }
+
       setNickname(userStoryResult.nickname);
+      setProfileImage(userStoryResult.profileImage);
 
       const stories: StoryProps[] = [];
       const paths: [{ latitude: number; longitude: number }[]] = [[]];
@@ -181,46 +184,58 @@ const UserDetail = () => {
         <div></div>
       </Layout>
     );
+
   return (
     <Layout>
       <div className="w-full max-w-[768px] min-w-[320px] mx-auto my-0">
-        <div className="border-b-2 p-[15px]">
-          <div className="text-[18px] font-semibold">{nickname}</div>
-          {accessUser?.uid === userId ? (
-            <Button
-              text={"내 정보 수정"}
-              style={"text-[14px] bg-zinc-200 hover:bg-zinc-300 rounded-[15px] px-[10px] py-[6px] mt-[10px]"}
-              onClick={() => {
-                Router.push(
-                  {
-                    pathname: "/user/edit",
-                    query: { userId },
-                  },
-                  "/user/edit"
-                );
-              }}
+        <div className="flex items-center border-b-2 p-[15px]">
+          {profileImage !== "" ? (
+            <BasicImage
+              style={"relative w-[100px] h-[100px] bg-black rounded-[50%] overflow-hidden"}
+              url={profileImage}
+              alt={"profile-image"}
             />
-          ) : (
-            <>
-              {regular[userId as string] ? (
-                <Button
-                  text={"단골중"}
-                  style={
-                    "text-[14px] bg-zinc-200 hover:bg-zinc-300 rounded-[15px] px-[10px] py-[6px] mt-[10px]"
-                  }
-                  onClick={deleteRegular}
-                />
-              ) : (
-                <Button
-                  text={"단골하기"}
-                  style={
-                    "text-[14px] text-white bg-bc hover:bg-bcd rounded-[15px] px-[10px] py-[6px] mt-[10px]"
-                  }
-                  onClick={registerRegular}
-                />
-              )}
-            </>
-          )}
+          ) : null}
+          <div className="ml-[10px]">
+            <div className="text-[18px] font-semibold">{nickname}</div>
+            {accessUser?.uid === userId ? (
+              <Button
+                text={"내 정보 수정"}
+                style={
+                  "text-[14px] bg-zinc-200 hover:bg-zinc-300 rounded-[15px] px-[10px] py-[6px] mt-[10px]"
+                }
+                onClick={() => {
+                  Router.push(
+                    {
+                      pathname: "/user/edit",
+                      query: { userId },
+                    },
+                    "/user/edit"
+                  );
+                }}
+              />
+            ) : (
+              <>
+                {regular[userId as string] ? (
+                  <Button
+                    text={"단골중"}
+                    style={
+                      "text-[14px] bg-zinc-200 hover:bg-zinc-300 rounded-[15px] px-[10px] py-[6px] mt-[10px]"
+                    }
+                    onClick={deleteRegular}
+                  />
+                ) : (
+                  <Button
+                    text={"단골하기"}
+                    style={
+                      "text-[14px] text-white bg-bc hover:bg-bcd rounded-[15px] px-[10px] py-[6px] mt-[10px]"
+                    }
+                    onClick={registerRegular}
+                  />
+                )}
+              </>
+            )}
+          </div>
         </div>
         <div className="flex justify-between mt-[20px] px-[10px]">
           <Button
