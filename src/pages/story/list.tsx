@@ -12,10 +12,11 @@ import useRegular from "@/hooks/useRegular";
 import { PopUpContext } from "@/context/popUpProvider";
 import { Icon } from "@iconify/react";
 import getDocument from "@/firebase/firestore/getDocument";
+import BasicImage from "@/components/common/BasicImage";
 
 const List = () => {
   const [stories, setStories] = useState<StoryProps[]>([]);
-  const [regulars, setRegulars] = useState<{ id: string; nickname: string }[]>([]);
+  const [regulars, setRegulars] = useState<{ id: string; nickname: string; profileImage: string }[]>([]);
   const [category, setCategory] = useState("basic");
   const [size, setSize] = useState(3);
   const [last, setLast] = useState(0);
@@ -125,15 +126,15 @@ const List = () => {
     }
 
     const getRegularUserData = async () => {
-      const newRegulars: { id: string; nickname: string }[] = [];
+      const newRegulars: { id: string; nickname: string; profileImage: string }[] = [];
       const promise = regularKeys.map(async (regularKey) => {
         const result = await getDocument("users", regularKey);
         if (!result) {
-          newRegulars.push({ id: regularKey, nickname: "unknown" });
+          newRegulars.push({ id: regularKey, nickname: "unknown", profileImage: "" });
           return;
         }
 
-        newRegulars.push({ id: regularKey, nickname: result.nickname });
+        newRegulars.push({ id: regularKey, nickname: result.nickname, profileImage: result.profileImage });
       });
       await Promise.all(promise);
 
@@ -212,23 +213,32 @@ const List = () => {
         className="fixed flex md:top-[50%] md:left-[5px] lg:left-[10%] md:-translate-y-1/2 md:justify-center md:w-[100px] text-[14px] md:border md:rounded-[5px] md:shadow-basic
       mobile:top-[45px] mobile:left-0 mobile:items-center mobile:w-full mobile:h-[45px] mobile:border-b mobile:z-[30] p-[5px] bg-white"
       >
-        {regulars.map((regularUser) => (
-          <div
-            className="cursor-pointer"
-            key={regularUser.id}
-            onClick={() => {
-              Router.push(
-                {
-                  pathname: "/user/detail",
-                  query: { userId: regularUser.id },
-                },
-                "/user/detail"
-              );
-            }}
-          >
-            {regularUser.nickname}
-          </div>
-        ))}
+        {regulars.length !== 0 ? (
+          regulars.map((regularUser) => (
+            <div
+              className="cursor-pointer"
+              key={regularUser.id}
+              onClick={() => {
+                Router.push(
+                  {
+                    pathname: "/user/detail",
+                    query: { userId: regularUser.id },
+                  },
+                  "/user/detail"
+                );
+              }}
+            >
+              <BasicImage
+                style={"relative w-[65px] h-[65px] bg-black rounded-[50%] mx-auto my-[5px] overflow-hidden"}
+                url={regularUser.profileImage}
+                alt={"profile-image"}
+              />
+              <div className="text-[12px]">{regularUser.nickname}</div>
+            </div>
+          ))
+        ) : (
+          <div className="text-[12px] text-center">단골을 등록해 보세요!</div>
+        )}
       </div>
     </Layout>
   );
