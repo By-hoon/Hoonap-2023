@@ -211,7 +211,7 @@ const List = () => {
       </div>
       <div
         className="fixed flex md:top-[50%] md:left-[5px] lg:left-[10%] md:-translate-y-1/2 md:justify-center md:w-[100px] text-[14px] md:border md:rounded-[5px] md:shadow-basic
-      mobile:top-[45px] mobile:left-0 mobile:items-center mobile:w-full mobile:h-[45px] mobile:border-b mobile:z-[30] p-[5px] bg-white"
+      mobile:top-[45px] mobile:left-0 mobile:items-center mobile:w-full mobile:h-[65px] mobile:border-b mobile:z-[30] p-[5px] bg-white"
       >
         {regulars.length !== 0 ? (
           regulars.map((regularUser) => (
@@ -229,11 +229,13 @@ const List = () => {
               }}
             >
               <BasicImage
-                style={"relative w-[65px] h-[65px] bg-black rounded-[50%] mx-auto my-[5px] overflow-hidden"}
+                style={
+                  "relative w-[65px] h-[65px] mobile:w-[40px] mobile:h-[40px] bg-black rounded-[50%] mx-auto md:my-[5px] overflow-hidden"
+                }
                 url={regularUser.profileImage}
                 alt={"profile-image"}
               />
-              <div className="text-[12px]">{regularUser.nickname}</div>
+              <div className="text-[12px] mobile:text-[10px]">{regularUser.nickname}</div>
             </div>
           ))
         ) : (
