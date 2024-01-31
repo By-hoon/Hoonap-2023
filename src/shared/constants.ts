@@ -58,6 +58,8 @@ export const alertContent = {
   reconfirmEmail: "이메일 형식을 확인해 주세요.",
   reconfirmPassword: "비밀번호를 다시 확인해 주세요.",
   wrongPassword: "비밀번호를 확인해 주세요",
+  successSignOut: "로그아웃에 성공하였습니다.",
+  failedSignOut: "로그아웃에 실패하였습니다.",
   tryAgain: "잠시 후 다시 시도해 주세요.",
   unknown: "알 수 없는 오류가 발생하였습니다.",
   invalidExp: "체험하기에서 이용할 수 없는 기능입니다.",

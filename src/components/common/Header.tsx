@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import Title from "./Title";
-import { confirmContent, confirmTitle, title } from "@/shared/constants";
+import { alertContent, confirmContent, confirmTitle, title } from "@/shared/constants";
 import useClickOutside from "@/hooks/useClickOutside";
 import { PopUpContext } from "@/context/popUpProvider";
 import { useAuth } from "@/context/authProvider";
@@ -19,7 +19,7 @@ const Header = () => {
 
   const { user } = useAuth();
   const { nickname, profileImage } = useUser(user?.uid);
-  const { confirm } = useContext(PopUpContext);
+  const { alert, confirm } = useContext(PopUpContext);
 
   const router = useRouter();
 
@@ -31,7 +31,15 @@ const Header = () => {
     const result = await confirm(confirmTitle.signOut, confirmContent.signOut);
     if (!result) return;
 
-    doSignOut();
+    doSignOut(
+      () => {
+        alert("", alertContent.successSignOut);
+      },
+      () => {
+        alert("", alertContent.failedSignOut);
+      }
+    );
+
     router.replace("/login");
   };
 
