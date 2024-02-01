@@ -15,7 +15,14 @@ export const PopUpContext = createContext<Type>({
 export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
   const [type, setType] = useState("");
   const [confirmState, setConfirmState] = useState<ConfirmProps>();
-  const [alertState, setAlertState] = useState<AlertProps>();
+  const [alertsState, setAlertsState] = useState<AlertProps[]>([]);
+
+  const topCalculator = (index: number) => {
+    if (index % 3 === 1) return `top-[110px]`;
+    if (index % 3 === 2) return `top-[200px]`;
+
+    return `top-[20px]`;
+  };
 
   const confirm = useCallback((title: string, content: string): Promise<boolean> => {
     return new Promise((resolve) => {
@@ -38,12 +45,19 @@ export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
   const alert = useCallback((title: string, content: string): Promise<boolean> => {
     return new Promise((resolve) => {
       setType("alert");
-      setAlertState({
-        title: title,
-        content: content,
-      });
+      setAlertsState((curState) =>
+        curState.concat({
+          title,
+          content,
+        })
+      );
+
       setTimeout(() => {
-        setAlertState(undefined);
+        setAlertsState((curState) => {
+          const newAlertState = [...curState];
+          newAlertState.shift();
+          return newAlertState;
+        });
         resolve(true);
       }, 3000);
     });
@@ -67,9 +81,21 @@ export const PopUpProvider = ({ children }: { children: React.ReactNode }) => {
         );
       }
       case "alert": {
-        if (!alertState) return;
+        if (!alertsState) return;
 
-        return <Alert title={alertState.title} content={alertState.content} />;
+        return (
+          <>
+            {alertsState.map((alertState, index) => (
+              <div
+                key={index}
+                //prettier-ignore
+                className={`fixed ${topCalculator(index)} left-1/2 transform -translate-x-1/2 max-w-[300px] bg-red-100 rounded-[10px] z-[200]`}
+              >
+                <Alert title={alertState.title} content={alertState.content} />
+              </div>
+            ))}
+          </>
+        );
       }
       default:
         return null;
