@@ -1,6 +1,7 @@
 import useUser from "@/hooks/useUser";
 import { getElapsedTime } from "@/utils/util";
 import CommentMenu from "./CommentMenu";
+import BasicImage from "@/components/common/BasicImage";
 
 export interface CommentProps {
   commentId: string;
@@ -14,11 +15,20 @@ interface CommentAndStoryIdProps extends CommentProps {
 }
 
 const Comment = ({ commentId, comment, writedAt, writedBy, storyId }: CommentAndStoryIdProps) => {
-  const { nickname } = useUser(writedBy);
+  const { nickname, profileImage } = useUser(writedBy);
 
   return (
     <div className="my-[10px]">
-      <div className="grid grid-cols-[1fr_25px]">
+      <div className="grid grid-cols-[45px_1fr_25px]">
+        <div>
+          {profileImage !== "" ? (
+            <BasicImage
+              style={"relative flex items-center w-[40px] h-[40px] bg-black rounded-[50%] overflow-hidden"}
+              url={profileImage}
+              alt={"profile-image"}
+            />
+          ) : null}
+        </div>
         <div>
           <div className="flex text-[12px] mb-[2px]">
             <div className="font-semibold">{nickname}</div>
