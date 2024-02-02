@@ -228,13 +228,15 @@ const List = () => {
                 );
               }}
             >
-              <BasicImage
-                style={
-                  "relative w-[65px] h-[65px] mobile:w-[40px] mobile:h-[40px] bg-black rounded-[50%] mx-auto md:my-[5px] overflow-hidden"
-                }
-                url={regularUser.profileImage}
-                alt={"profile-image"}
-              />
+              {regularUser.profileImage !== "" ? (
+                <BasicImage
+                  style={
+                    "relative w-[65px] h-[65px] mobile:w-[40px] mobile:h-[40px] bg-black rounded-[50%] mx-auto md:my-[5px] overflow-hidden"
+                  }
+                  url={regularUser.profileImage}
+                  alt={"profile-image"}
+                />
+              ) : null}
               <div className="text-[12px] mobile:text-[10px]">{regularUser.nickname}</div>
             </div>
           ))
