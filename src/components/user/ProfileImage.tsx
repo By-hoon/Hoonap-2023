@@ -16,7 +16,7 @@ const ProfileImage = ({ imageUrl, nickname, style }: ProfileImageProps) => {
           alt={"profile-image"}
         />
       ) : (
-        <div className={`${style} bg-black text-center text-white rounded-[50%] overflow-hidden`}>
+        <div className={`${style} flex-middle bg-black text-center text-white rounded-[50%] overflow-hidden`}>
           {nickname[0]}
         </div>
       )}

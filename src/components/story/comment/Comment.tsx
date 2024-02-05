@@ -2,6 +2,7 @@ import useUser from "@/hooks/useUser";
 import { getElapsedTime } from "@/utils/util";
 import CommentMenu from "./CommentMenu";
 import BasicImage from "@/components/common/BasicImage";
+import ProfileImage from "@/components/user/ProfileImage";
 
 export interface CommentProps {
   commentId: string;
@@ -21,13 +22,7 @@ const Comment = ({ commentId, comment, writedAt, writedBy, storyId }: CommentAnd
     <div className="my-[10px]">
       <div className="grid grid-cols-[45px_1fr_25px]">
         <div>
-          {profileImage !== "" ? (
-            <BasicImage
-              style={"relative flex items-center w-[40px] h-[40px] bg-black rounded-[50%] overflow-hidden"}
-              url={profileImage}
-              alt={"profile-image"}
-            />
-          ) : null}
+          <ProfileImage imageUrl={profileImage} nickname={nickname} style={"w-[40px] h-[40px]"} />
         </div>
         <div>
           <div className="flex text-[12px] mb-[2px]">

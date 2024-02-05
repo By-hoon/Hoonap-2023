@@ -2,6 +2,7 @@ import BasicImage from "@/components/common/BasicImage";
 import Button from "@/components/common/Button";
 import Layout from "@/components/common/Layout";
 import withHead from "@/components/hoc/withHead";
+import ProfileImage from "@/components/user/ProfileImage";
 import { PopUpContext } from "@/context/popUpProvider";
 import updateField from "@/firebase/firestore/updateField";
 import { addFile } from "@/firebase/storage/add";
@@ -76,17 +77,15 @@ const UserEdit = () => {
       <div className="max-w-[425px] min-w-[320px] mx-auto p-[5px] pt-[30px]">
         <div className="flex-middle">
           <label htmlFor="preview">
-            <div className="cursor-pointer w-[200px] h-[200px] mobile:w-[140px] mobile:h-[140px] rounded-[10px] border-2 p-[5px]">
+            <div className="cursor-pointer w-[200px] h-[200px] mobile:w-[140px] mobile:h-[140px]">
               {previewImage ? (
                 <BasicImage style={"relative w-full h-full"} url={previewImage} alt={"upload-image"} />
-              ) : profileImage !== "" ? (
-                <BasicImage style={"relative w-full h-full"} url={profileImage} alt={"upload-image"} />
               ) : (
-                <div className="relative w-full h-full bg-zinc-200">
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[15px] text-zinc-400 font-semibold">
-                    사진 등록
-                  </div>
-                </div>
+                <ProfileImage
+                  imageUrl={profileImage}
+                  nickname={nickname}
+                  style={"w-full h-full text-[36px]"}
+                />
               )}
             </div>
           </label>
