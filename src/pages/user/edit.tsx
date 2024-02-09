@@ -17,6 +17,7 @@ import { ChangeEvent, useContext, useEffect, useState } from "react";
 const UserEdit = () => {
   const [fileData, setFileData] = useState<File>();
   const [previewImage, setPreviewImage] = useState<string>();
+  const [isDeleted, setIsDeleted] = useState(false);
 
   const router = useRouter();
   const { userId } = router.query;
@@ -38,10 +39,13 @@ const UserEdit = () => {
     setFileData(newFileData);
 
     onClickEditMenu();
+    setIsDeleted(false);
   };
   const deleteProfileImage = () => {
-    setPreviewImage("");
+    setPreviewImage(undefined);
+    setFileData(undefined);
     onClickEditMenu();
+    setIsDeleted(true);
   };
 
   const changeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,6 +64,11 @@ const UserEdit = () => {
     if (fileData) {
       const fileUrl = await addFile(fileData, curUser, "profile-image");
       await updateField("users", curUser, "profileImage", fileUrl);
+      await deleteFile(profileImage);
+    }
+
+    if (isDeleted) {
+      await updateField("users", curUser, "profileImage", "");
       await deleteFile(profileImage);
     }
 
@@ -98,7 +107,7 @@ const UserEdit = () => {
                   />
                 ) : (
                   <ProfileImage
-                    imageUrl={profileImage}
+                    imageUrl={isDeleted ? "" : profileImage}
                     nickname={nickname}
                     style={"w-full h-full text-[36px]"}
                   />
@@ -129,7 +138,7 @@ const UserEdit = () => {
                         onChange={uploadImage}
                       />
                     </div>
-                    <MenuButton name={"현재 사진 삭제"} onClick={deleteProfileImage} />
+                    <MenuButton name={"프로필 사진 삭제"} onClick={deleteProfileImage} />
                     <MenuButton name={"취소"} style="text-red-600" onClick={onClickEditMenu} />
                   </div>
                 </div>
