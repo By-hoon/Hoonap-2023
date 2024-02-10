@@ -2,10 +2,13 @@ import BasicImage from "@/components/common/BasicImage";
 import Button from "@/components/common/Button";
 import Layout from "@/components/common/Layout";
 import withHead from "@/components/hoc/withHead";
+import MenuButton from "@/components/story/MenuButton";
+import ProfileImage from "@/components/user/ProfileImage";
 import { PopUpContext } from "@/context/popUpProvider";
 import updateField from "@/firebase/firestore/updateField";
 import { addFile } from "@/firebase/storage/add";
 import { deleteFile } from "@/firebase/storage/delete";
+import useClickOutside from "@/hooks/useClickOutside";
 import useUser from "@/hooks/useUser";
 import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/constants";
 import Router, { useRouter } from "next/router";
@@ -14,12 +17,13 @@ import { ChangeEvent, useContext, useEffect, useState } from "react";
 const UserEdit = () => {
   const [fileData, setFileData] = useState<File>();
   const [previewImage, setPreviewImage] = useState<string>();
+  const [isDeleted, setIsDeleted] = useState(false);
 
   const router = useRouter();
   const { userId } = router.query;
 
   const { nickname, setNickname, profileImage } = useUser(userId as string);
-
+  const { show: editMenu, ref: editMenuRef, onClickTarget: onClickEditMenu } = useClickOutside();
   const { alert } = useContext(PopUpContext);
 
   const uploadImage = (e: ChangeEvent<HTMLInputElement>) => {
@@ -33,6 +37,15 @@ const UserEdit = () => {
     setPreviewImage(fileUrl);
 
     setFileData(newFileData);
+
+    onClickEditMenu();
+    setIsDeleted(false);
+  };
+  const deleteProfileImage = () => {
+    setPreviewImage(undefined);
+    setFileData(undefined);
+    onClickEditMenu();
+    setIsDeleted(true);
   };
 
   const changeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,6 +64,11 @@ const UserEdit = () => {
     if (fileData) {
       const fileUrl = await addFile(fileData, curUser, "profile-image");
       await updateField("users", curUser, "profileImage", fileUrl);
+      await deleteFile(profileImage);
+    }
+
+    if (isDeleted) {
+      await updateField("users", curUser, "profileImage", "");
       await deleteFile(profileImage);
     }
 
@@ -74,25 +92,61 @@ const UserEdit = () => {
   return (
     <Layout>
       <div className="max-w-[425px] min-w-[320px] mx-auto p-[5px] pt-[30px]">
-        <div className="flex-middle">
-          <label htmlFor="preview">
-            <div className="cursor-pointer w-[200px] h-[200px] mobile:w-[140px] mobile:h-[140px] rounded-[10px] border-2 p-[5px]">
-              {previewImage ? (
-                <BasicImage style={"relative w-full h-full"} url={previewImage} alt={"upload-image"} />
-              ) : profileImage !== "" ? (
-                <BasicImage style={"relative w-full h-full"} url={profileImage} alt={"upload-image"} />
-              ) : (
-                <div className="relative w-full h-full bg-zinc-200">
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[15px] text-zinc-400 font-semibold">
-                    사진 등록
+        <div>
+          <div>
+            <div ref={editMenuRef}>
+              <div
+                className="cursor-pointer w-[140px] h-[140px] mobile:w-[140px] mobile:h-[140px] mx-auto"
+                onClick={onClickEditMenu}
+              >
+                {previewImage ? (
+                  <BasicImage
+                    style={"relative w-full h-full bg-black rounded-[50%] overflow-hidden"}
+                    url={previewImage}
+                    alt={"upload-image"}
+                  />
+                ) : (
+                  <ProfileImage
+                    imageUrl={isDeleted ? "" : profileImage}
+                    nickname={nickname}
+                    style={"w-full h-full text-[36px]"}
+                  />
+                )}
+              </div>
+              <div
+                className="cursor-pointer w-full text-[14px] text-bc text-center mt-[5px]"
+                onClick={onClickEditMenu}
+              >
+                프로필 사진 변경
+              </div>
+              {editMenu ? (
+                <div>
+                  <div className="background-shadow !fixed" onClick={onClickEditMenu} />
+                  <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] mobile:w-[250px] font-semibold text-[14px] bg-white px-[5px] rounded-[6px] z-30">
+                    <div className="text-center text-[20px] font-normal border-b mb-[10px] py-[10px]">
+                      프로필 사진 변경
+                    </div>
+                    <div>
+                      <label htmlFor="preview">
+                        <div className="cursor-pointer flex-middle text-bc m-[5px] p-[5px]">사진 선택</div>
+                      </label>
+                      <input
+                        id="preview"
+                        className="hidden"
+                        type="file"
+                        accept="image/*"
+                        onChange={uploadImage}
+                      />
+                    </div>
+                    <MenuButton name={"프로필 사진 삭제"} onClick={deleteProfileImage} />
+                    <MenuButton name={"취소"} style="text-red-600" onClick={onClickEditMenu} />
                   </div>
                 </div>
-              )}
+              ) : null}
             </div>
-          </label>
-          <input id="preview" className="hidden" type="file" accept="image/*" onChange={uploadImage} />
+          </div>
         </div>
-        <div className="mt-[20px] px-[10px]">
+        <div className="mt-[10px] px-[10px]">
           <input
             className="input-templete"
             type="text"

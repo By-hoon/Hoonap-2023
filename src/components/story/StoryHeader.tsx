@@ -6,6 +6,7 @@ import { useAuth } from "@/context/authProvider";
 import updateField from "@/firebase/firestore/updateField";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import deleteFieldFunc from "@/firebase/firestore/deleteField";
+import ProfileImage from "../user/ProfileImage";
 
 interface StoryHeaderProps {
   story: StoryProps;
@@ -15,7 +16,7 @@ interface StoryHeaderProps {
 }
 
 const StoryHeader = ({ story, regular, setRegular, style }: StoryHeaderProps) => {
-  const { nickname } = useUser(story.userId);
+  const { nickname, profileImage } = useUser(story.userId);
   const { user } = useAuth();
 
   if (!user) return <></>;
@@ -48,8 +49,11 @@ const StoryHeader = ({ story, regular, setRegular, style }: StoryHeaderProps) =>
   return (
     <div className={`flex justify-between ${style}`}>
       <div className="h-full flex flex-wrap items-center">
+        <div className="mr-[5px]">
+          <ProfileImage imageUrl={profileImage} nickname={nickname} style={"w-[32px] h-[32px] text-[14px]"} />
+        </div>
         <Link
-          className="text-[18px]"
+          className="text-[14px]"
           href={{
             pathname: "/user/detail",
             query: { userId: story.userId },

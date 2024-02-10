@@ -18,6 +18,7 @@ import { useAuth } from "@/context/authProvider";
 import useRegular from "@/hooks/useRegular";
 import updateField from "@/firebase/firestore/updateField";
 import deleteFieldFunc from "@/firebase/firestore/deleteField";
+import ProfileImage from "@/components/user/ProfileImage";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
@@ -189,13 +190,11 @@ const UserDetail = () => {
     <Layout>
       <div className="w-full max-w-[768px] min-w-[320px] mx-auto my-0">
         <div className="flex items-center border-b-2 p-[15px]">
-          {profileImage !== "" ? (
-            <BasicImage
-              style={"relative w-[100px] h-[100px] bg-black rounded-[50%] overflow-hidden"}
-              url={profileImage}
-              alt={"profile-image"}
-            />
-          ) : null}
+          <ProfileImage
+            imageUrl={profileImage}
+            nickname={nickname}
+            style={"w-[100px] h-[100px] text-[28px]"}
+          />
           <div className="ml-[10px]">
             <div className="text-[18px] font-semibold">{nickname}</div>
             {accessUser?.uid === userId ? (

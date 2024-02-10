@@ -13,6 +13,7 @@ import { PopUpContext } from "@/context/popUpProvider";
 import { Icon } from "@iconify/react";
 import getDocument from "@/firebase/firestore/getDocument";
 import BasicImage from "@/components/common/BasicImage";
+import ProfileImage from "@/components/user/ProfileImage";
 
 const List = () => {
   const [stories, setStories] = useState<StoryProps[]>([]);
@@ -228,15 +229,11 @@ const List = () => {
                 );
               }}
             >
-              {regularUser.profileImage !== "" ? (
-                <BasicImage
-                  style={
-                    "relative w-[65px] h-[65px] mobile:w-[40px] mobile:h-[40px] bg-black rounded-[50%] mx-auto md:my-[5px] overflow-hidden"
-                  }
-                  url={regularUser.profileImage}
-                  alt={"profile-image"}
-                />
-              ) : null}
+              <ProfileImage
+                imageUrl={regularUser.profileImage}
+                nickname={regularUser.nickname}
+                style={"w-[65px] h-[65px] mobile:w-[40px] mobile:h-[40px] text-[18px] mx-auto md:my-[5px]"}
+              />
               <div className="text-[12px] mobile:text-[10px]">{regularUser.nickname}</div>
             </div>
           ))

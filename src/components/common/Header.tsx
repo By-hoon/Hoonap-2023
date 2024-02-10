@@ -11,6 +11,7 @@ import { PopUpContext } from "@/context/popUpProvider";
 import { useAuth } from "@/context/authProvider";
 import useUser from "@/hooks/useUser";
 import BasicImage from "./BasicImage";
+import ProfileImage from "../user/ProfileImage";
 
 const Header = () => {
   const [mounted, setMounted] = useState(false);
@@ -96,15 +97,11 @@ const Header = () => {
                   <Link href="/">Hoonap</Link>
                 </div>
                 <div className="mb-[10px]">
-                  {profileImage ? (
-                    <BasicImage
-                      style={
-                        "relative w-[100px] h-[100px] bg-black rounded-[50%] mx-auto my-[5px] overflow-hidden"
-                      }
-                      url={profileImage}
-                      alt={"profile-image"}
-                    />
-                  ) : null}
+                  <ProfileImage
+                    imageUrl={profileImage}
+                    nickname={nickname}
+                    style={"w-[100px] h-[100px] text-[28px] mx-auto my-[5px]"}
+                  />
                   <div className="text-[17px] font-semibold my-[5px]">{nickname}</div>
                   <div className="text-[16px]">
                     <div className="px-[5px] py-[3px]">
@@ -182,15 +179,11 @@ const Header = () => {
             </div>
             {showProfileMenu ? (
               <div className="absolute top-[35px] right-0 w-[160px] font-normal bg-white rounded-[6px] shadow-basic py-[5px]">
-                {profileImage ? (
-                  <BasicImage
-                    style={
-                      "relative w-[100px] h-[100px] bg-black rounded-[50%] mx-auto my-[5px] overflow-hidden"
-                    }
-                    url={profileImage}
-                    alt={"profile-image"}
-                  />
-                ) : null}
+                <ProfileImage
+                  imageUrl={profileImage}
+                  nickname={nickname}
+                  style={"w-[100px] h-[100px] text-[28px] mx-auto my-[5px]"}
+                />
                 <div className="font-semibold py-[5px] px-[7px]">{nickname}</div>
                 <div className="text-[16px]">
                   <div
