@@ -19,6 +19,7 @@ import useRegular from "@/hooks/useRegular";
 import updateField from "@/firebase/firestore/updateField";
 import deleteFieldFunc from "@/firebase/firestore/deleteField";
 import ProfileImage from "@/components/user/ProfileImage";
+import useClickOutside from "@/hooks/useClickOutside";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
@@ -35,6 +36,7 @@ const UserDetail = () => {
   const router = useRouter();
   const { userId } = router.query;
 
+  const { show: showRegulars, ref: regularsRef, onClickTarget: onClickRegulars } = useClickOutside();
   const { user: accessUser } = useAuth();
   const { regular, setRegular } = useRegular(accessUser?.uid);
 
@@ -195,45 +197,60 @@ const UserDetail = () => {
             nickname={nickname}
             style={"w-[100px] h-[100px] text-[28px]"}
           />
-          <div className="ml-[10px]">
+          <div className="ml-[10px]" ref={regularsRef}>
             <div className="text-[18px] font-semibold">{nickname}</div>
-            {accessUser?.uid === userId ? (
-              <Button
-                text={"내 정보 수정"}
-                style={
-                  "text-[14px] bg-zinc-200 hover:bg-zinc-300 rounded-[15px] px-[10px] py-[6px] mt-[10px]"
-                }
-                onClick={() => {
-                  Router.push(
-                    {
-                      pathname: "/user/edit",
-                      query: { userId },
-                    },
-                    "/user/edit"
-                  );
-                }}
-              />
-            ) : (
-              <>
-                {regular[userId as string] ? (
+            <div className="text-[14px] mt-[10px]">
+              {accessUser?.uid === userId ? (
+                <>
                   <Button
-                    text={"단골중"}
-                    style={
-                      "text-[14px] bg-zinc-200 hover:bg-zinc-300 rounded-[15px] px-[10px] py-[6px] mt-[10px]"
-                    }
-                    onClick={deleteRegular}
+                    text={"내 정보 수정"}
+                    style={"bg-zinc-200 hover:bg-zinc-300 rounded-[15px] px-[10px] py-[6px]"}
+                    onClick={() => {
+                      Router.push(
+                        {
+                          pathname: "/user/edit",
+                          query: { userId },
+                        },
+                        "/user/edit"
+                      );
+                    }}
                   />
-                ) : (
                   <Button
-                    text={"단골하기"}
-                    style={
-                      "text-[14px] text-white bg-bc hover:bg-bcd rounded-[15px] px-[10px] py-[6px] mt-[10px]"
-                    }
-                    onClick={registerRegular}
+                    text={"단골 목록"}
+                    style={"bg-zinc-200 hover:bg-zinc-300 rounded-[15px] px-[10px] py-[6px] ml-[5px]"}
+                    onClick={() => {
+                      onClickRegulars();
+                    }}
                   />
-                )}
-              </>
-            )}
+                </>
+              ) : (
+                <>
+                  {regular[userId as string] ? (
+                    <Button
+                      text={"단골중"}
+                      style={"bg-zinc-200 hover:bg-zinc-300 rounded-[15px] px-[10px] py-[6px]"}
+                      onClick={deleteRegular}
+                    />
+                  ) : (
+                    <Button
+                      text={"단골하기"}
+                      style={"text-white bg-bc hover:bg-bcd rounded-[15px] px-[10px] py-[6px]"}
+                      onClick={registerRegular}
+                    />
+                  )}
+                </>
+              )}
+            </div>
+            {showRegulars ? (
+              <div>
+                <div className="background-shadow !fixed" onClick={onClickRegulars} />
+                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] mobile:w-[250px] font-semibold text-[14px] bg-white px-[5px] rounded-[6px] z-30">
+                  <div className="text-center text-[20px] font-normal border-b mb-[10px] py-[10px]">
+                    단골 목록
+                  </div>
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
         <div className="flex justify-between mt-[20px] px-[10px]">
