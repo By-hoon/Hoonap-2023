@@ -32,6 +32,9 @@ const UserDetail = () => {
   const [paths, setPaths] = useState<[{ latitude: number; longitude: number }[]]>([[]]);
   const [storyIds, setStoryIds] = useState<string[]>([]);
   const [images, setImages] = useState<{ urls: string[]; storyId: string }[]>([]);
+  const [regularOwner, setRegularOwner] = useState<{ id: string; nickname: string; profileImage: string }[]>(
+    []
+  );
 
   const router = useRouter();
   const { userId } = router.query;
@@ -178,7 +181,31 @@ const UserDetail = () => {
       setStoryIds(storyIds);
       setImages(images);
     };
+
+    const getRegularOwnerData = async () => {
+      const regularOwnerResult = await getDocument("regular-owner", userId as string);
+      if (!regularOwnerResult) return;
+
+      const newRegularOwner: { id: string; nickname: string; profileImage: string }[] = [];
+      const promise = Object.keys(regularOwnerResult).map(async (regularKey) => {
+        const result = await getDocument("users", regularKey);
+        if (!result) {
+          newRegularOwner.push({ id: regularKey, nickname: "unknown", profileImage: "" });
+          return;
+        }
+
+        newRegularOwner.push({
+          id: regularKey,
+          nickname: result.nickname,
+          profileImage: result.profileImage,
+        });
+      });
+      await Promise.all(promise);
+
+      setRegularOwner(newRegularOwner);
+    };
     getUserData();
+    getRegularOwnerData();
   }, [alert, userId]);
 
   if (!userId)
@@ -216,7 +243,7 @@ const UserDetail = () => {
                     }}
                   />
                   <Button
-                    text={"단골 목록"}
+                    text={"단골 관리"}
                     style={"bg-zinc-200 hover:bg-zinc-300 rounded-[15px] px-[10px] py-[6px] ml-[5px]"}
                     onClick={() => {
                       onClickRegulars();
@@ -247,6 +274,30 @@ const UserDetail = () => {
                 <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] mobile:w-[250px] font-semibold text-[14px] bg-white px-[5px] rounded-[6px] z-30">
                   <div className="text-center text-[20px] font-normal border-b mb-[10px] py-[10px]">
                     단골 목록
+                  </div>
+                  <div>
+                    {regularOwner.map((regularUser) => (
+                      <div
+                        className="cursor-pointer grid grid-cols-[45px_1fr_80px] my-[10px]"
+                        key={regularUser.id}
+                        onClick={() => {
+                          Router.push(
+                            {
+                              pathname: "/user/detail",
+                              query: { userId: regularUser.id },
+                            },
+                            "/user/detail"
+                          );
+                        }}
+                      >
+                        <ProfileImage
+                          imageUrl={regularUser.profileImage}
+                          nickname={regularUser.nickname}
+                          style={"flex-middle w-[40px] h-[40px] text-[18px]"}
+                        />
+                        <div className="flex items-center px-[5px]">{regularUser.nickname}</div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
