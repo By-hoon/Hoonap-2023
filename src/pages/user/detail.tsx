@@ -32,9 +32,9 @@ const UserDetail = () => {
   const [paths, setPaths] = useState<[{ latitude: number; longitude: number }[]]>([[]]);
   const [storyIds, setStoryIds] = useState<string[]>([]);
   const [images, setImages] = useState<{ urls: string[]; storyId: string }[]>([]);
-  const [regularOwner, setRegularOwner] = useState<{ id: string; nickname: string; profileImage: string }[]>(
-    []
-  );
+  const [regularOwner, setRegularOwner] = useState<{
+    [key: string]: { id: string; nickname: string; profileImage: string };
+  }>({});
 
   const router = useRouter();
   const { userId } = router.query;
@@ -79,6 +79,16 @@ const UserDetail = () => {
     delete newRegular[userId as string];
 
     setRegular(newRegular);
+  };
+
+  const deleteRegularOwner = async (targetId: string) => {
+    await deleteFieldFunc("regulars", targetId, userId as string);
+    await deleteFieldFunc("regular-owner", userId as string, targetId);
+
+    const newRegularOwner = JSON.parse(JSON.stringify(regularOwner));
+    delete newRegularOwner[targetId];
+
+    setRegularOwner(newRegularOwner);
   };
 
   const sectionRender = () => {
@@ -186,19 +196,19 @@ const UserDetail = () => {
       const regularOwnerResult = await getDocument("regular-owner", userId as string);
       if (!regularOwnerResult) return;
 
-      const newRegularOwner: { id: string; nickname: string; profileImage: string }[] = [];
+      const newRegularOwner: { [key: string]: { id: string; nickname: string; profileImage: string } } = {};
       const promise = Object.keys(regularOwnerResult).map(async (regularKey) => {
         const result = await getDocument("users", regularKey);
         if (!result) {
-          newRegularOwner.push({ id: regularKey, nickname: "unknown", profileImage: "" });
+          newRegularOwner[regularKey] = { id: regularKey, nickname: "unknown", profileImage: "" };
           return;
         }
 
-        newRegularOwner.push({
+        newRegularOwner[regularKey] = {
           id: regularKey,
           nickname: result.nickname,
           profileImage: result.profileImage,
-        });
+        };
       });
       await Promise.all(promise);
 
@@ -276,26 +286,35 @@ const UserDetail = () => {
                     단골 목록
                   </div>
                   <div>
-                    {regularOwner.map((regularUser) => (
+                    {Object.keys(regularOwner).map((regularKey) => (
                       <div
-                        className="cursor-pointer grid grid-cols-[45px_1fr_80px] my-[10px]"
-                        key={regularUser.id}
+                        className="cursor-pointer grid grid-cols-[45px_1fr_60px] my-[10px] px-[5px]"
+                        key={regularOwner[regularKey].id}
                         onClick={() => {
                           Router.push(
                             {
                               pathname: "/user/detail",
-                              query: { userId: regularUser.id },
+                              query: { userId: regularOwner[regularKey].id },
                             },
                             "/user/detail"
                           );
                         }}
                       >
                         <ProfileImage
-                          imageUrl={regularUser.profileImage}
-                          nickname={regularUser.nickname}
+                          imageUrl={regularOwner[regularKey].profileImage}
+                          nickname={regularOwner[regularKey].nickname}
                           style={"flex-middle w-[40px] h-[40px] text-[18px]"}
                         />
-                        <div className="flex items-center px-[5px]">{regularUser.nickname}</div>
+                        <div className="flex items-center px-[5px]">{regularOwner[regularKey].nickname}</div>
+                        <div
+                          className="cursor-pointer flex-middle self-center h-[90%] text-[16px] text-white bg-zinc-400 rounded-[5px]"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            deleteRegularOwner(regularOwner[regularKey].id);
+                          }}
+                        >
+                          <span>삭제</span>
+                        </div>
                       </div>
                     ))}
                   </div>
