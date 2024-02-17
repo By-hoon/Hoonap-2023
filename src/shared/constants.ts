@@ -76,12 +76,16 @@ export const confirmTitle = {
   signOut: "로그아웃 하시겠습니까?",
   deleteStory: "스토리를 삭제하시겠습니까?",
   editStory: "스토리를 수정하시겠습니까?",
+  deleteRegularMy: "내가 등록한 단골을 취소하시겠습니까?",
+  deleteRegularMe: "나를 등록한 단골을 삭제하시겠습니까?",
 };
 
 export const confirmContent = {
   signOut: "로그인 페이지로 넘어갑니다.",
   deleteStory: "삭제된 스토리는 다시 복구할 수 없습니다.",
   editStory: "수정된 내용은 다시 복구할 수 없습니다.",
+  deleteRegularMy: "취소 대상",
+  deleteRegularMe: "삭제 대상",
 };
 
 export const expInfo = [
