@@ -11,7 +11,14 @@ import Button from "@/components/common/Button";
 import { Icon } from "@iconify/react";
 import { StoryProps } from "../story/detail";
 import withHead from "@/components/hoc/withHead";
-import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/constants";
+import {
+  alertContent,
+  alertTitle,
+  confirmContent,
+  confirmTitle,
+  headDescription,
+  headTitle,
+} from "@/shared/constants";
 import { PopUpContext } from "@/context/popUpProvider";
 import { isExp } from "@/utils/util";
 import { useAuth } from "@/context/authProvider";
@@ -52,7 +59,7 @@ const UserDetail = () => {
 
   const { regular, setRegular } = useRegular(accessUser?.uid);
 
-  const { alert } = useContext(PopUpContext);
+  const { alert, confirm } = useContext(PopUpContext);
 
   const clickMap = (storyId?: string) => {
     if (!storyId) return;
@@ -90,7 +97,13 @@ const UserDetail = () => {
     setRegular(newRegular);
   };
 
-  const deleteRegularMy = async (targetId: string) => {
+  const deleteRegularMy = async (targetId: string, targetNickname: string) => {
+    const result = await confirm(
+      confirmTitle.deleteRegularMy,
+      `${confirmContent.deleteRegularMy}: ${targetNickname}`
+    );
+    if (!result) return;
+
     await deleteFieldFunc("regular-owner", targetId, userId as string);
     await deleteFieldFunc("regulars", userId as string, targetId);
 
@@ -105,7 +118,13 @@ const UserDetail = () => {
     setRegular(newRegular);
   };
 
-  const deleteRegularMe = async (targetId: string) => {
+  const deleteRegularMe = async (targetId: string, targetNickname: string) => {
+    const result = await confirm(
+      confirmTitle.deleteRegularMe,
+      `${confirmContent.deleteRegularMe}: ${targetNickname}`
+    );
+    if (!result) return;
+
     await deleteFieldFunc("regulars", targetId, userId as string);
     await deleteFieldFunc("regular-owner", userId as string, targetId);
 
@@ -361,7 +380,7 @@ const UserDetail = () => {
                       <>
                         {Object.keys(regularMy).map((regularKey) => (
                           <div
-                            className="cursor-pointer grid grid-cols-[45px_1fr_70px] my-[10px] px-[5px]"
+                            className="cursor-pointer grid grid-cols-[45px_1fr_60px] my-[10px] px-[5px]"
                             key={regularMy[regularKey].id}
                             onClick={() => {
                               onClickRegularManagement();
@@ -384,10 +403,10 @@ const UserDetail = () => {
                               className="cursor-pointer flex-middle self-center h-[90%] text-[16px] text-white bg-zinc-400 hover:bg-zinc-500 rounded-[5px]"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                deleteRegularMy(regularMy[regularKey].id);
+                                deleteRegularMy(regularMy[regularKey].id, regularMy[regularKey].nickname);
                               }}
                             >
-                              단골중
+                              취소
                             </div>
                           </div>
                         ))}
@@ -419,7 +438,7 @@ const UserDetail = () => {
                               className="cursor-pointer flex-middle self-center h-[90%] text-[16px] text-white bg-zinc-400 hover:bg-zinc-500 rounded-[5px]"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                deleteRegularMe(regularMe[regularKey].id);
+                                deleteRegularMe(regularMe[regularKey].id, regularMe[regularKey].nickname);
                               }}
                             >
                               <span>삭제</span>
