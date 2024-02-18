@@ -10,7 +10,6 @@ import useClickOutside from "@/hooks/useClickOutside";
 import { PopUpContext } from "@/context/popUpProvider";
 import { useAuth } from "@/context/authProvider";
 import useUser from "@/hooks/useUser";
-import BasicImage from "./BasicImage";
 import ProfileImage from "../user/ProfileImage";
 
 const Header = () => {
@@ -184,7 +183,7 @@ const Header = () => {
                   nickname={nickname}
                   style={"w-[100px] h-[100px] text-[28px] mx-auto my-[5px]"}
                 />
-                <div className="font-semibold py-[5px] px-[7px]">{nickname}</div>
+                <div className="font-semibold break-all py-[5px] px-[7px]">{nickname}</div>
                 <div className="text-[16px]">
                   <div
                     className="header-menu-button"

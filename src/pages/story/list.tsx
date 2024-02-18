@@ -12,7 +12,6 @@ import useRegular from "@/hooks/useRegular";
 import { PopUpContext } from "@/context/popUpProvider";
 import { Icon } from "@iconify/react";
 import getDocument from "@/firebase/firestore/getDocument";
-import BasicImage from "@/components/common/BasicImage";
 import ProfileImage from "@/components/user/ProfileImage";
 
 const List = () => {
@@ -171,7 +170,7 @@ const List = () => {
     );
   return (
     <Layout>
-      <div className="p-[10px] py-[45px]">
+      <div className="p-[10px] mobile:pt-[65px] mobile:pb-[45px]">
         {stories.map((story) => (
           <div key={story.storyId} ref={storyRef}>
             <Preview story={story} regular={regular} setRegular={setRegular} />
@@ -232,7 +231,7 @@ const List = () => {
               <ProfileImage
                 imageUrl={regularUser.profileImage}
                 nickname={regularUser.nickname}
-                style={"w-[65px] h-[65px] mobile:w-[40px] mobile:h-[40px] text-[18px] mx-auto md:my-[5px]"}
+                style={"w-[40px] h-[40px] mobile:w-[32px] mobile:h-[32px] text-[14px] mx-auto md:my-[5px]"}
               />
               <div className="text-[12px] mobile:text-[10px]">{regularUser.nickname}</div>
             </div>
