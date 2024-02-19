@@ -78,6 +78,7 @@ export const confirmTitle = {
   editStory: "스토리를 수정하시겠습니까?",
   deleteRegularMy: "내가 등록한 단골을 취소하시겠습니까?",
   deleteRegularMe: "나를 등록한 단골을 삭제하시겠습니까?",
+  deleteProfileImage: "현재 프로필 사진을 삭제하시겠습니까?",
 };
 
 export const confirmContent = {
@@ -86,6 +87,7 @@ export const confirmContent = {
   editStory: "수정된 내용은 다시 복구할 수 없습니다.",
   deleteRegularMy: "취소 대상",
   deleteRegularMe: "삭제 대상",
+  deleteProfileImage: "삭제된 사진은 다시 복구할 수 없습니다.",
 };
 
 export const expInfo = [

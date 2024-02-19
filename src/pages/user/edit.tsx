@@ -10,7 +10,14 @@ import { addFile } from "@/firebase/storage/add";
 import { deleteFile } from "@/firebase/storage/delete";
 import useClickOutside from "@/hooks/useClickOutside";
 import useUser from "@/hooks/useUser";
-import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/constants";
+import {
+  alertContent,
+  alertTitle,
+  confirmContent,
+  confirmTitle,
+  headDescription,
+  headTitle,
+} from "@/shared/constants";
 import Router, { useRouter } from "next/router";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 
@@ -24,7 +31,7 @@ const UserEdit = () => {
 
   const { nickname, setNickname, profileImage } = useUser(userId as string);
   const { show: editMenu, ref: editMenuRef, onClickTarget: onClickEditMenu } = useClickOutside();
-  const { alert } = useContext(PopUpContext);
+  const { alert, confirm } = useContext(PopUpContext);
 
   const uploadImage = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -41,7 +48,10 @@ const UserEdit = () => {
     onClickEditMenu();
     setIsDeleted(false);
   };
-  const deleteProfileImage = () => {
+  const deleteProfileImage = async () => {
+    const result = await confirm(confirmTitle.deleteProfileImage, confirmContent.deleteProfileImage);
+    if (!result) return;
+
     setPreviewImage(undefined);
     setFileData(undefined);
     onClickEditMenu();
