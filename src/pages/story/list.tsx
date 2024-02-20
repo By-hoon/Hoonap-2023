@@ -233,7 +233,7 @@ const List = () => {
                 nickname={regularUser.nickname}
                 style={"w-[40px] h-[40px] mobile:w-[32px] mobile:h-[32px] text-[14px] mx-auto md:my-[5px]"}
               />
-              <div className="text-[12px] mobile:text-[10px]">{regularUser.nickname}</div>
+              <div className="text-[12px] mobile:text-[10px] break-all">{regularUser.nickname}</div>
             </div>
           ))
         ) : (

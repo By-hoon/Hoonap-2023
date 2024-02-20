@@ -309,7 +309,7 @@ const UserDetail = () => {
             style={"w-[100px] h-[100px] text-[28px]"}
           />
           <div className="ml-[10px]" ref={regularManagementRef}>
-            <div className="text-[18px] font-semibold">{nickname}</div>
+            <div className="text-[18px] font-semibold break-all">{nickname}</div>
             <div className="text-[14px] mt-[10px]">
               {accessUser?.uid === userId ? (
                 <>
@@ -398,7 +398,9 @@ const UserDetail = () => {
                               nickname={regularMy[regularKey].nickname}
                               style={"flex-middle w-[40px] h-[40px] text-[18px]"}
                             />
-                            <div className="flex items-center px-[5px]">{regularMy[regularKey].nickname}</div>
+                            <div className="flex items-center px-[5px] break-all">
+                              {regularMy[regularKey].nickname}
+                            </div>
                             <div
                               className="cursor-pointer flex-middle self-center h-[90%] text-[16px] text-white bg-zinc-400 hover:bg-zinc-500 rounded-[5px]"
                               onClick={(e) => {
@@ -433,7 +435,9 @@ const UserDetail = () => {
                               nickname={regularMe[regularKey].nickname}
                               style={"flex-middle w-[40px] h-[40px] text-[18px]"}
                             />
-                            <div className="flex items-center px-[5px]">{regularMe[regularKey].nickname}</div>
+                            <div className="flex items-center px-[5px] break-all">
+                              {regularMe[regularKey].nickname}
+                            </div>
                             <div
                               className="cursor-pointer flex-middle self-center h-[90%] text-[16px] text-white bg-zinc-400 hover:bg-zinc-500 rounded-[5px]"
                               onClick={(e) => {
