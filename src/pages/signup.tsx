@@ -4,7 +4,7 @@ import { PopUpContext } from "@/context/popUpProvider";
 import signUp from "@/firebase/auth/signUp";
 import setData from "@/firebase/firestore/setData";
 import Alerts from "@/shared/alerts";
-import { headDescription, headTitle } from "@/shared/constants";
+import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/constants";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 
@@ -24,11 +24,24 @@ const Signup = () => {
     setPassword(e.target.value);
   };
   const changeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.target.value;
+    if (target.length > 10) {
+      alert(alertTitle.nickname, alertContent.nicknameLength);
+      return;
+    }
+
     setNickname(e.target.value);
   };
 
   const trySignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const nicknameCheck = new RegExp(/^[가-힣0-9a-zA-Z\s]+$/);
+    if (!nicknameCheck.test(nickname)) {
+      alert(alertTitle.nickname, alertContent.inValidNickname);
+      return;
+    }
+
     const userData = await signUp(email, password);
     if (typeof userData === "string") {
       const errorCode = userData;
@@ -47,7 +60,7 @@ const Signup = () => {
     router.push("/");
   };
 
-  const goSignUp = () => {
+  const goSignIn = () => {
     router.push("/login");
   };
 
@@ -94,7 +107,7 @@ const Signup = () => {
       </form>
       <div className="text-center mb-[20px]">
         <div className="text-[17px] mt-[10px] hover:text-bcd">
-          <Button text="이미 회원이신가요? →" style="" onClick={goSignUp} />
+          <Button text="이미 회원이신가요? →" style="" onClick={goSignIn} />
         </div>
       </div>
     </div>
