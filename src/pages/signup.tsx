@@ -5,6 +5,7 @@ import signUp from "@/firebase/auth/signUp";
 import setData from "@/firebase/firestore/setData";
 import Alerts from "@/shared/alerts";
 import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/constants";
+import { checkNickname } from "@/utils/util";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 
@@ -25,18 +26,25 @@ const Signup = () => {
   };
   const changeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target.value;
-    if (target.length > 10) {
-      alert(alertTitle.nickname, alertContent.nicknameLength);
-      return;
-    }
 
-    setNickname(e.target.value);
+    const checkResult = checkNickname(target);
+
+    switch (checkResult) {
+      case "nicknameLength": {
+        alert(alertTitle.nickname, alertContent.nicknameLength);
+        return;
+      }
+
+      default: {
+        setNickname(target);
+      }
+    }
   };
 
   const trySignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const nicknameCheck = new RegExp(/^[가-힣0-9a-zA-Z\s]+$/);
+    const nicknameCheck = new RegExp(/^[가-힣0-9a-zA-Z]+$/);
     if (!nicknameCheck.test(nickname)) {
       alert(alertTitle.nickname, alertContent.inValidNickname);
       return;

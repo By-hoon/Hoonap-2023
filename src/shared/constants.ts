@@ -93,6 +93,8 @@ export const confirmContent = {
   deleteProfileImage: "삭제된 사진은 다시 복구할 수 없습니다.",
 };
 
+export const maxNicknameLength = 20;
+
 export const expInfo = [
   "스토리는 3개까지 생성할 수 있어요",
   "체험하기에서 생성하신 스토리 정보들은 로컬에 저장돼요",
