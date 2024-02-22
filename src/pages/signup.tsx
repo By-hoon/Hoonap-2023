@@ -30,7 +30,7 @@ const Signup = () => {
 
     const checkResult = checkNickname(target);
 
-    switch (checkResult) {
+    switch (checkResult[0]) {
       case "nicknameLength": {
         alert(alertTitle.nickname, alertContent.nicknameLength);
         return;
@@ -39,6 +39,13 @@ const Signup = () => {
       case "nicknameValid": {
         setIsPassNickname(false);
         setNickname(target);
+        return;
+      }
+
+      case "filtering": {
+        setIsPassNickname(false);
+        setNickname(target);
+        alert(alertTitle.nickname, `${alertContent.nicknameFilter} '${checkResult[1]}'`);
         return;
       }
 

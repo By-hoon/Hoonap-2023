@@ -73,6 +73,7 @@ export const alertContent = {
   requireValue: "입력은 필수입니다.",
   inValidNickname: "닉네임 형식을 확인해 주세요.",
   nicknameLength: "더 길게 닉네임을 설정할 수 없습니다.",
+  nicknameFilter: "사용할 수 없는 단어가 포함되어 있습니다.",
 };
 
 export const confirmTitle = {
@@ -95,6 +96,8 @@ export const confirmContent = {
 
 export const maxNicknameLength = 20;
 export const nicknameInfo = "영문·숫자 20자, 한글 10자 제한";
+
+export const nicknameFilter = ["욕설"];
 
 export const expInfo = [
   "스토리는 3개까지 생성할 수 있어요",
