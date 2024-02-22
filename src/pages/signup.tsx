@@ -4,7 +4,7 @@ import { PopUpContext } from "@/context/popUpProvider";
 import signUp from "@/firebase/auth/signUp";
 import setData from "@/firebase/firestore/setData";
 import Alerts from "@/shared/alerts";
-import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/constants";
+import { alertContent, alertTitle, headDescription, headTitle, nicknameInfo } from "@/shared/constants";
 import { checkNickname } from "@/utils/util";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
@@ -13,6 +13,7 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
+  const [isPassNickname, setIsPassNickname] = useState(true);
 
   const router = useRouter();
 
@@ -35,7 +36,14 @@ const Signup = () => {
         return;
       }
 
+      case "nicknameValid": {
+        setIsPassNickname(false);
+        setNickname(target);
+        return;
+      }
+
       default: {
+        setIsPassNickname(true);
         setNickname(target);
       }
     }
@@ -44,8 +52,7 @@ const Signup = () => {
   const trySignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const nicknameCheck = new RegExp(/^[가-힣0-9a-zA-Z]+$/);
-    if (!nicknameCheck.test(nickname)) {
+    if (!isPassNickname) {
       alert(alertTitle.nickname, alertContent.inValidNickname);
       return;
     }
@@ -101,13 +108,18 @@ const Signup = () => {
         <div className="mb-[20px] px-[10px]">
           <div className="text-[20px]">닉네임</div>
           <input
-            className="input-templete"
+            className={`input-templete ${
+              isPassNickname
+                ? "focus:border-bc focus:bg-bcvl"
+                : "border-red-400 focus:border-red-400 focus:bg-red-50"
+            }`}
             type="text"
             value={nickname}
             placeholder="닉네임을 입력해 주세요"
             onChange={changeNickname}
             required
           />
+          <div className="text-[12px] text-zinc-400">{nicknameInfo}</div>
         </div>
         <div className="text-center">
           <Button text="가입" style="submit-button py-[7px]" type="submit" />

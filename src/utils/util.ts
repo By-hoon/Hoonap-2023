@@ -45,9 +45,11 @@ export const checkNickname = (nickname: string) => {
 
   const totalLength = engMatch.length + korMatch.length * 2 + korSubMatch.length + numMatch.length;
 
-  if (totalLength > maxNicknameLength) {
-    return "nicknameLength";
-  }
+  if (totalLength > maxNicknameLength) return "nicknameLength";
+
+  const nicknameValid = new RegExp(/^[가-힣0-9a-zA-Z]+$/);
+
+  if (!nicknameValid.test(nickname)) return "nicknameValid";
 
   return true;
 };

@@ -94,6 +94,7 @@ export const confirmContent = {
 };
 
 export const maxNicknameLength = 20;
+export const nicknameInfo = "영문·숫자 20자, 한글 10자 제한";
 
 export const expInfo = [
   "스토리는 3개까지 생성할 수 있어요",
