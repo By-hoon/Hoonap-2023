@@ -17,7 +17,9 @@ import {
   confirmTitle,
   headDescription,
   headTitle,
+  nicknameInfo,
 } from "@/shared/constants";
+import { checkNickname } from "@/utils/util";
 import Router, { useRouter } from "next/router";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 
@@ -25,6 +27,7 @@ const UserEdit = () => {
   const [fileData, setFileData] = useState<File>();
   const [previewImage, setPreviewImage] = useState<string>();
   const [isDeleted, setIsDeleted] = useState(false);
+  const [isPassNickname, setIsPassNickname] = useState(true);
 
   const router = useRouter();
   const { userId } = router.query;
@@ -59,13 +62,45 @@ const UserEdit = () => {
   };
 
   const changeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNickname(e.target.value);
+    const target = e.target.value;
+
+    const checkResult = checkNickname(target);
+
+    switch (checkResult[0]) {
+      case "nicknameLength": {
+        alert(alertTitle.nickname, alertContent.nicknameLength);
+        return;
+      }
+
+      case "nicknameValid": {
+        setIsPassNickname(false);
+        setNickname(target);
+        return;
+      }
+
+      case "filtering": {
+        setIsPassNickname(false);
+        setNickname(target);
+        alert(alertTitle.nickname, `${alertContent.nicknameFilter} '${checkResult[1]}'`);
+        return;
+      }
+
+      default: {
+        setIsPassNickname(true);
+        setNickname(target);
+      }
+    }
   };
 
   const editUser = async () => {
     const curUser = userId as string;
     if (nickname === "") {
       alert(alertTitle.input, `닉네임 ${alertContent.requireValue}`);
+      return;
+    }
+
+    if (!isPassNickname) {
+      alert(alertTitle.nickname, alertContent.inValidNickname);
       return;
     }
 
@@ -158,13 +193,18 @@ const UserEdit = () => {
         </div>
         <div className="mt-[10px] px-[10px]">
           <input
-            className="input-templete"
+            className={`input-templete ${
+              isPassNickname
+                ? "focus:border-bc focus:bg-bcvl"
+                : "border-red-400 focus:border-red-400 focus:bg-red-50"
+            }`}
             type="text"
             value={nickname}
             placeholder="닉네임을 입력해 주세요"
             onChange={changeNickname}
             required
           />
+          <div className="text-[12px] text-zinc-400">{nicknameInfo}</div>
         </div>
         <div className="w-[100%] text-center mt-[20px]">
           <Button
