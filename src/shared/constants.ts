@@ -50,6 +50,7 @@ export const alertTitle = {
   exp: "체험하기 오류",
   access: "접근 제한",
   input: "입력 오류",
+  nickname: "닉네임 오류",
 };
 
 export const alertContent = {
@@ -70,6 +71,9 @@ export const alertContent = {
   expCreate: "체험 계정은 3개까지만 스토리 등록이 가능합니다.",
   sameCategory: "현재 적용되어있는 카테고리입니다.",
   requireValue: "입력은 필수입니다.",
+  inValidNickname: "닉네임 형식을 확인해 주세요.",
+  nicknameLength: "더 길게 닉네임을 설정할 수 없습니다.",
+  nicknameFilter: "사용할 수 없는 단어가 포함되어 있습니다.",
 };
 
 export const confirmTitle = {
@@ -89,6 +93,11 @@ export const confirmContent = {
   deleteRegularMe: "삭제 대상",
   deleteProfileImage: "삭제된 사진은 다시 복구할 수 없습니다.",
 };
+
+export const maxNicknameLength = 20;
+export const nicknameInfo = "영문·숫자 20자, 한글 10자 제한";
+
+export const nicknameFilter = ["욕설"];
 
 export const expInfo = [
   "스토리는 3개까지 생성할 수 있어요",

@@ -4,7 +4,8 @@ import { PopUpContext } from "@/context/popUpProvider";
 import signUp from "@/firebase/auth/signUp";
 import setData from "@/firebase/firestore/setData";
 import Alerts from "@/shared/alerts";
-import { headDescription, headTitle } from "@/shared/constants";
+import { alertContent, alertTitle, headDescription, headTitle, nicknameInfo } from "@/shared/constants";
+import { checkNickname } from "@/utils/util";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 
@@ -12,6 +13,7 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
+  const [isPassNickname, setIsPassNickname] = useState(true);
 
   const router = useRouter();
 
@@ -24,11 +26,44 @@ const Signup = () => {
     setPassword(e.target.value);
   };
   const changeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNickname(e.target.value);
+    const target = e.target.value;
+
+    const checkResult = checkNickname(target);
+
+    switch (checkResult[0]) {
+      case "nicknameLength": {
+        alert(alertTitle.nickname, alertContent.nicknameLength);
+        return;
+      }
+
+      case "nicknameValid": {
+        setIsPassNickname(false);
+        setNickname(target);
+        return;
+      }
+
+      case "filtering": {
+        setIsPassNickname(false);
+        setNickname(target);
+        alert(alertTitle.nickname, `${alertContent.nicknameFilter} '${checkResult[1]}'`);
+        return;
+      }
+
+      default: {
+        setIsPassNickname(true);
+        setNickname(target);
+      }
+    }
   };
 
   const trySignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!isPassNickname) {
+      alert(alertTitle.nickname, alertContent.inValidNickname);
+      return;
+    }
+
     const userData = await signUp(email, password);
     if (typeof userData === "string") {
       const errorCode = userData;
@@ -47,7 +82,7 @@ const Signup = () => {
     router.push("/");
   };
 
-  const goSignUp = () => {
+  const goSignIn = () => {
     router.push("/login");
   };
 
@@ -80,13 +115,18 @@ const Signup = () => {
         <div className="mb-[20px] px-[10px]">
           <div className="text-[20px]">닉네임</div>
           <input
-            className="input-templete"
+            className={`input-templete ${
+              isPassNickname
+                ? "focus:border-bc focus:bg-bcvl"
+                : "border-red-400 focus:border-red-400 focus:bg-red-50"
+            }`}
             type="text"
             value={nickname}
             placeholder="닉네임을 입력해 주세요"
             onChange={changeNickname}
             required
           />
+          <div className="text-[12px] text-zinc-400">{nicknameInfo}</div>
         </div>
         <div className="text-center">
           <Button text="가입" style="submit-button py-[7px]" type="submit" />
@@ -94,7 +134,7 @@ const Signup = () => {
       </form>
       <div className="text-center mb-[20px]">
         <div className="text-[17px] mt-[10px] hover:text-bcd">
-          <Button text="이미 회원이신가요? →" style="" onClick={goSignUp} />
+          <Button text="이미 회원이신가요? →" style="" onClick={goSignIn} />
         </div>
       </div>
     </div>
