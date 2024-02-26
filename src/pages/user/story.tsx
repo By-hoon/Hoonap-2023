@@ -59,7 +59,7 @@ const Story = () => {
       <div className="p-[10px]">
         <DetailView story={current} regular={regular} setRegular={setRegular} />
       </div>
-      <div className="flex justify-between mt-[20px]">
+      <div className="flex flex-wrap justify-between mt-[20px]">
         {rest.map((restStory) => (
           <div
             key={restStory.storyId}
