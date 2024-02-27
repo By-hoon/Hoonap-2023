@@ -20,7 +20,7 @@ import {
   headTitle,
 } from "@/shared/constants";
 import { PopUpContext } from "@/context/popUpProvider";
-import { isExp } from "@/utils/util";
+import { getElapsedTime, isExp } from "@/utils/util";
 import { useAuth } from "@/context/authProvider";
 import useRegular from "@/hooks/useRegular";
 import updateField from "@/firebase/firestore/updateField";
@@ -38,6 +38,7 @@ const UserDetail = () => {
   const [stories, setStories] = useState<StoryProps[]>([]);
   const [paths, setPaths] = useState<[{ latitude: number; longitude: number }[]]>([[]]);
   const [storyIds, setStoryIds] = useState<string[]>([]);
+  const [curPolygonNumber, setCurPolygonNumber] = useState<number>();
   const [images, setImages] = useState<{ urls: string[]; storyId: string }[]>([]);
   const [isRegulars, setIsRegulars] = useState(true);
   const [regularMe, setRegularMe] = useState<{
@@ -61,15 +62,13 @@ const UserDetail = () => {
 
   const { alert, confirm } = useContext(PopUpContext);
 
-  const clickMap = (storyId?: string) => {
-    if (!storyId) return;
-    Router.push(
-      {
-        pathname: "/user/story",
-        query: { storyId: storyId, stories: JSON.stringify(stories) },
-      },
-      "/user/story"
-    );
+  const clickMap = (polygonNumber?: number) => {
+    if (polygonNumber === undefined) {
+      setCurPolygonNumber(undefined);
+      return;
+    }
+
+    setCurPolygonNumber(polygonNumber);
   };
 
   const registerRegular = async () => {
@@ -170,6 +169,37 @@ const UserDetail = () => {
                     paths={paths.map((path, index) => ({ pathArray: path, storyId: storyIds[index] }))}
                     clickMap={clickMap}
                   />
+                  {curPolygonNumber !== undefined ? (
+                    <Link
+                      href={{
+                        pathname: "/user/story",
+                        query: {
+                          storyId: stories[curPolygonNumber].storyId,
+                          stories: JSON.stringify(stories),
+                        },
+                      }}
+                      as="/user/story"
+                    >
+                      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[300px] h-[140px] bg-white rounded-[10px] shadow-basic pt-[10px] pb-[5px]">
+                        <div className="h-[105px] grid grid-cols-[100px_1fr] px-[10px]">
+                          <BasicImage
+                            style={"relative w-full h-[100px] bg-black rounded-[5px]"}
+                            url={stories[curPolygonNumber].images[0]}
+                            alt={"user-story-image"}
+                          />
+                          <div className="text-semibold ml-[5px] break-all">
+                            {stories[curPolygonNumber].title}
+                            <span className="text-[12px] text-zinc-400 ml-[3px]">
+                              {getElapsedTime(stories[curPolygonNumber].createdAt)}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="h-[20px] text-[12px] text-center text-zinc-400 px-[10px]">
+                          스토리를 자세히 보려면 클릭하세요
+                        </div>
+                      </div>
+                    </Link>
+                  ) : null}
                 </Map>
               ) : null}
             </div>

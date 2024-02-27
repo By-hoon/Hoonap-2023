@@ -6,7 +6,7 @@ type PathType = { latitude: number; longitude: number };
 
 interface MapOptionProps {
   paths: { pathArray: PathType[]; storyId?: string }[];
-  clickMap?: (storyId?: string) => void;
+  clickMap?: (polygonNumber?: number) => void;
   addPaths?: (path: PathType) => void;
   deletePaths?: (index: number) => void;
 }
@@ -59,7 +59,7 @@ export default function MapOption({ paths, clickMap, addPaths, deletePaths }: Ma
                 strokeOpacity={0.6}
                 strokeWeight={3}
                 clickable
-                onClick={() => (clickMap ? clickMap(path.storyId) : undefined)}
+                onClick={() => (clickMap ? clickMap(index) : undefined)}
               />
             ))}
           </>
