@@ -28,6 +28,7 @@ const DetailView = ({ story, regular, setRegular }: DetailViewProps) => {
         <StoryContents
           title={story.title}
           story={story.story}
+          createdAt={story.createdAt}
           storyId={story.storyId}
           userId={story.userId}
         />

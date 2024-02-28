@@ -1,20 +1,25 @@
 import Link from "next/link";
 import Comments from "./comment/Comments";
+import { getElapsedTime } from "@/utils/util";
 
 interface StoryContentsProps {
   title: string;
   story: string;
+  createdAt: number;
   storyId: string;
   userId: string;
   hasLink?: boolean;
 }
 
-const StoryContents = ({ title, story, storyId, userId, hasLink = false }: StoryContentsProps) => {
+const StoryContents = ({ title, story, createdAt, storyId, userId, hasLink = false }: StoryContentsProps) => {
   return (
     <div>
       <div className={`${!hasLink ? "h-full md:grid md:grid-rows-[1fr_500px]" : ""}`}>
         <div>
-          <div className="text-[16px] break-all">{title}</div>
+          <div className="text-[16px] break-all">
+            {title}
+            <span className="text-[12px] text-zinc-400 ml-[3px]">{getElapsedTime(createdAt)}</span>
+          </div>
           <div className="text-[14px] break-all">{story}</div>
         </div>
         <div>
