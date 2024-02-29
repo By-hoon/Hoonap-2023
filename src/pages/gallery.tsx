@@ -9,6 +9,7 @@ import Link from "next/link";
 import withHead from "@/components/hoc/withHead";
 import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/constants";
 import { PopUpContext } from "@/context/popUpProvider";
+import ImageCard from "@/components/gallery/ImageCard";
 
 const Gallery = () => {
   const [images, setImages] = useState<{ url: string; userId: string; id: string }[]>([]);
@@ -108,22 +109,15 @@ const Gallery = () => {
             </div>
           </>
         ) : null}
-        <div className={`flex flex-wrap items-center px-[15px]`}>
+        <div className={`flex flex-wrap justify-between items-center px-[15px]`}>
           {images.map((imageObj, index) => (
             <div
               key={index}
               onClick={() => {
                 setCurrent(imageObj);
               }}
-              className="cursor-pointer relative block md:w-[150px] md:h-[150px] w-[140px] h-[140px] bg-contain bg-no-repeat bg-center rounded-[8px] mx-[15px] my-[20px] hover:md:w-[170px] hover:md:h-[170px] hover:mx-[5px] hover:my-[10px]"
-              style={{
-                backgroundImage: `url(${imageObj.url})`,
-              }}
             >
-              <div
-                className="w-full h-full absolute scale-95 translate-y-[36px] translate-z-[-30px] bg-contain blur-lg opacity-90 -z-10"
-                style={{ backgroundImage: "inherit" }}
-              />
+              <ImageCard url={imageObj.url} />
             </div>
           ))}
         </div>
