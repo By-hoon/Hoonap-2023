@@ -108,18 +108,21 @@ const Gallery = () => {
             </div>
           </>
         ) : null}
-        <div className={`flex flex-wrap items-center p-[15px]`}>
+        <div className={`flex flex-wrap items-center px-[15px]`}>
           {images.map((imageObj, index) => (
             <div
               key={index}
               onClick={() => {
                 setCurrent(imageObj);
               }}
+              className="cursor-pointer relative block md:w-[150px] md:h-[150px] w-[140px] h-[140px] bg-contain bg-no-repeat bg-center rounded-[8px] mx-[15px] my-[20px] hover:md:w-[170px] hover:md:h-[170px] hover:mx-[5px] hover:my-[10px]"
+              style={{
+                backgroundImage: `url(${imageObj.url})`,
+              }}
             >
-              <BasicImage
-                style={"relative md:w-[150px] md:h-[150px] w-[140px] h-[140px] mx-[10px] rounded-[8px]"}
-                url={imageObj.url}
-                alt={"gallery-image"}
+              <div
+                className="w-full h-full absolute scale-95 translate-y-[36px] translate-z-[-30px] bg-contain blur-lg opacity-90 -z-10"
+                style={{ backgroundImage: "inherit" }}
               />
             </div>
           ))}
