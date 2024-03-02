@@ -9,11 +9,6 @@ export const title = {
   userEdit: "사용자 정보 수정",
 };
 
-export const commentSortTypes = [
-  { code: "latest", name: "최신 댓글" },
-  { code: "earliest", name: "오래된 댓글" },
-];
-
 export const headTitle = {
   main: "메인 페이지",
   storyList: "스토리 목록",
@@ -41,6 +36,20 @@ export const headDescription = {
   login: "로그인 페이지입니다.",
   signup: "회원가입 페이지입니다.",
 };
+
+export const MAX_CONTENT_WIDTH = 1200;
+export const GALLERY_PADDING = 10;
+export const GALLERY_CARD_MARGIN_X = 5;
+
+export const commentSortTypes = [
+  { code: "latest", name: "최신 댓글" },
+  { code: "earliest", name: "오래된 댓글" },
+];
+
+export const maxNicknameLength = 20;
+export const nicknameInfo = "영문·숫자 20자, 한글 10자 제한";
+
+export const nicknameFilter = ["욕설"];
 
 export const alertTitle = {
   id: "아이디 오류",
@@ -93,11 +102,6 @@ export const confirmContent = {
   deleteRegularMe: "삭제 대상",
   deleteProfileImage: "삭제된 사진은 다시 복구할 수 없습니다.",
 };
-
-export const maxNicknameLength = 20;
-export const nicknameInfo = "영문·숫자 20자, 한글 10자 제한";
-
-export const nicknameFilter = ["욕설"];
 
 export const expInfo = [
   "스토리는 3개까지 생성할 수 있어요",
