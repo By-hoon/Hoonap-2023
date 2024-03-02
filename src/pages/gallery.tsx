@@ -107,7 +107,7 @@ const Gallery = () => {
     handleResize();
     window.addEventListener("resize", handleResize);
 
-    return window.addEventListener("resize", () => handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   if (!user)
