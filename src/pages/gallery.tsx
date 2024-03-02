@@ -26,7 +26,7 @@ const Gallery = () => {
     const getImageData = async () => {
       const result = await getCollection("images");
       if (!result || result.empty) {
-        alert(alertTitle.access, alertContent.nothingStory);
+        await alert(alertTitle.access, alertContent.nothingStory);
         Router.push("/");
         return;
       }
@@ -41,10 +41,10 @@ const Gallery = () => {
       setImages(newData);
     };
 
-    const getExpImageData = () => {
+    const getExpImageData = async () => {
       const storageImage = window.localStorage.getItem("image");
       if (!storageImage) {
-        alert(alertTitle.access, alertContent.nothingStory);
+        await alert(alertTitle.access, alertContent.nothingStory);
         Router.push("/");
         return;
       }
@@ -65,7 +65,7 @@ const Gallery = () => {
       return;
     }
     getImageData();
-  }, [user]);
+  }, [user, alert]);
 
   if (!user)
     return (
