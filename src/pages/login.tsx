@@ -70,6 +70,7 @@ const Login = () => {
             value={password}
             placeholder="비밀번호를 입력해 주세요"
             onChange={changePassword}
+            autoComplete="off"
             required
           />
         </div>
