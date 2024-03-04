@@ -40,6 +40,7 @@ export const headDescription = {
 export const MAX_CONTENT_WIDTH = 1200;
 export const GALLERY_PADDING = 10;
 export const GALLERY_CARD_MARGIN_X = 5;
+export const SAVE_IMAGE_MARGIN_X = 5;
 
 export const commentSortTypes = [
   { code: "latest", name: "최신 댓글" },

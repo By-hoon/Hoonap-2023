@@ -1,7 +1,8 @@
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 import BasicImage from "../common/BasicImage";
+import { SAVE_IMAGE_MARGIN_X } from "@/shared/constants";
 
 interface SaveImageProps {
   images: FileList | undefined;
@@ -11,6 +12,12 @@ interface SaveImageProps {
 }
 
 const SaveImage = ({ images, setImage, previewImages, setPreviewImages }: SaveImageProps) => {
+  const [cardSize, setCardSize] = useState(0);
+
+  const sizeRef = useRef<HTMLDivElement>(null);
+
+  const imageMarginX = `mx-[${SAVE_IMAGE_MARGIN_X}px]`;
+
   const uploadImage = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (e.currentTarget.files === null) return;
@@ -53,25 +60,60 @@ const SaveImage = ({ images, setImage, previewImages, setPreviewImages }: SaveIm
     setPreviewImages((prevImages) => prevImages.concat(filesArray));
   };
 
+  useEffect(() => {
+    const cardColumn = (curWidth: number) => {
+      if (curWidth > 630) return 4;
+      if (curWidth <= 630 && curWidth >= 450) return 3;
+      return 2;
+    };
+
+    const cardSizeCalculator = (curWidth: number) => {
+      return Math.floor(curWidth / cardColumn(curWidth)) - SAVE_IMAGE_MARGIN_X * 2;
+    };
+
+    const handleResize = () => {
+      if (!sizeRef.current) return;
+      const curWidth = sizeRef.current?.offsetWidth - 1;
+
+      const curSize = cardSizeCalculator(curWidth);
+
+      setCardSize(curSize);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="main-absolute">
-      <div className="md:h-[85%] mobile:h-[80%] p-[5px] flex flex-wrap justify-between overflow-y-scroll scrollbar-hide">
+      <div
+        ref={sizeRef}
+        className="md:h-[85%] mobile:h-[80%] flex flex-wrap overflow-y-scroll scrollbar-hide"
+      >
         {previewImages.map((imageUrl, index) => (
-          <BasicImage
+          <div
             key={index}
-            style={
-              "relative w-[200px] h-[200px] mobile:w-[140px] mobile:h-[140px] rounded-[10px] border-2 my-[10px] p-[5px]"
-            }
-            url={imageUrl}
-            alt={"upload-image"}
+            className={`${imageMarginX} mb-[10px]`}
+            style={{
+              width: `${cardSize}px`,
+              height: `${cardSize}px`,
+            }}
           >
-            <div
-              className="absolute top-0 left-0 flex-middle w-[100%] h-[100%] rounded-[10px] cursor-pointer"
-              onClick={() => deleteImage(index)}
+            <BasicImage
+              style={"relative w-full h-full rounded-[10px] bg-black"}
+              url={imageUrl}
+              alt={"upload-image"}
             >
-              <Icon icon="ant-design:delete-filled" className="text-[30px] text-white" />
-            </div>
-          </BasicImage>
+              <div
+                className="absolute top-0 left-0 flex-middle w-[100%] h-[100%] rounded-[10px] cursor-pointer"
+                onClick={() => deleteImage(index)}
+              >
+                <Icon icon="ant-design:delete-filled" className="text-[30px] text-white" />
+              </div>
+            </BasicImage>
+          </div>
         ))}
       </div>
       <div>
