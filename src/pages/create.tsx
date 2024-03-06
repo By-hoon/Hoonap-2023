@@ -1,6 +1,6 @@
 import SaveImage from "@/components/create/SaveImage";
 import SavePath from "@/components/create/SavePath";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import setData from "@/firebase/firestore/setData";
 import getDocument from "@/firebase/firestore/getDocument";
@@ -16,7 +16,13 @@ import Button from "@/components/common/Button";
 import BasicImage from "@/components/common/BasicImage";
 import PartButton from "@/components/create/PartButton";
 import withHead from "@/components/hoc/withHead";
-import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/constants";
+import {
+  CREATE_STORY_IMAGES_MARGIN_X,
+  alertContent,
+  alertTitle,
+  headDescription,
+  headTitle,
+} from "@/shared/constants";
 import { PopUpContext } from "@/context/popUpProvider";
 
 const Create = ({ uid }: { uid: string }) => {
@@ -26,10 +32,15 @@ const Create = ({ uid }: { uid: string }) => {
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [title, setTitle] = useState("");
   const [story, setStory] = useState("");
+  const [cardSize, setCardSize] = useState(0);
+
+  const sizeRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
 
   const { alert } = useContext(PopUpContext);
+
+  const storyImagesMarginX = `mx-[${CREATE_STORY_IMAGES_MARGIN_X}px]`;
 
   const changeTitle = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -175,16 +186,25 @@ const Create = ({ uid }: { uid: string }) => {
       case "story": {
         return (
           <div className="p-[10px]">
-            <div className="min-h-[360px] max-h-[438px] p-[10px] flex flex-wrap justify-between overflow-y-scroll scrollbar-hide">
+            <div
+              ref={sizeRef}
+              className="min-h-[360px] max-h-[438px] flex flex-wrap overflow-y-scroll scrollbar-hide"
+            >
               {previewImages.map((imageUrl, index) => (
-                <BasicImage
+                <div
                   key={index}
-                  style={
-                    "relative w-[200px] h-[200px] mobile:w-[140px] mobile:h-[140px] rounded-[10px] border-2 my-[10px] p-[5px]"
-                  }
-                  url={imageUrl}
-                  alt={"uploaded-image"}
-                />
+                  className={`${storyImagesMarginX} mb-[10px]`}
+                  style={{
+                    width: `${cardSize}px`,
+                    height: `${cardSize}px`,
+                  }}
+                >
+                  <BasicImage
+                    style={"relative w-full h-full rounded-[10px] bg-black"}
+                    url={imageUrl}
+                    alt={"uploaded-image"}
+                  />
+                </div>
               ))}
             </div>
             <div className="h-[280px]">
@@ -216,6 +236,34 @@ const Create = ({ uid }: { uid: string }) => {
     }
     return null;
   };
+
+  useEffect(() => {
+    if (part !== "story") return;
+
+    const cardColumn = (curWidth: number) => {
+      if (curWidth > 630) return 4;
+      if (curWidth <= 630 && curWidth >= 450) return 3;
+      return 2;
+    };
+
+    const cardSizeCalculator = (curWidth: number) => {
+      return Math.floor(curWidth / cardColumn(curWidth)) - CREATE_STORY_IMAGES_MARGIN_X * 2;
+    };
+
+    const handleResize = () => {
+      if (!sizeRef.current) return;
+      const curWidth = sizeRef.current?.offsetWidth - 1;
+
+      const curSize = cardSizeCalculator(curWidth);
+
+      setCardSize(curSize);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, [part]);
 
   return (
     <Layout>

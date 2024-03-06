@@ -1,13 +1,15 @@
 import { useState } from "react";
 
-const ImageCard = ({ url }: { url: string }) => {
+const ImageCard = ({ url, cardSize }: { url: string; cardSize: number }) => {
   const [mouseX, setMouseX] = useState(0);
   const [mouseY, setMouseY] = useState(0);
 
   return (
     <div
-      className="md:w-[150px] md:h-[150px] w-[140px] h-[140px] mx-[5px] mb-[40px]"
+      className={`mb-[40px]`}
       style={{
+        width: `${cardSize}px`,
+        height: `${cardSize}px`,
         transform: `perspective(300px) rotateX(${mouseX}deg) rotateY(${mouseY}deg)`,
       }}
       onMouseMove={(e) => {

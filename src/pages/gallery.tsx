@@ -7,13 +7,25 @@ import BasicImage from "@/components/common/BasicImage";
 import Router from "next/router";
 import Link from "next/link";
 import withHead from "@/components/hoc/withHead";
-import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/constants";
+import {
+  GALLERY_CARD_MARGIN_X,
+  GALLERY_PADDING,
+  MAX_CONTENT_WIDTH,
+  alertContent,
+  alertTitle,
+  headDescription,
+  headTitle,
+} from "@/shared/constants";
 import { PopUpContext } from "@/context/popUpProvider";
 import ImageCard from "@/components/gallery/ImageCard";
 
 const Gallery = () => {
   const [images, setImages] = useState<{ url: string; userId: string; id: string }[]>([]);
   const [current, setCurrent] = useState<{ url: string; userId: string; id: string }>();
+
+  const [cardSize, setCardSize] = useState(0);
+  const cardMarginX = `mx-[${GALLERY_CARD_MARGIN_X}px]`;
+  const padding = `p-[${GALLERY_PADDING}px]`;
 
   const { user } = useAuth();
 
@@ -67,6 +79,37 @@ const Gallery = () => {
     getImageData();
   }, [user, alert]);
 
+  useEffect(() => {
+    const cardColumn = (curWidth: number) => {
+      if (curWidth > 990) return 6;
+      if (curWidth <= 990 && curWidth > 700) return 5;
+      if (curWidth <= 700 && curWidth > 450) return 4;
+      if (curWidth <= 450 && curWidth > 300) return 3;
+      return 2;
+    };
+
+    const cardSizeCalculator = (curWidth: number) => {
+      return Math.floor(curWidth / cardColumn(curWidth)) - GALLERY_CARD_MARGIN_X * 2;
+    };
+
+    const handleResize = () => {
+      const curWidth = window.innerWidth;
+
+      const curSize = cardSizeCalculator(
+        curWidth > MAX_CONTENT_WIDTH
+          ? MAX_CONTENT_WIDTH - GALLERY_PADDING * 2
+          : curWidth - GALLERY_PADDING * 2
+      );
+
+      setCardSize(curSize);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   if (!user)
     return (
       <Layout>
@@ -76,7 +119,7 @@ const Gallery = () => {
 
   return (
     <Layout>
-      <div className="p-[10px]">
+      <div className={`${padding}`}>
         {current ? (
           <>
             <div
@@ -109,15 +152,16 @@ const Gallery = () => {
             </div>
           </>
         ) : null}
-        <div className={`flex flex-wrap justify-between items-center px-[15px]`}>
+        <div className={`flex flex-wrap items-center`}>
           {images.map((imageObj, index) => (
             <div
               key={index}
+              className={`${cardMarginX}`}
               onClick={() => {
                 setCurrent(imageObj);
               }}
             >
-              <ImageCard url={imageObj.url} />
+              <ImageCard url={imageObj.url} cardSize={cardSize} />
             </div>
           ))}
         </div>
