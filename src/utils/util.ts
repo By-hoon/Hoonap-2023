@@ -1,4 +1,4 @@
-import { maxNicknameLength, nicknameFilter } from "@/shared/constants";
+import { MAX_NICKNAME_LENGTH, NICKNAME_FILTERS } from "@/shared/constants";
 
 export const convertToLatLng = (
   navermaps: typeof naver.maps,
@@ -55,7 +55,7 @@ const checkNicknameLength = (nickname: string) => {
 
   const totalLength = engMatch.length + korMatch.length * 2 + korSubMatch.length + numMatch.length;
 
-  if (totalLength > maxNicknameLength) return false;
+  if (totalLength > MAX_NICKNAME_LENGTH) return false;
 
   return true;
 };
@@ -71,10 +71,10 @@ const checkNicknameValid = (nickname: string) => {
 const filteringNickname = (nickname: string) => {
   let error = "";
 
-  for (var i = 0; i < nicknameFilter.length; i++) {
+  for (var i = 0; i < NICKNAME_FILTERS.length; i++) {
     for (var j = 0; j < nickname.length; j++) {
-      const curString = nickname.substring(j, j + nicknameFilter[i].length);
-      if (nicknameFilter[i] == curString.toLowerCase()) {
+      const curString = nickname.substring(j, j + NICKNAME_FILTERS[i].length);
+      if (NICKNAME_FILTERS[i] == curString.toLowerCase()) {
         error = curString;
         break;
       }

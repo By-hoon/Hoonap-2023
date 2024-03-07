@@ -18,10 +18,10 @@ import PartButton from "@/components/create/PartButton";
 import withHead from "@/components/hoc/withHead";
 import {
   CREATE_STORY_IMAGES_MARGIN_X,
-  alertContent,
-  alertTitle,
-  headDescription,
-  headTitle,
+  ALERT_CONTENT,
+  ALERT_TITLE,
+  HEAD_DESCRIPTION,
+  HEAD_TITLE,
 } from "@/shared/constants";
 import { PopUpContext } from "@/context/popUpProvider";
 
@@ -53,7 +53,7 @@ const Create = ({ uid }: { uid: string }) => {
   const changePart = (newPart: string) => {
     if (newPart === "story") {
       if (previewImages.length === 0) {
-        alert(alertTitle.access, alertContent.storyAfterImage);
+        alert(ALERT_TITLE.ACCESS, ALERT_CONTENT.STORY_AFTER_IMAGE);
         return;
       }
     }
@@ -91,7 +91,7 @@ const Create = ({ uid }: { uid: string }) => {
     const expImage = storageImage ? JSON.parse(storageImage) : {};
 
     if (Object.keys(expStory).length >= 3) {
-      alert(alertTitle.exp, alertContent.expCreate);
+      alert(ALERT_TITLE.EXP, ALERT_CONTENT.EXP_CREATE);
       router.push("/story/list");
       return;
     }
@@ -319,7 +319,7 @@ const Create = ({ uid }: { uid: string }) => {
   );
 };
 
-export default withHead(Create, headTitle.create, headDescription.create);
+export default withHead(Create, HEAD_TITLE.CREATE, HEAD_DESCRIPTION.CREATE);
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const uid = await checkUser(context);

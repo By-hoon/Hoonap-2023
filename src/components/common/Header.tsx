@@ -5,12 +5,12 @@ import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import Title from "./Title";
-import { alertContent, confirmContent, confirmTitle, title } from "@/shared/constants";
 import useClickOutside from "@/hooks/useClickOutside";
 import { PopUpContext } from "@/context/popUpProvider";
 import { useAuth } from "@/context/authProvider";
 import useUser from "@/hooks/useUser";
 import ProfileImage from "../user/ProfileImage";
+import { ALERT_CONTENT, CONFIRM_CONTENT, CONFIRM_TITLE, TITLE } from "@/shared/constants";
 
 const Header = () => {
   const [mounted, setMounted] = useState(false);
@@ -28,15 +28,15 @@ const Header = () => {
   });
 
   const trySignOut = async () => {
-    const result = await confirm(confirmTitle.signOut, confirmContent.signOut);
+    const result = await confirm(CONFIRM_TITLE.SIGN_OUT, CONFIRM_CONTENT.SIGN_OUT);
     if (!result) return;
 
     doSignOut(
       () => {
-        alert("", alertContent.successSignOut);
+        alert("", ALERT_CONTENT.SUCCESS_SIGNOUT);
       },
       () => {
-        alert("", alertContent.failedSignOut);
+        alert("", ALERT_CONTENT.FAILED_SIGNOUT);
       }
     );
 
@@ -50,28 +50,28 @@ const Header = () => {
   const titleRender = () => {
     switch (router.pathname) {
       case "/create": {
-        return <Title title={title.create} />;
+        return <Title title={TITLE.CREATE} />;
       }
       case "/story/detail": {
-        return <Title title={title.story} />;
+        return <Title title={TITLE.STORY} />;
       }
       case "/story/list": {
-        return <Title title={title.stories} />;
+        return <Title title={TITLE.STORIES} />;
       }
       case "/story/edit": {
-        return <Title title={title.editStory} />;
+        return <Title title={TITLE.EDIT_STORY} />;
       }
       case "/gallery": {
-        return <Title title={title.gallery} />;
+        return <Title title={TITLE.GALLERY} />;
       }
       case "/user/detail": {
-        return <Title title={title.user} />;
+        return <Title title={TITLE.USER} />;
       }
       case "/user/story": {
-        return <Title title={title.userStory} />;
+        return <Title title={TITLE.USER_STORY} />;
       }
       case "/user/edit": {
-        return <Title title={title.userEdit} />;
+        return <Title title={TITLE.USER_EDIT} />;
       }
       default:
         return null;

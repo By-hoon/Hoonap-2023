@@ -1,20 +1,20 @@
-import { alertContent, alertTitle } from "./constants";
+import { ALERT_TITLE, ALERT_CONTENT } from "./constants";
 
 const Alerts = (code: string) => {
   if (code === "auth/email-already-in-use")
-    return { alertTitle: alertTitle.id, alertContent: alertContent.invalidId };
+    return { ALERT_TITLE: ALERT_TITLE.ID, ALERT_CONTENT: ALERT_CONTENT.INVALID_ID };
   if (code === "auth/user-not-found")
-    return { alertTitle: alertTitle.id, alertContent: alertContent.userNotFound };
+    return { ALERT_TITLE: ALERT_TITLE.ID, ALERT_CONTENT: ALERT_CONTENT.USER_NOT_FOUND };
   if (code === "auth/invalid-email")
-    return { alertTitle: alertTitle.id, alertContent: alertContent.reconfirmEmail };
+    return { ALERT_TITLE: ALERT_TITLE.ID, ALERT_CONTENT: ALERT_CONTENT.RECONFIRM_EMAIL };
   if (code === "auth/weak-password")
-    return { alertTitle: alertTitle.password, alertContent: alertContent.reconfirmPassword };
+    return { ALERT_TITLE: ALERT_TITLE.PASSWORD, ALERT_CONTENT: ALERT_CONTENT.RECONFIRM_PASSWORD };
   if (code === "auth/wrong-password")
-    return { alertTitle: alertTitle.password, alertContent: alertContent.wrongPassword };
+    return { ALERT_TITLE: ALERT_TITLE.PASSWORD, ALERT_CONTENT: ALERT_CONTENT.WRONG_PASSWORD };
   if (code === "auth/too-many-requests")
-    return { alertTitle: alertTitle.server, alertContent: alertContent.tryAgain };
+    return { ALERT_TITLE: ALERT_TITLE.SERVER, ALERT_CONTENT: ALERT_CONTENT.TRY_AGAIN };
 
-  return { alertTitle: alertTitle.unknown, alertContent: alertContent.unknown };
+  return { ALERT_TITLE: ALERT_TITLE.UNKNOWN, ALERT_CONTENT: ALERT_CONTENT.UNKNOWN };
 };
 
 export default Alerts;

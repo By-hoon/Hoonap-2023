@@ -11,10 +11,10 @@ import {
   GALLERY_CARD_MARGIN_X,
   GALLERY_PADDING,
   MAX_CONTENT_WIDTH,
-  alertContent,
-  alertTitle,
-  headDescription,
-  headTitle,
+  ALERT_TITLE,
+  ALERT_CONTENT,
+  HEAD_TITLE,
+  HEAD_DESCRIPTION,
 } from "@/shared/constants";
 import { PopUpContext } from "@/context/popUpProvider";
 import ImageCard from "@/components/gallery/ImageCard";
@@ -38,7 +38,7 @@ const Gallery = () => {
     const getImageData = async () => {
       const result = await getCollection("images");
       if (!result || result.empty) {
-        await alert(alertTitle.access, alertContent.nothingStory);
+        await alert(ALERT_TITLE.ACCESS, ALERT_CONTENT.NOTHING_STORY);
         Router.push("/");
         return;
       }
@@ -56,7 +56,7 @@ const Gallery = () => {
     const getExpImageData = async () => {
       const storageImage = window.localStorage.getItem("image");
       if (!storageImage) {
-        await alert(alertTitle.access, alertContent.nothingStory);
+        await alert(ALERT_TITLE.ACCESS, ALERT_CONTENT.NOTHING_STORY);
         Router.push("/");
         return;
       }
@@ -170,4 +170,4 @@ const Gallery = () => {
   );
 };
 
-export default withHead(Gallery, headTitle.gallery, headDescription.gallery);
+export default withHead(Gallery, HEAD_TITLE.GALLERY, HEAD_DESCRIPTION.GALLERY);

@@ -4,7 +4,7 @@ import { PopUpContext } from "@/context/popUpProvider";
 import signUp from "@/firebase/auth/signUp";
 import setData from "@/firebase/firestore/setData";
 import Alerts from "@/shared/alerts";
-import { alertContent, alertTitle, headDescription, headTitle, nicknameInfo } from "@/shared/constants";
+import { ALERT_TITLE, ALERT_CONTENT, HEAD_DESCRIPTION, HEAD_TITLE, NICKNAME_INFO } from "@/shared/constants";
 import { checkNickname } from "@/utils/util";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
@@ -32,7 +32,7 @@ const Signup = () => {
 
     switch (checkResult[0]) {
       case "nicknameLength": {
-        alert(alertTitle.nickname, alertContent.nicknameLength);
+        alert(ALERT_TITLE.NICKNAME, ALERT_CONTENT.NICKNAME_LENGTH);
         return;
       }
 
@@ -45,7 +45,7 @@ const Signup = () => {
       case "filtering": {
         setIsPassNickname(false);
         setNickname(target);
-        alert(alertTitle.nickname, `${alertContent.nicknameFilter} '${checkResult[1]}'`);
+        alert(ALERT_TITLE.NICKNAME, `${ALERT_CONTENT.NICKNAME_FILTER} '${checkResult[1]}'`);
         return;
       }
 
@@ -60,15 +60,15 @@ const Signup = () => {
     e.preventDefault();
 
     if (!isPassNickname) {
-      alert(alertTitle.nickname, alertContent.inValidNickname);
+      alert(ALERT_TITLE.NICKNAME, ALERT_CONTENT.INVALID_NICKNAME);
       return;
     }
 
     const userData = await signUp(email, password);
     if (typeof userData === "string") {
       const errorCode = userData;
-      const { alertTitle, alertContent } = Alerts(errorCode);
-      await alert(alertTitle, alertContent);
+      const { ALERT_TITLE, ALERT_CONTENT } = Alerts(errorCode);
+      await alert(ALERT_TITLE, ALERT_CONTENT);
       return;
     }
 
@@ -127,7 +127,7 @@ const Signup = () => {
             onChange={changeNickname}
             required
           />
-          <div className="text-[12px] text-zinc-400">{nicknameInfo}</div>
+          <div className="text-[12px] text-zinc-400">{NICKNAME_INFO}</div>
         </div>
         <div className="text-center">
           <Button text="가입" style="submit-button py-[7px]" type="submit" />
@@ -142,4 +142,4 @@ const Signup = () => {
   );
 };
 
-export default withHead(Signup, headTitle.signup, headDescription.signup);
+export default withHead(Signup, HEAD_TITLE.SIGNUP, HEAD_DESCRIPTION.SIGNUP);

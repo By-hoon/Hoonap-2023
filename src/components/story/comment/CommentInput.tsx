@@ -5,7 +5,7 @@ import { isExp } from "@/utils/util";
 import setData from "@/firebase/firestore/setData";
 import { useAuth } from "@/context/authProvider";
 import { PopUpContext } from "@/context/popUpProvider";
-import { alertTitle, alertContent } from "@/shared/constants";
+import { ALERT_TITLE, ALERT_CONTENT } from "@/shared/constants";
 
 const CommentInput = ({ storyId }: { storyId: string }) => {
   const [comment, setComment] = useState("");
@@ -28,7 +28,7 @@ const CommentInput = ({ storyId }: { storyId: string }) => {
     commentData[`${Date.now()} ${writerId}`] = { comment, writedAt: Date.now(), writedBy: writerId };
 
     if (isExp(writerId)) {
-      await alert(alertTitle.exp, alertContent.invalidExp);
+      await alert(ALERT_TITLE.EXP, ALERT_CONTENT.INVALID_EXP);
       return;
     }
 

@@ -11,13 +11,13 @@ import { deleteFile } from "@/firebase/storage/delete";
 import useClickOutside from "@/hooks/useClickOutside";
 import useUser from "@/hooks/useUser";
 import {
-  alertContent,
-  alertTitle,
-  confirmContent,
-  confirmTitle,
-  headDescription,
-  headTitle,
-  nicknameInfo,
+  ALERT_TITLE,
+  ALERT_CONTENT,
+  CONFIRM_TITLE,
+  CONFIRM_CONTENT,
+  HEAD_TITLE,
+  HEAD_DESCRIPTION,
+  NICKNAME_INFO,
 } from "@/shared/constants";
 import { checkNickname } from "@/utils/util";
 import Router, { useRouter } from "next/router";
@@ -52,7 +52,7 @@ const UserEdit = () => {
     setIsDeleted(false);
   };
   const deleteProfileImage = async () => {
-    const result = await confirm(confirmTitle.deleteProfileImage, confirmContent.deleteProfileImage);
+    const result = await confirm(CONFIRM_TITLE.DELETE_PROFILE_IMAGE, CONFIRM_CONTENT.DELETE_PROFILE_IMAGE);
     if (!result) return;
 
     setPreviewImage(undefined);
@@ -68,7 +68,7 @@ const UserEdit = () => {
 
     switch (checkResult[0]) {
       case "nicknameLength": {
-        alert(alertTitle.nickname, alertContent.nicknameLength);
+        alert(ALERT_TITLE.NICKNAME, ALERT_CONTENT.NICKNAME_LENGTH);
         return;
       }
 
@@ -81,7 +81,7 @@ const UserEdit = () => {
       case "filtering": {
         setIsPassNickname(false);
         setNickname(target);
-        alert(alertTitle.nickname, `${alertContent.nicknameFilter} '${checkResult[1]}'`);
+        alert(ALERT_TITLE.NICKNAME, `${ALERT_CONTENT.NICKNAME_FILTER} '${checkResult[1]}'`);
         return;
       }
 
@@ -95,12 +95,12 @@ const UserEdit = () => {
   const editUser = async () => {
     const curUser = userId as string;
     if (nickname === "") {
-      alert(alertTitle.input, `닉네임 ${alertContent.requireValue}`);
+      alert(ALERT_TITLE.INPUT, `닉네임 ${ALERT_CONTENT.REQUIRE_VALUE}`);
       return;
     }
 
     if (!isPassNickname) {
-      alert(alertTitle.nickname, alertContent.inValidNickname);
+      alert(ALERT_TITLE.NICKNAME, ALERT_CONTENT.INVALID_NICKNAME);
       return;
     }
 
@@ -128,7 +128,7 @@ const UserEdit = () => {
 
   useEffect(() => {
     if (!userId) {
-      alert(alertTitle.access, alertContent.noUser);
+      alert(ALERT_TITLE.ACCESS, ALERT_CONTENT.NO_USER);
       Router.push("/");
       return;
     }
@@ -204,7 +204,7 @@ const UserEdit = () => {
             onChange={changeNickname}
             required
           />
-          <div className="text-[12px] text-zinc-400">{nicknameInfo}</div>
+          <div className="text-[12px] text-zinc-400">{NICKNAME_INFO}</div>
         </div>
         <div className="w-[100%] text-center mt-[20px]">
           <Button
@@ -225,4 +225,4 @@ const UserEdit = () => {
   );
 };
 
-export default withHead(UserEdit, headTitle.userEdit, headDescription.userEdit);
+export default withHead(UserEdit, HEAD_TITLE.USER_EDIT, HEAD_DESCRIPTION.USER_EDIT);

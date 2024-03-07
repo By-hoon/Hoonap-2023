@@ -6,7 +6,7 @@ import { isExp } from "@/utils/util";
 import { useAuth } from "@/context/authProvider";
 import DetailView from "@/components/story/DetailView";
 import withHead from "@/components/hoc/withHead";
-import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/constants";
+import { ALERT_TITLE, ALERT_CONTENT, HEAD_TITLE, HEAD_DESCRIPTION } from "@/shared/constants";
 import useRegular from "@/hooks/useRegular";
 import { PopUpContext } from "@/context/popUpProvider";
 
@@ -35,7 +35,7 @@ const StoryDetail = () => {
     if (!user) return;
 
     if (!storyId) {
-      alert(alertTitle.access, alertContent.nothingStory);
+      alert(ALERT_TITLE.ACCESS, ALERT_CONTENT.NOTHING_STORY);
       Router.push("/story/list");
       return;
     }
@@ -97,4 +97,4 @@ const StoryDetail = () => {
   );
 };
 
-export default withHead(StoryDetail, headTitle.storyDetail, headDescription.storyDetail);
+export default withHead(StoryDetail, HEAD_TITLE.STORY_DETAIL, HEAD_DESCRIPTION.STORY_DETAIL);

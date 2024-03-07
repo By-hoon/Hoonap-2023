@@ -11,12 +11,12 @@ import { deleteFile } from "@/firebase/storage/delete";
 import Button from "@/components/common/Button";
 import { PopUpContext } from "@/context/popUpProvider";
 import {
-  alertContent,
-  alertTitle,
-  confirmContent,
-  confirmTitle,
-  headDescription,
-  headTitle,
+  ALERT_TITLE,
+  ALERT_CONTENT,
+  CONFIRM_TITLE,
+  CONFIRM_CONTENT,
+  HEAD_TITLE,
+  HEAD_DESCRIPTION,
 } from "@/shared/constants";
 import withHead from "@/components/hoc/withHead";
 
@@ -90,7 +90,7 @@ const StoryEdit = () => {
   const editStory = async () => {
     if (paths.length === 0 || !previewImages || title === "" || story === "") return;
 
-    const result = await confirm(confirmTitle.editStory, confirmContent.editStory);
+    const result = await confirm(CONFIRM_TITLE.EDIT_STORY, CONFIRM_CONTENT.EDIT_STORY);
     if (!result) return;
 
     const curStoryId = storyId as string;
@@ -134,7 +134,7 @@ const StoryEdit = () => {
 
   useEffect(() => {
     if (!queryPaths || !queryTitle || !queryStory || !queryImageUrls) {
-      alert(alertTitle.access, alertContent.nothingStory);
+      alert(ALERT_TITLE.ACCESS, ALERT_CONTENT.NOTHING_STORY);
       router.push("/");
       return;
     }
@@ -205,4 +205,4 @@ const StoryEdit = () => {
   );
 };
 
-export default withHead(StoryEdit, headTitle.storyEdit, headDescription.storyEdit);
+export default withHead(StoryEdit, HEAD_TITLE.STORY_EDIT, HEAD_DESCRIPTION.STORY_EDIT);

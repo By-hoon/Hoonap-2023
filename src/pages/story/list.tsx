@@ -6,7 +6,7 @@ import { useAuth } from "@/context/authProvider";
 import Router from "next/router";
 import { StoryProps } from "./detail";
 import withHead from "@/components/hoc/withHead";
-import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/constants";
+import { ALERT_TITLE, ALERT_CONTENT, HEAD_TITLE, HEAD_DESCRIPTION } from "@/shared/constants";
 import getPage from "@/firebase/firestore/getPage";
 import useRegular from "@/hooks/useRegular";
 import { PopUpContext } from "@/context/popUpProvider";
@@ -31,11 +31,11 @@ const List = () => {
   const changeCategory = (target: string) => {
     if (!user) return;
     if (isExp(user.uid)) {
-      alert(alertTitle.exp, alertContent.invalidExp);
+      alert(ALERT_TITLE.EXP, ALERT_CONTENT.INVALID_EXP);
       return;
     }
     if (target === category) {
-      alert("", alertContent.sameCategory);
+      alert("", ALERT_CONTENT.SAME_CATEGORY);
       return;
     }
 
@@ -52,16 +52,16 @@ const List = () => {
       const result = await getPage("stories", size, "createdAt", "desc", last === 0 ? undefined : last);
 
       if (!result) {
-        alert(alertTitle.server, alertContent.unknown);
+        alert(ALERT_TITLE.SERVER, ALERT_CONTENT.UNKNOWN);
         return;
       }
       if (result.empty && last === 0) {
-        alert(alertTitle.access, alertContent.nothingStory);
+        alert(ALERT_TITLE.ACCESS, ALERT_CONTENT.NOTHING_STORY);
         Router.push("/");
         return;
       }
       if (result.empty && last !== 0) {
-        alert("", alertContent.noMoreStory);
+        alert("", ALERT_CONTENT.NO_MORE_STORY);
         return;
       }
       const newStories: StoryProps[] = [];
@@ -83,7 +83,7 @@ const List = () => {
       });
 
       if (stories.length === 0 && newStories.length === 0) {
-        alert("", alertContent.nothingStory);
+        alert("", ALERT_CONTENT.NOTHING_STORY);
         return;
       }
       setStories((cur) => cur.concat(newStories as StoryProps[]));
@@ -92,7 +92,7 @@ const List = () => {
     const getExpStoriesData = () => {
       const storageStories = window.localStorage.getItem("story");
       if (!storageStories) {
-        alert(alertTitle.access, alertContent.nothingStory);
+        alert(ALERT_TITLE.ACCESS, ALERT_CONTENT.NOTHING_STORY);
         Router.push("/");
         return;
       }
@@ -244,4 +244,4 @@ const List = () => {
   );
 };
 
-export default withHead(List, headTitle.storyList, headDescription.storyList);
+export default withHead(List, HEAD_TITLE.STORY_LIST, HEAD_DESCRIPTION.STORY_LIST);

@@ -3,7 +3,7 @@ import withHead from "@/components/hoc/withHead";
 import { PopUpContext } from "@/context/popUpProvider";
 import signIn from "@/firebase/auth/signIn";
 import Alerts from "@/shared/alerts";
-import { headDescription, headTitle } from "@/shared/constants";
+import { HEAD_TITLE, HEAD_DESCRIPTION } from "@/shared/constants";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 
@@ -27,8 +27,8 @@ const Login = () => {
     const userData = await signIn(email, password);
     if (typeof userData === "string") {
       const errorCode = userData;
-      const { alertTitle, alertContent } = Alerts(errorCode);
-      await alert(alertTitle, alertContent);
+      const { ALERT_TITLE, ALERT_CONTENT } = Alerts(errorCode);
+      await alert(ALERT_TITLE, ALERT_CONTENT);
       return;
     }
     router.push("/");
@@ -94,4 +94,4 @@ const Login = () => {
   );
 };
 
-export default withHead(Login, headTitle.login, headDescription.login);
+export default withHead(Login, HEAD_TITLE.LOGIN, HEAD_DESCRIPTION.LOGIN);

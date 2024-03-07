@@ -5,7 +5,7 @@ import Router, { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import BasicImage from "@/components/common/BasicImage";
 import withHead from "@/components/hoc/withHead";
-import { alertContent, alertTitle, headDescription, headTitle } from "@/shared/constants";
+import { ALERT_TITLE, ALERT_CONTENT, HEAD_TITLE, HEAD_DESCRIPTION } from "@/shared/constants";
 import useRegular from "@/hooks/useRegular";
 import { useAuth } from "@/context/authProvider";
 import { PopUpContext } from "@/context/popUpProvider";
@@ -23,7 +23,7 @@ const Story = () => {
   const { storyId, stories } = router.query;
   useEffect(() => {
     if (!storyId) {
-      alert(alertTitle.access, alertContent.noUser);
+      alert(ALERT_TITLE.ACCESS, ALERT_CONTENT.NO_USER);
       Router.push("/story/list");
       return;
     }
@@ -86,4 +86,4 @@ const Story = () => {
   );
 };
 
-export default withHead(Story, headTitle.userStory, headDescription.userStory);
+export default withHead(Story, HEAD_TITLE.USER_STORY, HEAD_DESCRIPTION.USER_STORY);

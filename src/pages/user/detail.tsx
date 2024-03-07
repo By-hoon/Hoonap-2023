@@ -12,12 +12,12 @@ import { Icon } from "@iconify/react";
 import { StoryProps } from "../story/detail";
 import withHead from "@/components/hoc/withHead";
 import {
-  alertContent,
-  alertTitle,
-  confirmContent,
-  confirmTitle,
-  headDescription,
-  headTitle,
+  ALERT_TITLE,
+  ALERT_CONTENT,
+  CONFIRM_TITLE,
+  CONFIRM_CONTENT,
+  HEAD_TITLE,
+  HEAD_DESCRIPTION,
 } from "@/shared/constants";
 import { PopUpContext } from "@/context/popUpProvider";
 import { getElapsedTime, isExp } from "@/utils/util";
@@ -98,8 +98,8 @@ const UserDetail = () => {
 
   const deleteRegularMy = async (targetId: string, targetNickname: string) => {
     const result = await confirm(
-      confirmTitle.deleteRegularMy,
-      `${confirmContent.deleteRegularMy}: ${targetNickname}`
+      CONFIRM_TITLE.DELETE_REGULAR_MY,
+      `${CONFIRM_CONTENT.DELETE_REGULAR_MY}: ${targetNickname}`
     );
     if (!result) return;
 
@@ -119,8 +119,8 @@ const UserDetail = () => {
 
   const deleteRegularMe = async (targetId: string, targetNickname: string) => {
     const result = await confirm(
-      confirmTitle.deleteRegularMe,
-      `${confirmContent.deleteRegularMe}: ${targetNickname}`
+      CONFIRM_TITLE.DELETE_REGULAR_ME,
+      `${CONFIRM_CONTENT.DELETE_REGULAR_ME}: ${targetNickname}`
     );
     if (!result) return;
 
@@ -213,13 +213,13 @@ const UserDetail = () => {
 
   useEffect(() => {
     if (!userId) {
-      alert(alertTitle.access, alertContent.noUser);
+      alert(ALERT_TITLE.ACCESS, ALERT_CONTENT.NO_USER);
       Router.push("/");
       return;
     }
 
     if (isExp(userId as string)) {
-      alert(alertTitle.exp, alertContent.invalidExp);
+      alert(ALERT_TITLE.EXP, ALERT_CONTENT.INVALID_EXP);
       Router.push("/");
       return;
     }
@@ -511,4 +511,4 @@ const UserDetail = () => {
   );
 };
 
-export default withHead(UserDetail, headTitle.userDetail, headDescription.userDetail);
+export default withHead(UserDetail, HEAD_TITLE.USER_DETAIL, HEAD_DESCRIPTION.USER_DETAIL);

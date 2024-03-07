@@ -2,7 +2,7 @@ import Layout from "@/components/common/Layout";
 import signIn from "@/firebase/auth/signIn";
 import { useRouter } from "next/router";
 import { isExp } from "@/utils/util";
-import { addInfo, expInfo, headDescription, headTitle } from "@/shared/constants";
+import { ADD_INFO, EXP_INFO, HEAD_TITLE, HEAD_DESCRIPTION } from "@/shared/constants";
 import { useAuth } from "@/context/authProvider";
 import Button from "@/components/common/Button";
 import withHead from "@/components/hoc/withHead";
@@ -56,15 +56,15 @@ const Home = () => {
     return (
       <Layout>
         <div className="w-[300px] p-[10px] mx-[auto]">
-          <div className="text-[22px] font-semibold text-center my-[20px]">{addInfo.expSubtitle}</div>
+          <div className="text-[22px] font-semibold text-center my-[20px]">{ADD_INFO.EXP_SUBTITLE}</div>
           <div>
-            {expInfo.map((info, index) => (
+            {EXP_INFO.map((info, index) => (
               <div key={index} className="text-[17px] mt-[10px] break-keep">
                 {info}
               </div>
             ))}
             <div className="flex flex-wrap">
-              {addInfo.expRestricts.map((restrict, index) => (
+              {ADD_INFO.EXP_RESTRICTS.map((restrict, index) => (
                 <div
                   key={index}
                   className="text-[15px] text-white mx-[2px] mt-[2px] px-[10px] py-[4px] bg-red-300"
@@ -81,4 +81,4 @@ const Home = () => {
   return <Layout>Home</Layout>;
 };
 
-export default withHead(Home, headTitle.main, headDescription.main);
+export default withHead(Home, HEAD_TITLE.MAIN, HEAD_DESCRIPTION.MAIN);

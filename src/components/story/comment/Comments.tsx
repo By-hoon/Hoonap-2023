@@ -5,22 +5,22 @@ import { useRouter } from "next/router";
 import useClickOutside from "@/hooks/useClickOutside";
 import getSnapshot from "@/firebase/firestore/getSnapshot";
 import { Icon } from "@iconify/react";
-import { commentSortTypes } from "@/shared/constants";
+import { COMMENT_SORT_TYPES } from "@/shared/constants";
 import { isExp } from "@/utils/util";
 
 const Comments = ({ storyId, userId: storyUserId }: { storyId: string; userId: string }) => {
   const [comments, setComments] = useState<CommentProps[]>([]);
-  const [sortType, setSortType] = useState(commentSortTypes[0]);
+  const [sortType, setSortType] = useState(COMMENT_SORT_TYPES[0]);
   const { show, ref, onClickTarget } = useClickOutside();
   const { show: showSortMenu, ref: sortMenuRef, onClickTarget: onClickSortMenu } = useClickOutside();
 
   const router = useRouter();
 
-  const doSortComments = (e: React.MouseEvent<HTMLElement>, type: { code: string; name: string }) => {
+  const doSortComments = (e: React.MouseEvent<HTMLElement>, type: { CODE: string; NAME: string }) => {
     e.stopPropagation();
     const newComments = [...comments];
     newComments.sort((a, b) => {
-      if (type.code === "earliest") return a.writedAt - b.writedAt;
+      if (type.CODE === "earliest") return a.writedAt - b.writedAt;
 
       return b.writedAt - a.writedAt;
     });
@@ -39,7 +39,7 @@ const Comments = ({ storyId, userId: storyUserId }: { storyId: string; userId: s
     });
 
     newData.sort((a, b) => b.writedAt - a.writedAt);
-    setSortType(commentSortTypes[0]);
+    setSortType(COMMENT_SORT_TYPES[0]);
     return newData;
   };
 
@@ -76,22 +76,22 @@ const Comments = ({ storyId, userId: storyUserId }: { storyId: string; userId: s
                     className="relative flex text-[14px] pt-[5px] border-t mobile:mt-[5px]"
                   >
                     <div className="cursor-pointer flex items-center text-[14px]" onClick={onClickSortMenu}>
-                      {sortType.name} <Icon icon="mingcute:down-line" className="text-[18px] ml-[5px]" />
+                      {sortType.NAME} <Icon icon="mingcute:down-line" className="text-[18px] ml-[5px]" />
                     </div>
                     {showSortMenu ? (
                       <div className="absolute top-[5px] right-0 text-[14px] bg-white rounded-[6px] shadow-basic pl-[10px] py-[5px]">
-                        {commentSortTypes.map((commentSortType) => (
-                          <div className="grid grid-cols-[1fr_30px]" key={commentSortType.code}>
+                        {COMMENT_SORT_TYPES.map((commentSortType) => (
+                          <div className="grid grid-cols-[1fr_30px]" key={commentSortType.CODE}>
                             <div
                               className="cursor-pointer"
                               onClick={(e) => doSortComments(e, commentSortType)}
                             >
-                              {commentSortType.name}
+                              {commentSortType.NAME}
                             </div>
                             <div className="flex-middle">
                               <Icon
                                 icon={`grommet-icons:radial${
-                                  commentSortType.code === sortType.code ? "-selected" : ""
+                                  commentSortType.CODE === sortType.CODE ? "-selected" : ""
                                 }`}
                               />
                             </div>
@@ -127,19 +127,19 @@ const Comments = ({ storyId, userId: storyUserId }: { storyId: string; userId: s
           <div className="mobile:relative w-full h-full md:grid md:grid-rows-[auto_1fr_36px]">
             <div ref={sortMenuRef} className="relative flex pt-[5px] border-t mobile:mt-[5px]">
               <div className="cursor-pointer flex items-center text-[14px]" onClick={onClickSortMenu}>
-                {sortType.name} <Icon icon="mingcute:down-line" className="text-[18px] ml-[5px]" />
+                {sortType.NAME} <Icon icon="mingcute:down-line" className="text-[18px] ml-[5px]" />
               </div>
               {showSortMenu ? (
                 <div className="absolute top-[5px] right-0 text-[14px] bg-white rounded-[6px] shadow-basic pl-[10px] py-[5px]">
-                  {commentSortTypes.map((commentSortType) => (
-                    <div className="grid grid-cols-[1fr_30px]" key={commentSortType.code}>
+                  {COMMENT_SORT_TYPES.map((commentSortType) => (
+                    <div className="grid grid-cols-[1fr_30px]" key={commentSortType.CODE}>
                       <div className="cursor-pointer" onClick={(e) => doSortComments(e, commentSortType)}>
-                        {commentSortType.name}
+                        {commentSortType.NAME}
                       </div>
                       <div className="flex-middle">
                         <Icon
                           icon={`grommet-icons:radial${
-                            commentSortType.code === sortType.code ? "-selected" : ""
+                            commentSortType.CODE === sortType.CODE ? "-selected" : ""
                           }`}
                         />
                       </div>

@@ -13,7 +13,7 @@ import getDocument from "@/firebase/firestore/getDocument";
 import updateField from "@/firebase/firestore/updateField";
 import { deleteFile } from "@/firebase/storage/delete";
 import { isExp } from "@/utils/util";
-import { confirmContent, confirmTitle } from "@/shared/constants";
+import { CONFIRM_TITLE, CONFIRM_CONTENT } from "@/shared/constants";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
 });
@@ -55,7 +55,7 @@ const MoreMenu = ({ title, story, images, paths, createdAt, storyId, userId }: S
   };
 
   const deleteStory = async () => {
-    const result = await confirm(confirmTitle.deleteStory, confirmContent.deleteStory);
+    const result = await confirm(CONFIRM_TITLE.DELETE_STORY, CONFIRM_CONTENT.DELETE_STORY);
     if (!result) return;
 
     for (let i = 0; i < images.length; i++) {
