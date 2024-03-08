@@ -16,9 +16,9 @@ const StoryContents = ({ title, story, createdAt, storyId, userId, hasLink = fal
     <div>
       <div className={`${!hasLink ? "h-full md:grid md:grid-rows-[1fr_500px]" : ""}`}>
         <div>
-          <div className="text-[16px] break-all">
-            {title}
-            <span className="text-[12px] text-zinc-400 ml-[3px]">{getElapsedTime(createdAt)}</span>
+          <div className="flex flex-wrap items-center">
+            <div className="text-[16px] break-all">{title}</div>
+            <div className="text-[12px] text-zinc-400 ml-[3px]">{getElapsedTime(createdAt)}</div>
           </div>
           <div className="text-[14px] break-all">{story}</div>
         </div>
