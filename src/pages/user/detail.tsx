@@ -2,7 +2,7 @@ import getDocument from "@/firebase/firestore/getDocument";
 import Link from "next/link";
 import useUser from "@/hooks/useUser";
 import Layout from "@/components/common/Layout";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Router, { useRouter } from "next/router";
 import BasicImage from "@/components/common/BasicImage";
 import dynamic from "next/dynamic";
@@ -47,6 +47,8 @@ const UserDetail = () => {
   const [regularMy, setRegularMy] = useState<{
     [key: string]: { id: string; nickname: string; profileImage: string };
   }>({});
+
+  const mapRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
   const { userId } = router.query;
@@ -161,7 +163,7 @@ const UserDetail = () => {
       }
       case "map": {
         return (
-          <div className="main-relative">
+          <div ref={mapRef} className="main-relative">
             <div className="main-absolute">
               {paths[0][0] ? (
                 <Map location={{ latitude: paths[0][0].latitude, longitude: paths[0][0].longitude }}>
@@ -321,6 +323,12 @@ const UserDetail = () => {
 
     getRegularMyData();
   }, [regular]);
+
+  useEffect(() => {
+    if (section !== "map") return;
+
+    mapRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [section]);
 
   if (!userId)
     return (
