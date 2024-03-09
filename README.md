@@ -106,6 +106,8 @@ src
 │   │   ├── PartButton.tsx
 │   │   ├── SaveImage.tsx
 │   │   └── SavePath.tsx
+│   ├── gallery
+│   │   └── ImageCard.tsx
 │   ├── hoc
 │   │   └── withHead.tsx
 │   ├── story
