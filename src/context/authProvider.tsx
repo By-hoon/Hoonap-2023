@@ -3,6 +3,7 @@ import { getAuth, User } from "firebase/auth";
 import nookies from "nookies";
 import firebase_app from "@/firebase/config";
 import Router from "next/router";
+import { NOT_NECESSARY_TO_LOGIN } from "@/shared/constants";
 
 const AuthContext = createContext<{ user: User | null }>({
   user: null,
@@ -18,7 +19,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         nookies.set(null, "token", "", { path: "/" });
 
         const curPathname = Router.pathname;
-        if (curPathname === "/" || curPathname === "/login" || curPathname === "/signup") return;
+
+        if (NOT_NECESSARY_TO_LOGIN.includes(curPathname)) return;
+
         alert("로그인이 필요한 서비스입니다.");
         Router.push("/login");
         return;
