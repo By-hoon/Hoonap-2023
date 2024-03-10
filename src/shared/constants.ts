@@ -39,8 +39,6 @@ export const HEAD_DESCRIPTION = {
   SIGNUP: "회원가입 페이지입니다.",
 };
 
-export const MAX_CONTENT_WIDTH = 1200;
-export const GALLERY_PADDING = 10;
 export const GALLERY_CARD_MARGIN_X = 5;
 export const SAVE_IMAGE_MARGIN_X = 5;
 export const CREATE_STORY_IMAGES_MARGIN_X = 5;

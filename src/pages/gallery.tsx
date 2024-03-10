@@ -1,6 +1,6 @@
 import Layout from "@/components/common/Layout";
 import getCollection from "@/firebase/firestore/getCollection";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { isExp } from "@/utils/util";
 import { useAuth } from "@/context/authProvider";
 import BasicImage from "@/components/common/BasicImage";
@@ -9,8 +9,6 @@ import Link from "next/link";
 import withHead from "@/components/hoc/withHead";
 import {
   GALLERY_CARD_MARGIN_X,
-  GALLERY_PADDING,
-  MAX_CONTENT_WIDTH,
   ALERT_TITLE,
   ALERT_CONTENT,
   HEAD_TITLE,
@@ -24,12 +22,14 @@ const Gallery = () => {
   const [current, setCurrent] = useState<{ url: string; userId: string; id: string }>();
 
   const [cardSize, setCardSize] = useState(0);
-  const cardMarginX = `mx-[${GALLERY_CARD_MARGIN_X}px]`;
-  const padding = `p-[${GALLERY_PADDING}px]`;
+
+  const sizeRef = useRef<HTMLDivElement>(null);
 
   const { user } = useAuth();
 
   const { alert } = useContext(PopUpContext);
+
+  const cardMarginX = `mx-[${GALLERY_CARD_MARGIN_X}px]`;
 
   useEffect(() => {
     if (!user) return;
@@ -93,13 +93,10 @@ const Gallery = () => {
     };
 
     const handleResize = () => {
-      const curWidth = window.innerWidth;
+      if (!sizeRef.current) return;
+      const curWidth = sizeRef.current?.offsetWidth - 1;
 
-      const curSize = cardSizeCalculator(
-        curWidth > MAX_CONTENT_WIDTH
-          ? MAX_CONTENT_WIDTH - GALLERY_PADDING * 2
-          : curWidth - GALLERY_PADDING * 2
-      );
+      const curSize = cardSizeCalculator(curWidth);
 
       setCardSize(curSize);
     };
@@ -119,7 +116,7 @@ const Gallery = () => {
 
   return (
     <Layout>
-      <div className={`${padding}`}>
+      <div className="p-[10px]">
         {current ? (
           <>
             <div
@@ -152,7 +149,7 @@ const Gallery = () => {
             </div>
           </>
         ) : null}
-        <div className={`flex flex-wrap items-center`}>
+        <div ref={sizeRef} className={`flex flex-wrap items-center`}>
           {images.map((imageObj, index) => (
             <div
               key={index}
