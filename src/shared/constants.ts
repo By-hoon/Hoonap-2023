@@ -39,10 +39,6 @@ export const HEAD_DESCRIPTION = {
   SIGNUP: "회원가입 페이지입니다.",
 };
 
-export const GALLERY_CARD_MARGIN_X = 5;
-export const SAVE_IMAGE_MARGIN_X = 5;
-export const CREATE_STORY_IMAGES_MARGIN_X = 5;
-
 export const COMMENT_SORT_TYPES = [
   { CODE: "latest", NAME: "최신 댓글" },
   { CODE: "earliest", NAME: "오래된 댓글" },

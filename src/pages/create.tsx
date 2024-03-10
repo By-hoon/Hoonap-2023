@@ -9,20 +9,14 @@ import checkUser from "@/firebase/auth/checkUser";
 import { useRouter } from "next/router";
 import Layout from "@/components/common/Layout";
 import { Icon } from "@iconify/react";
-import { isExp } from "@/utils/util";
+import { cardSizeCalculator, isExp } from "@/utils/util";
 import { addFiles } from "@/firebase/storage/add";
 import { deleteFiles } from "@/firebase/storage/delete";
 import Button from "@/components/common/Button";
 import BasicImage from "@/components/common/BasicImage";
 import PartButton from "@/components/create/PartButton";
 import withHead from "@/components/hoc/withHead";
-import {
-  CREATE_STORY_IMAGES_MARGIN_X,
-  ALERT_CONTENT,
-  ALERT_TITLE,
-  HEAD_DESCRIPTION,
-  HEAD_TITLE,
-} from "@/shared/constants";
+import { ALERT_CONTENT, ALERT_TITLE, HEAD_DESCRIPTION, HEAD_TITLE } from "@/shared/constants";
 import { PopUpContext } from "@/context/popUpProvider";
 
 const Create = ({ uid }: { uid: string }) => {
@@ -39,8 +33,6 @@ const Create = ({ uid }: { uid: string }) => {
   const router = useRouter();
 
   const { alert } = useContext(PopUpContext);
-
-  const storyImagesMarginX = `mx-[${CREATE_STORY_IMAGES_MARGIN_X}px]`;
 
   const changeTitle = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -193,7 +185,7 @@ const Create = ({ uid }: { uid: string }) => {
               {previewImages.map((imageUrl, index) => (
                 <div
                   key={index}
-                  className={`${storyImagesMarginX} mb-[10px]`}
+                  className="mx-[5px] mb-[10px]"
                   style={{
                     width: `${cardSize}px`,
                     height: `${cardSize}px`,
@@ -239,16 +231,6 @@ const Create = ({ uid }: { uid: string }) => {
 
   useEffect(() => {
     if (part !== "story") return;
-
-    const cardColumn = (curWidth: number) => {
-      if (curWidth > 630) return 4;
-      if (curWidth <= 630 && curWidth >= 450) return 3;
-      return 2;
-    };
-
-    const cardSizeCalculator = (curWidth: number) => {
-      return Math.floor(curWidth / cardColumn(curWidth)) - CREATE_STORY_IMAGES_MARGIN_X * 2;
-    };
 
     const handleResize = () => {
       if (!sizeRef.current) return;

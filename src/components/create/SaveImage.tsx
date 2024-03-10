@@ -1,8 +1,7 @@
 import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
-import Image from "next/image";
 import BasicImage from "../common/BasicImage";
-import { SAVE_IMAGE_MARGIN_X } from "@/shared/constants";
+import { cardSizeCalculator } from "@/utils/util";
 
 interface SaveImageProps {
   images: FileList | undefined;
@@ -15,8 +14,6 @@ const SaveImage = ({ images, setImage, previewImages, setPreviewImages }: SaveIm
   const [cardSize, setCardSize] = useState(0);
 
   const sizeRef = useRef<HTMLDivElement>(null);
-
-  const imageMarginX = `mx-[${SAVE_IMAGE_MARGIN_X}px]`;
 
   const uploadImage = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -61,16 +58,6 @@ const SaveImage = ({ images, setImage, previewImages, setPreviewImages }: SaveIm
   };
 
   useEffect(() => {
-    const cardColumn = (curWidth: number) => {
-      if (curWidth > 630) return 4;
-      if (curWidth <= 630 && curWidth >= 450) return 3;
-      return 2;
-    };
-
-    const cardSizeCalculator = (curWidth: number) => {
-      return Math.floor(curWidth / cardColumn(curWidth)) - SAVE_IMAGE_MARGIN_X * 2;
-    };
-
     const handleResize = () => {
       if (!sizeRef.current) return;
       const curWidth = sizeRef.current?.offsetWidth - 1;
@@ -95,7 +82,7 @@ const SaveImage = ({ images, setImage, previewImages, setPreviewImages }: SaveIm
         {previewImages.map((imageUrl, index) => (
           <div
             key={index}
-            className={`${imageMarginX} mb-[10px]`}
+            className="mx-[5px] mb-[10px]"
             style={{
               width: `${cardSize}px`,
               height: `${cardSize}px`,

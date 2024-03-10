@@ -1,19 +1,13 @@
 import Layout from "@/components/common/Layout";
 import getCollection from "@/firebase/firestore/getCollection";
 import { useContext, useEffect, useRef, useState } from "react";
-import { isExp } from "@/utils/util";
+import { cardSizeCalculator, isExp } from "@/utils/util";
 import { useAuth } from "@/context/authProvider";
 import BasicImage from "@/components/common/BasicImage";
 import Router from "next/router";
 import Link from "next/link";
 import withHead from "@/components/hoc/withHead";
-import {
-  GALLERY_CARD_MARGIN_X,
-  ALERT_TITLE,
-  ALERT_CONTENT,
-  HEAD_TITLE,
-  HEAD_DESCRIPTION,
-} from "@/shared/constants";
+import { ALERT_TITLE, ALERT_CONTENT, HEAD_TITLE, HEAD_DESCRIPTION } from "@/shared/constants";
 import { PopUpContext } from "@/context/popUpProvider";
 import ImageCard from "@/components/gallery/ImageCard";
 
@@ -28,8 +22,6 @@ const Gallery = () => {
   const { user } = useAuth();
 
   const { alert } = useContext(PopUpContext);
-
-  const cardMarginX = `mx-[${GALLERY_CARD_MARGIN_X}px]`;
 
   useEffect(() => {
     if (!user) return;
@@ -80,18 +72,6 @@ const Gallery = () => {
   }, [user, alert]);
 
   useEffect(() => {
-    const cardColumn = (curWidth: number) => {
-      if (curWidth > 990) return 6;
-      if (curWidth <= 990 && curWidth > 700) return 5;
-      if (curWidth <= 700 && curWidth > 450) return 4;
-      if (curWidth <= 450 && curWidth > 300) return 3;
-      return 2;
-    };
-
-    const cardSizeCalculator = (curWidth: number) => {
-      return Math.floor(curWidth / cardColumn(curWidth)) - GALLERY_CARD_MARGIN_X * 2;
-    };
-
     const handleResize = () => {
       if (!sizeRef.current) return;
       const curWidth = sizeRef.current?.offsetWidth - 1;
@@ -153,7 +133,7 @@ const Gallery = () => {
           {images.map((imageObj, index) => (
             <div
               key={index}
-              className={`${cardMarginX}`}
+              className="mx-[5px]"
               onClick={() => {
                 setCurrent(imageObj);
               }}

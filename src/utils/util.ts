@@ -83,3 +83,15 @@ const filteringNickname = (nickname: string) => {
 
   return error === "" ? true : error;
 };
+
+const cardColumn = (curWidth: number) => {
+  if (curWidth > 1000) return 6;
+  if (curWidth <= 1000 && curWidth > 768) return 5;
+  if (curWidth <= 768 && curWidth > 568) return 4;
+  if (curWidth <= 568 && curWidth > 368) return 3;
+  return 2;
+};
+
+export const cardSizeCalculator = (curWidth: number) => {
+  return Math.floor(curWidth / cardColumn(curWidth)) - 10;
+};
