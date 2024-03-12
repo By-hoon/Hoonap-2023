@@ -192,7 +192,7 @@ const Create = ({ uid }: { uid: string }) => {
                   }}
                 >
                   <BasicImage
-                    style={"relative w-full h-full rounded-[10px] bg-black"}
+                    style={"relative w-full h-full rounded-[10px] bg-black overflow-hidden"}
                     url={imageUrl}
                     alt={"uploaded-image"}
                   />
