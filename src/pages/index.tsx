@@ -21,6 +21,8 @@ const Home = () => {
     router.replace("/");
   };
 
+  if (user === undefined) return <></>;
+
   if (!user)
     return (
       <div className="max-w-[768px] min-w-[320px] mx-auto p-[5px]">

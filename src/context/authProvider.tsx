@@ -5,12 +5,12 @@ import firebase_app from "@/firebase/config";
 import Router from "next/router";
 import { NOT_NECESSARY_TO_LOGIN } from "@/shared/constants";
 
-const AuthContext = createContext<{ user: User | null }>({
+const AuthContext = createContext<{ user: User | null | undefined }>({
   user: null,
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [userState, setUserState] = useState<User | null>(null);
+  const [userState, setUserState] = useState<User | null | undefined>(undefined);
 
   useEffect(() => {
     return getAuth(firebase_app).onIdTokenChanged(async (user) => {
