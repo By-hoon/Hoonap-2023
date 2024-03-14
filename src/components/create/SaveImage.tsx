@@ -1,7 +1,9 @@
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
 import BasicImage from "../common/BasicImage";
 import { cardSizeCalculator } from "@/utils/util";
+import { PopUpContext } from "@/context/popUpProvider";
+import { CONFIRM_CONTENT, CONFIRM_TITLE } from "@/shared/constants";
 
 interface SaveImageProps {
   images: FileList | undefined;
@@ -14,6 +16,8 @@ const SaveImage = ({ images, setImage, previewImages, setPreviewImages }: SaveIm
   const [cardSize, setCardSize] = useState(0);
 
   const sizeRef = useRef<HTMLDivElement>(null);
+
+  const { confirm } = useContext(PopUpContext);
 
   const uploadImage = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -37,7 +41,10 @@ const SaveImage = ({ images, setImage, previewImages, setPreviewImages }: SaveIm
     setImage(dataTranster.files);
   };
 
-  const deleteImage = (index: number) => {
+  const deleteImage = async (index: number) => {
+    const result = await confirm(CONFIRM_TITLE.DELETE_IMAGE, CONFIRM_CONTENT.DELETE_IMAGE);
+    if (!result) return;
+
     const newPreviewImages = [...previewImages];
     newPreviewImages.splice(index, 1);
     setPreviewImages(newPreviewImages);
