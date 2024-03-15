@@ -20,7 +20,7 @@ import {
   HEAD_DESCRIPTION,
 } from "@/shared/constants";
 import { PopUpContext } from "@/context/popUpProvider";
-import { getElapsedTime, isExp } from "@/utils/util";
+import { cardSizeCalculator, getElapsedTime, isExp } from "@/utils/util";
 import { useAuth } from "@/context/authProvider";
 import useRegular from "@/hooks/useRegular";
 import updateField from "@/firebase/firestore/updateField";
@@ -47,6 +47,10 @@ const UserDetail = () => {
   const [regularMy, setRegularMy] = useState<{
     [key: string]: { id: string; nickname: string; profileImage: string };
   }>({});
+
+  const [cardSize, setCardSize] = useState(0);
+
+  const sizeRef = useRef<HTMLDivElement>(null);
 
   const mapRef = useRef<HTMLDivElement>(null);
 
@@ -139,7 +143,7 @@ const UserDetail = () => {
     switch (section) {
       case "gallery": {
         return (
-          <div className="flex flex-wrap justify-around p-[5px]">
+          <div ref={sizeRef} className="flex flex-wrap mt-[10px]">
             {images.map((image) =>
               image.urls.map((imageUrl) => (
                 <Link
@@ -148,10 +152,15 @@ const UserDetail = () => {
                     pathname: "/user/story",
                     query: { storyId: image.storyId, stories: JSON.stringify(stories) },
                   }}
+                  className="cursor-pointer mx-[5px] mb-[10px]"
+                  style={{
+                    width: `${cardSize}px`,
+                    height: `${cardSize}px`,
+                  }}
                   as="/story/detail"
                 >
                   <BasicImage
-                    style={"relative w-[130px] h-[130px] rounded-[5px] border-2 mx-[5px] my-[10px] p-[5px]"}
+                    style={"relative w-full h-full rounded-[10px] bg-black overflow-hidden"}
                     url={imageUrl}
                     alt={"user-story-image"}
                   />
@@ -328,6 +337,24 @@ const UserDetail = () => {
     if (section !== "map") return;
 
     mapRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [section]);
+
+  useEffect(() => {
+    if (section !== "gallery") return;
+
+    const handleResize = () => {
+      if (!sizeRef.current) return;
+      const curWidth = sizeRef.current?.offsetWidth - 1;
+
+      const curSize = cardSizeCalculator(curWidth);
+
+      setCardSize(curSize);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
   }, [section]);
 
   if (!userId)
