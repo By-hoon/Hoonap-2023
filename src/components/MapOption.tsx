@@ -1,5 +1,6 @@
 import { convertToLatLng } from "@/utils/util";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import { Listener, Marker, Polygon, useNavermaps } from "react-naver-maps";
 
 type PathType = { latitude: number; longitude: number };
@@ -12,9 +13,15 @@ interface MapOptionProps {
 }
 
 export default function MapOption({ paths, clickMap, addPaths, deletePaths }: MapOptionProps) {
+  const [curPolygon, setCurPolygon] = useState<number | undefined>();
+
   const navermaps = useNavermaps();
 
   const router = useRouter();
+
+  const hoverPolygon = (cur: number | undefined) => {
+    setCurPolygon(cur);
+  };
 
   const mapOptionRender = () => {
     switch (router.pathname) {
@@ -53,13 +60,15 @@ export default function MapOption({ paths, clickMap, addPaths, deletePaths }: Ma
               <Polygon
                 key={index}
                 paths={[convertToLatLng(navermaps, path.pathArray)]}
-                fillColor="#ff0000"
+                fillColor={index === curPolygon ? "#0086cc" : "#ff0000"}
                 fillOpacity={0.3}
-                strokeColor="#ff0000"
+                strokeColor={index === curPolygon ? "#0086cc" : "#ff0000"}
                 strokeOpacity={0.6}
                 strokeWeight={2}
                 clickable
                 onClick={() => (clickMap ? clickMap(index) : undefined)}
+                onMouseover={() => hoverPolygon(index)}
+                onMouseout={() => hoverPolygon(undefined)}
               />
             ))}
           </>
