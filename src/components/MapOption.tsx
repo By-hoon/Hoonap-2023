@@ -13,14 +13,21 @@ interface MapOptionProps {
 }
 
 export default function MapOption({ paths, clickMap, addPaths, deletePaths }: MapOptionProps) {
-  const [curPolygon, setCurPolygon] = useState<number | undefined>();
+  const [curHoverPolygon, setcurHoverPolygon] = useState<number | undefined>();
+  const [curClickPolygon, setCurClickPolygon] = useState<number | undefined>();
 
   const navermaps = useNavermaps();
 
   const router = useRouter();
 
   const hoverPolygon = (cur: number | undefined) => {
-    setCurPolygon(cur);
+    setcurHoverPolygon(cur);
+  };
+
+  const clickPolygon = (cur: number | undefined) => {
+    if (!clickMap) return;
+    clickMap(cur);
+    setCurClickPolygon(cur);
   };
 
   const mapOptionRender = () => {
@@ -32,7 +39,7 @@ export default function MapOption({ paths, clickMap, addPaths, deletePaths }: Ma
             <Listener
               type="click"
               listener={(e) =>
-                addPaths ? addPaths({ latitude: e.coord.lat(), longitude: e.coord.lng() }) : undefined
+                addPaths ? addPaths({ latitude: e.coord.lat(), longitude: e.coord.lng() }) : null
               }
             />
             <Polygon
@@ -47,7 +54,7 @@ export default function MapOption({ paths, clickMap, addPaths, deletePaths }: Ma
               <Marker
                 key={index}
                 position={new navermaps.LatLng(path.latitude, path.longitude)}
-                onClick={() => (deletePaths ? deletePaths(index) : undefined)}
+                onClick={() => (deletePaths ? deletePaths(index) : null)}
               />
             ))}
           </>
@@ -55,18 +62,18 @@ export default function MapOption({ paths, clickMap, addPaths, deletePaths }: Ma
       case "/user/detail":
         return (
           <>
-            <Listener type="click" listener={() => (clickMap ? clickMap() : undefined)} />
+            <Listener type="click" listener={() => clickPolygon(undefined)} />
             {paths.map((path, index) => (
               <Polygon
                 key={index}
                 paths={[convertToLatLng(navermaps, path.pathArray)]}
-                fillColor={index === curPolygon ? "#0086cc" : "#ff0000"}
+                fillColor={index === curHoverPolygon || index === curClickPolygon ? "#0086cc" : "#ff0000"}
                 fillOpacity={0.3}
-                strokeColor={index === curPolygon ? "#0086cc" : "#ff0000"}
+                strokeColor={index === curHoverPolygon || index === curClickPolygon ? "#0086cc" : "#ff0000"}
                 strokeOpacity={0.6}
                 strokeWeight={2}
                 clickable
-                onClick={() => (clickMap ? clickMap(index) : undefined)}
+                onClick={() => clickPolygon(index)}
                 onMouseover={() => hoverPolygon(index)}
                 onMouseout={() => hoverPolygon(undefined)}
               />
