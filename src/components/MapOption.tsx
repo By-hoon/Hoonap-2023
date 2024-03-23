@@ -42,14 +42,16 @@ export default function MapOption({ paths, clickMap, addPaths, deletePaths }: Ma
                 addPaths ? addPaths({ latitude: e.coord.lat(), longitude: e.coord.lng() }) : null
               }
             />
-            <Polygon
-              paths={[convertToLatLng(navermaps, paths[0].pathArray)]}
-              fillColor="#ff0000"
-              fillOpacity={0.3}
-              strokeColor="#ff0000"
-              strokeOpacity={0.6}
-              strokeWeight={2}
-            />
+            {paths[0].pathArray.length ? (
+              <Polygon
+                paths={[convertToLatLng(navermaps, paths[0].pathArray)]}
+                fillColor="#ff0000"
+                fillOpacity={0.3}
+                strokeColor="#ff0000"
+                strokeOpacity={0.6}
+                strokeWeight={2}
+              />
+            ) : null}
             {paths[0].pathArray.map((path, index) => (
               <Marker
                 key={index}

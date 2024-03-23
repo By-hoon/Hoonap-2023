@@ -27,6 +27,16 @@ const SavePath = ({ paths, setPaths }: SavePathProps) => {
     <div className="main-absolute">
       <Map>
         <MapOption paths={[{ pathArray: paths }]} addPaths={addPaths} deletePaths={deletePaths} />
+        {paths.length ? (
+          <div
+            className="cursor-pointer absolute bottom-[10px] left-1/2 transform -translate-x-1/2 text-white bg-red-400 px-[10px] py-[5px] rounded-[15px]"
+            onClick={() => {
+              setPaths([]);
+            }}
+          >
+            초기화
+          </div>
+        ) : null}
       </Map>
     </div>
   );
