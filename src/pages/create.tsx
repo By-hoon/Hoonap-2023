@@ -117,7 +117,10 @@ const Create = ({ uid }: { uid: string }) => {
   };
 
   const createStory = async () => {
-    if (paths.length === 0 || !images || title === "" || story === "") return;
+    if (paths.length === 0 || !images?.length || title === "" || story === "") {
+      alert(ALERT_TITLE.CREATE, ALERT_CONTENT.CHECK_ALL_INPUT);
+      return;
+    }
 
     const storyId = crypto.randomUUID();
 

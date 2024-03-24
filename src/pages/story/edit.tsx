@@ -88,7 +88,10 @@ const StoryEdit = () => {
   };
 
   const editStory = async () => {
-    if (paths.length === 0 || !previewImages || title === "" || story === "") return;
+    if (paths.length === 0 || !images?.length || title === "" || story === "") {
+      alert(ALERT_TITLE.EDIT, ALERT_CONTENT.CHECK_ALL_INPUT);
+      return;
+    }
 
     const result = await confirm(CONFIRM_TITLE.EDIT_STORY, CONFIRM_CONTENT.EDIT_STORY);
     if (!result) return;

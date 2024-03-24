@@ -56,6 +56,8 @@ export const ALERT_TITLE = {
   UNKNOWN: "알 수 없는 오류",
   EXP: "체험하기 오류",
   ACCESS: "접근 제한",
+  CREATE: "생성 오류",
+  EDIT: "수정 오류",
   INPUT: "입력 오류",
   NICKNAME: "닉네임 오류",
 };
@@ -74,6 +76,7 @@ export const ALERT_CONTENT = {
   NOTHING_STORY: "스토리 정보가 없습니다.",
   NO_USER: "사용자 정보가 없습니다.",
   NO_MORE_STORY: "더 이상 불러올 스토리가 없습니다.",
+  CHECK_ALL_INPUT: "빈 입력값이 있는지 확인해 주세요.",
   STORY_AFTER_IMAGE: "스토리 작성은 이미지 입력 후 가능합니다.",
   EXP_CREATE: "체험 계정은 3개까지만 스토리 등록이 가능합니다.",
   SAME_CATEGORY: "현재 적용되어있는 카테고리입니다.",
