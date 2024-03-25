@@ -1,14 +1,12 @@
 import SaveImage from "@/components/create/SaveImage";
 import SavePath from "@/components/create/SavePath";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import setData from "@/firebase/firestore/setData";
 import getDocument from "@/firebase/firestore/getDocument";
 import { GetServerSidePropsContext } from "next/types";
 import checkUser from "@/firebase/auth/checkUser";
 import { useRouter } from "next/router";
 import Layout from "@/components/common/Layout";
-import { Icon } from "@iconify/react";
 import { cardSizeCalculator, isExp } from "@/utils/util";
 import { addFiles } from "@/firebase/storage/add";
 import { deleteFiles } from "@/firebase/storage/delete";
@@ -114,6 +112,14 @@ const Create = ({ uid }: { uid: string }) => {
     window.localStorage.setItem("path", JSON.stringify(expPath));
     window.localStorage.setItem("image", JSON.stringify(expImage));
     router.push("/story/list");
+  };
+
+  const clearAllInput = () => {
+    setPaths([]);
+    setImage(undefined);
+    setPreviewImages([]);
+    setTitle("");
+    setStory("");
   };
 
   const createStory = async () => {
@@ -275,10 +281,26 @@ const Create = ({ uid }: { uid: string }) => {
                 isComplete={story !== "" && title !== ""}
                 onClick={() => changePart("story")}
               />
-              <div className="w-[100%] text-center mt-[45px]">
+              {paths.length !== 0 || images?.length || title !== "" || story !== "" ? (
+                <div className="w-full text-center mt-[10px]">
+                  <Button
+                    text="초기화"
+                    style="text-[16px] font-semibold bg-red-400 text-white px-[18px] py-[8px] rounded-[20px]"
+                    onClick={clearAllInput}
+                  />
+                </div>
+              ) : null}
+
+              <div
+                className={`w-[100%] text-center ${
+                  paths.length !== 0 || images?.length || title !== "" || story !== ""
+                    ? "mt-[10px]"
+                    : "mt-[60px]"
+                }`}
+              >
                 <Button
                   text="스토리 생성"
-                  style="text-[19px] font-semibold bg-bc text-white px-[38px] py-[15px] rounded-[12px]"
+                  style="text-[19px] font-semibold bg-bc text-white px-[38px] py-[15px] rounded-[30px]"
                   onClick={createStory}
                 />
               </div>
