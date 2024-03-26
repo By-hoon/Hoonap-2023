@@ -88,6 +88,7 @@ export const ALERT_CONTENT = {
 
 export const CONFIRM_TITLE = {
   SIGN_OUT: "로그아웃 하시겠습니까?",
+  CLEAR_ALL_INPUT: "입력한 모든 값들을 초기화하시겠습니까?",
   DELETE_IMAGE: "이미지를 삭제하시겠습니까?",
   DELETE_STORY: "스토리를 삭제하시겠습니까?",
   EDIT_STORY: "스토리를 수정하시겠습니까?",
@@ -98,6 +99,7 @@ export const CONFIRM_TITLE = {
 
 export const CONFIRM_CONTENT = {
   SIGN_OUT: "로그인 페이지로 넘어갑니다.",
+  CLEAR_ALL_INPUT: "초기화된 값들은 다시 복구할 수 없습니다.",
   DELETE_IMAGE: "삭제된 이미지는 다시 복구할 수 없습니다.",
   DELETE_STORY: "삭제된 스토리는 다시 복구할 수 없습니다.",
   EDIT_STORY: "수정된 내용은 다시 복구할 수 없습니다.",

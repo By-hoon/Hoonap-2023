@@ -14,7 +14,14 @@ import Button from "@/components/common/Button";
 import BasicImage from "@/components/common/BasicImage";
 import PartButton from "@/components/create/PartButton";
 import withHead from "@/components/hoc/withHead";
-import { ALERT_CONTENT, ALERT_TITLE, HEAD_DESCRIPTION, HEAD_TITLE } from "@/shared/constants";
+import {
+  ALERT_CONTENT,
+  ALERT_TITLE,
+  CONFIRM_CONTENT,
+  CONFIRM_TITLE,
+  HEAD_DESCRIPTION,
+  HEAD_TITLE,
+} from "@/shared/constants";
 import { PopUpContext } from "@/context/popUpProvider";
 
 const Create = ({ uid }: { uid: string }) => {
@@ -30,7 +37,7 @@ const Create = ({ uid }: { uid: string }) => {
 
   const router = useRouter();
 
-  const { alert } = useContext(PopUpContext);
+  const { alert, confirm } = useContext(PopUpContext);
 
   const changeTitle = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -114,7 +121,10 @@ const Create = ({ uid }: { uid: string }) => {
     router.push("/story/list");
   };
 
-  const clearAllInput = () => {
+  const clearAllInput = async () => {
+    const result = await confirm(CONFIRM_TITLE.CLEAR_ALL_INPUT, CONFIRM_CONTENT.CLEAR_ALL_INPUT);
+    if (!result) return;
+
     setPaths([]);
     setImage(undefined);
     setPreviewImages([]);
