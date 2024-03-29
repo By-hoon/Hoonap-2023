@@ -34,13 +34,12 @@ const Header = () => {
     doSignOut(
       () => {
         alert("", ALERT_CONTENT.SUCCESS_SIGNOUT);
+        router.push("/login");
       },
       () => {
         alert("", ALERT_CONTENT.FAILED_SIGNOUT);
       }
     );
-
-    router.replace("/login");
   };
 
   useEffect(() => {

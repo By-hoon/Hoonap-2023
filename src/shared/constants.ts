@@ -1,4 +1,4 @@
-export const NOT_NECESSARY_TO_LOGIN = ["/", "/login", "/signup", "/404"];
+export const NOT_NECESSARY_TO_LOGIN = ["/welcome", "/login", "/signup", "/404"];
 
 export const TITLE = {
   CREATE: "스토리 생성",
