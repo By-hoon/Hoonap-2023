@@ -14,18 +14,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     return getAuth(firebase_app).onIdTokenChanged(async (user) => {
+      const curPathname = Router.pathname;
+
       if (!user) {
         setUserState(null);
         nookies.set(null, "token", "", { path: "/" });
 
-        const curPathname = Router.pathname;
-
         if (NOT_NECESSARY_TO_LOGIN.includes(curPathname)) return;
+
+        if (curPathname === "/") {
+          Router.push("/welcome");
+          return;
+        }
 
         alert("로그인이 필요한 서비스입니다.");
         Router.push("/login");
         return;
       }
+      if (curPathname === "/welcome") Router.push("/");
 
       setUserState(user);
       const token = await user.getIdToken();
