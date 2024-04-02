@@ -1,11 +1,10 @@
 import Button from "@/components/common/Button";
-import { useAuth } from "@/context/authProvider";
+import withHead from "@/components/hoc/withHead";
 import signIn from "@/firebase/auth/signIn";
+import { HEAD_TITLE, HEAD_DESCRIPTION } from "@/shared/constants";
 import { useRouter } from "next/router";
 
 const Welcome = () => {
-  const { user } = useAuth();
-
   const router = useRouter();
 
   const tryLoginTestAccount = async () => {
@@ -48,4 +47,4 @@ const Welcome = () => {
   );
 };
 
-export default Welcome;
+export default withHead(Welcome, HEAD_TITLE.WELCOME, HEAD_DESCRIPTION.WELCOME);

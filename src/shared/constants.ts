@@ -23,6 +23,7 @@ export const HEAD_TITLE = {
   GALLERY: "갤러리",
   LOGIN: "로그인",
   SIGNUP: "회원가입",
+  WELCOME: "환영합니다!",
 };
 
 export const HEAD_DESCRIPTION = {
@@ -37,6 +38,7 @@ export const HEAD_DESCRIPTION = {
   GALLERY: "갤러리 페이지입니다.",
   LOGIN: "로그인 페이지입니다.",
   SIGNUP: "회원가입 페이지입니다.",
+  WELCOME: "환영 페이지입니다.",
 };
 
 export const COMMENT_SORT_TYPES = [
