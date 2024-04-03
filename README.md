@@ -107,6 +107,7 @@ src
 │   │   ├── SaveImage.tsx
 │   │   └── SavePath.tsx
 │   ├── gallery
+│   │   ├── CurrentImage.tsx
 │   │   └── ImageCard.tsx
 │   ├── hoc
 │   │   └── withHead.tsx
@@ -173,7 +174,8 @@ src
 │   ├── gallery.tsx
 │   ├── index.tsx
 │   ├── login.tsx
-│   └── signup.tsx
+│   ├── signup.tsx
+│   └── welcome.tsx
 └── shared
 │   ├── alerts.ts
 │   └── constants.ts
