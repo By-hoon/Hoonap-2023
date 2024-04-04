@@ -8,12 +8,12 @@ const nextConfig = {
     return [
       {
         source: "/login",
-        destination: "/",
+        destination: "/welcome",
         permanent: true,
       },
       {
         source: "/signup",
-        destination: "/",
+        destination: "/welcome",
         permanent: true,
       },
     ];
