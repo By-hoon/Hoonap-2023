@@ -157,7 +157,7 @@ const UserDetail = () => {
                     width: `${cardSize}px`,
                     height: `${cardSize}px`,
                   }}
-                  as="/story/detail"
+                  as="/user/story"
                 >
                   <BasicImage
                     style={"relative w-full h-full rounded-[10px] bg-black overflow-hidden"}
