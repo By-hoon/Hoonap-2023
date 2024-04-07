@@ -141,7 +141,7 @@ const Header = () => {
           <div
             className="cursor-pointer text-[24px] mr-[8px]"
             onClick={() => {
-              console.log("click search");
+              router.push("/user/search");
             }}
           >
             <Icon icon="ic:baseline-search" />
@@ -184,7 +184,7 @@ const Header = () => {
           <div
             className="cursor-pointer text-[24px] mr-[10px]"
             onClick={() => {
-              console.log("click search");
+              router.push("/user/search");
             }}
           >
             <Icon icon="ic:baseline-search" />
