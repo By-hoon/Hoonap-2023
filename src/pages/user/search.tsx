@@ -1,9 +1,12 @@
 import Layout from "@/components/common/Layout";
+import getCollection from "@/firebase/firestore/getCollection";
 import { Icon } from "@iconify/react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const Search = () => {
   const [focus, setFocus] = useState(false);
+  const [keyword, setKeyword] = useState("");
+  const [targets, setTargets] = useState<{ nickname: string; userId: string }[] | undefined>();
 
   const ref = useRef<HTMLInputElement>(null);
 
@@ -13,9 +16,29 @@ const Search = () => {
     }
   };
 
-  const getSearchResult = (e: React.FormEvent<HTMLFormElement>) => {
+  const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyword(e.target.value);
+  }, []);
+
+  const getSearchResult = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("get user result");
+
+    if (keyword === "") return;
+
+    const result = await getCollection("users");
+    if (!result || result.empty) return;
+
+    const newTargets: { nickname: string; userId: string }[] = [];
+
+    result.docs.forEach((doc) => {
+      const curNickname = doc.data().nickname;
+      const curUserId = doc.id;
+      if (!curNickname.includes(keyword)) return;
+
+      newTargets.push({ nickname: curNickname, userId: curUserId });
+    });
+
+    setTargets(newTargets);
   };
 
   useEffect(() => {
@@ -45,6 +68,8 @@ const Search = () => {
             }`}
             type="text"
             name="search-user"
+            value={keyword}
+            onChange={onChange}
             onFocus={() => {
               setFocus(true);
             }}
