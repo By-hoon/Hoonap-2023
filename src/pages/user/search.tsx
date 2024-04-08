@@ -1,12 +1,16 @@
 import Layout from "@/components/common/Layout";
+import { PopUpContext } from "@/context/popUpProvider";
 import getCollection from "@/firebase/firestore/getCollection";
+import { ALERT_CONTENT, ALERT_TITLE } from "@/shared/constants";
 import { Icon } from "@iconify/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 
 const Search = () => {
   const [focus, setFocus] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [targets, setTargets] = useState<{ nickname: string; userId: string }[] | undefined>();
+
+  const { alert } = useContext(PopUpContext);
 
   const ref = useRef<HTMLInputElement>(null);
 
@@ -23,7 +27,7 @@ const Search = () => {
   const getSearchResult = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (keyword === "") return;
+    if (keyword === "") alert(ALERT_TITLE.INPUT, ALERT_CONTENT.REQUIRE_VALUE);
 
     const result = await getCollection("users");
     if (!result || result.empty) return;
