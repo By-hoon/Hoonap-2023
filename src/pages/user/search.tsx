@@ -1,4 +1,5 @@
 import Layout from "@/components/common/Layout";
+import UserCard from "@/components/user/UserCard";
 import { PopUpContext } from "@/context/popUpProvider";
 import getCollection from "@/firebase/firestore/getCollection";
 import { ALERT_CONTENT, ALERT_TITLE } from "@/shared/constants";
@@ -80,6 +81,16 @@ const Search = () => {
             placeholder="사용자 검색"
           />
         </form>
+        {targets ? (
+          <div className="mt-[10px]">
+            {targets.map(({ nickname, userId }) => (
+              <div key={userId}>
+                <UserCard nickname={nickname} userId={userId} />
+              </div>
+            ))}
+            {targets.length === 0 ? <div>일치하는 사용자가 없습니다.</div> : null}
+          </div>
+        ) : null}
       </div>
     </Layout>
   );
