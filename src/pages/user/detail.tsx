@@ -245,6 +245,14 @@ const UserDetail = () => {
       setNickname(userStoryResult.nickname);
       setProfileImage(userStoryResult.profileImage);
 
+      if (!userStoryResult.storyIds) {
+        setStories([]);
+        setPaths([[]]);
+        setStoryIds([]);
+        setImages([]);
+        return;
+      }
+
       const stories: StoryProps[] = [];
       const paths: [{ latitude: number; longitude: number }[]] = [[]];
       const storyIds: string[] = [];
