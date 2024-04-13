@@ -9,7 +9,9 @@ import { useCallback, useContext, useEffect, useRef, useState } from "react";
 const Search = () => {
   const [focus, setFocus] = useState(false);
   const [keyword, setKeyword] = useState("");
-  const [targets, setTargets] = useState<{ nickname: string; userId: string }[] | undefined>();
+  const [targets, setTargets] = useState<
+    { nickname: string; profileImage: string; userId: string }[] | undefined
+  >();
 
   const { alert } = useContext(PopUpContext);
 
@@ -33,14 +35,15 @@ const Search = () => {
     const result = await getCollection("users");
     if (!result || result.empty) return;
 
-    const newTargets: { nickname: string; userId: string }[] = [];
+    const newTargets: { nickname: string; profileImage: string; userId: string }[] = [];
 
     result.docs.forEach((doc) => {
       const curNickname = doc.data().nickname;
       const curUserId = doc.id;
+      const curUserProfileImage = doc.data().profileImage;
       if (!curNickname.includes(keyword)) return;
 
-      newTargets.push({ nickname: curNickname, userId: curUserId });
+      newTargets.push({ nickname: curNickname, profileImage: curUserProfileImage, userId: curUserId });
     });
 
     setTargets(newTargets);
@@ -83,9 +86,9 @@ const Search = () => {
         </form>
         {targets ? (
           <div className="mt-[10px]">
-            {targets.map(({ nickname, userId }) => (
+            {targets.map(({ nickname, profileImage, userId }) => (
               <div key={userId}>
-                <UserCard nickname={nickname} userId={userId} />
+                <UserCard nickname={nickname} profileImage={profileImage} userId={userId} />
               </div>
             ))}
             {targets.length === 0 ? <div>일치하는 사용자가 없습니다.</div> : null}
