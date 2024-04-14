@@ -87,7 +87,10 @@ const Search = () => {
         {targets ? (
           <div className="mt-[10px]">
             {targets.map(({ nickname, profileImage, userId }) => (
-              <div key={userId}>
+              <div
+                key={userId}
+                className="w-[468px] mobile:w-[300px] bg-bcvl rounded-[8px] mx-auto my-[7px] p-[7px]"
+              >
                 <UserCard nickname={nickname} profileImage={profileImage} userId={userId} />
               </div>
             ))}
