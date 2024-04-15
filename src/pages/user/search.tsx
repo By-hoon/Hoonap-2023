@@ -30,7 +30,11 @@ const Search = () => {
   const getSearchResult = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (keyword === "") alert(ALERT_TITLE.INPUT, ALERT_CONTENT.REQUIRE_VALUE);
+    if (keyword === "") {
+      alert(ALERT_TITLE.INPUT, ALERT_CONTENT.REQUIRE_VALUE);
+      setTargets(undefined);
+      return;
+    }
 
     const result = await getCollection("users");
     if (!result || result.empty) return;
