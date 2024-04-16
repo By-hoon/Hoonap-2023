@@ -1,8 +1,9 @@
 import Layout from "@/components/common/Layout";
+import withHead from "@/components/hoc/withHead";
 import UserCard from "@/components/user/UserCard";
 import { PopUpContext } from "@/context/popUpProvider";
 import getCollection from "@/firebase/firestore/getCollection";
-import { ALERT_CONTENT, ALERT_TITLE } from "@/shared/constants";
+import { ALERT_CONTENT, ALERT_TITLE, HEAD_DESCRIPTION, HEAD_TITLE } from "@/shared/constants";
 import { Icon } from "@iconify/react";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 
@@ -106,4 +107,4 @@ const Search = () => {
   );
 };
 
-export default Search;
+export default withHead(Search, HEAD_TITLE.USER_SEARCH, HEAD_DESCRIPTION.USER_SEARCH);
