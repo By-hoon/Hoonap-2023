@@ -123,5 +123,5 @@ export const EXP_INFO = [
 
 export const ADD_INFO = {
   EXP_SUBTITLE: "체험 안내사항",
-  EXP_RESTRICTS: ["내 정보 조회", "댓글"],
+  EXP_RESTRICTS: ["내 정보 조회", "댓글", "검색"],
 };

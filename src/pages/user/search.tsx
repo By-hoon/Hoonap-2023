@@ -1,10 +1,13 @@
 import Layout from "@/components/common/Layout";
 import withHead from "@/components/hoc/withHead";
 import UserCard from "@/components/user/UserCard";
+import { useAuth } from "@/context/authProvider";
 import { PopUpContext } from "@/context/popUpProvider";
 import getCollection from "@/firebase/firestore/getCollection";
 import { ALERT_CONTENT, ALERT_TITLE, HEAD_DESCRIPTION, HEAD_TITLE } from "@/shared/constants";
+import { isExp } from "@/utils/util";
 import { Icon } from "@iconify/react";
+import Router from "next/router";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 
 const Search = () => {
@@ -13,6 +16,8 @@ const Search = () => {
   const [targets, setTargets] = useState<
     { nickname: string; profileImage: string; userId: string }[] | undefined
   >();
+
+  const { user } = useAuth();
 
   const { alert } = useContext(PopUpContext);
 
@@ -53,6 +58,16 @@ const Search = () => {
 
     setTargets(newTargets);
   };
+
+  useEffect(() => {
+    if (!user) return;
+
+    if (!isExp(user.uid as string)) return;
+
+    alert(ALERT_TITLE.EXP, ALERT_CONTENT.INVALID_EXP);
+    Router.push("/");
+    return;
+  }, [alert, user]);
 
   useEffect(() => {
     document.addEventListener("click", onClickOutSide);
