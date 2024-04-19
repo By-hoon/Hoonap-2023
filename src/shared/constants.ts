@@ -19,6 +19,7 @@ export const HEAD_TITLE = {
   USER_DETAIL: "사용자 상세정보",
   USER_STORY: "사용자 스토리",
   USER_EDIT: "사용자 정보 수정",
+  USER_SEARCH: "사용자 검색",
   CREATE: "스토리 생성",
   GALLERY: "갤러리",
   LOGIN: "로그인",
@@ -34,6 +35,7 @@ export const HEAD_DESCRIPTION = {
   USER_DETAIL: "사용자 상세정보 페이지입니다.",
   USER_STORY: "사용자 스토리 페이지입니다.",
   USER_EDIT: "사용자 정보 수정 페이지입니다.",
+  USER_SEARCH: "사용자 검색 페이지입니다.",
   CREATE: "스토리 생성 페이지입니다.",
   GALLERY: "갤러리 페이지입니다.",
   LOGIN: "로그인 페이지입니다.",
@@ -121,5 +123,5 @@ export const EXP_INFO = [
 
 export const ADD_INFO = {
   EXP_SUBTITLE: "체험 안내사항",
-  EXP_RESTRICTS: ["내 정보 조회", "댓글"],
+  EXP_RESTRICTS: ["내 정보 조회", "댓글", "검색"],
 };

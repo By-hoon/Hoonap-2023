@@ -82,7 +82,7 @@ const Header = () => {
     return (
       <div className="header h-[45px] flex justify-between items-center">
         <div>
-          <div className="w-[58px] text-[24px]" onClick={onClickSidebar} ref={sidebarRef}>
+          <div className="w-[100px] text-[24px]" onClick={onClickSidebar} ref={sidebarRef}>
             <Icon icon="material-symbols:menu-rounded" />
           </div>
           {showSidebar ? (
@@ -137,10 +137,20 @@ const Header = () => {
         <div className="text-[22px] font-semibold">
           <Link href="/">Hoonap</Link>
         </div>
-        <div>
-          <Link href="/create" className="submit-button text-[14px] px-[11px] py-[6px]">
-            생성
-          </Link>
+        <div className="w-[100px] flex flex-wrap justify-end">
+          <div
+            className="cursor-pointer text-[24px] mr-[8px]"
+            onClick={() => {
+              router.push("/user/search");
+            }}
+          >
+            <Icon icon="ic:baseline-search" />
+          </div>
+          <div>
+            <Link href="/create" className="submit-button text-[14px] px-[11px] py-[6px]">
+              생성
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -171,6 +181,14 @@ const Header = () => {
           {titleRender()}
         </div>
         <div className="flex justify-end items-center">
+          <div
+            className="cursor-pointer text-[24px] mr-[10px]"
+            onClick={() => {
+              router.push("/user/search");
+            }}
+          >
+            <Icon icon="ic:baseline-search" />
+          </div>
           <div ref={profileMenuRef} className="relative flex  font-semibold text-[18px] mr-[30px]">
             <div className="cursor-pointer" onClick={onClickProfileMenu}>
               프로필

@@ -63,6 +63,7 @@ Vercel 배포: https://hoonap-2023.vercel.app/
   - 사용자 스토리맵
   - 사용자 스토리(이미지) 목록
   - 내 정보 수정
+  - 사용자 검색
 
 - 스토리
 
@@ -125,7 +126,8 @@ src
 │   │   ├── StoryHeader.tsx
 │   │   └── StoryImages.tsx
 │   ├── user
-│   │   └── ProfileImage.tsx
+│   │   ├── ProfileImage.tsx
+│   │   └── UserCard.tsx
 │   ├── Map.tsx
 │   └── MapOption.tsx
 └── context
@@ -166,6 +168,7 @@ src
 │   ├── user
 │   │   ├── detail.ts
 │   │   ├── edit.ts
+│   │   ├── search.ts
 │   │   └── story.tsx
 │   ├── _app.tsx
 │   ├── _document.tsx
