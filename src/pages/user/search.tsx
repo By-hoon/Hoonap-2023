@@ -42,6 +42,20 @@ const Search = () => {
       return;
     }
 
+    const keywordValid = new RegExp(/^[가-힣0-9a-zA-Z]+$/);
+
+    let filteredKeyword = keyword
+      .split("")
+      .map((str) => {
+        if (keywordValid.test(str)) return str;
+      })
+      .join("");
+
+    if (!filteredKeyword) {
+      setTargets([]);
+      return;
+    }
+
     const result = await getCollection("users");
     if (!result || result.empty) return;
 
@@ -51,7 +65,7 @@ const Search = () => {
       const curNickname = doc.data().nickname;
       const curUserId = doc.id;
       const curUserProfileImage = doc.data().profileImage;
-      if (!curNickname.includes(keyword)) return;
+      if (!curNickname.includes(filteredKeyword)) return;
 
       newTargets.push({ nickname: curNickname, profileImage: curUserProfileImage, userId: curUserId });
     });
