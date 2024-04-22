@@ -29,7 +29,7 @@ const Gallery = () => {
     const getImageData = async () => {
       const result = await getCollection("images");
       if (!result || result.empty) {
-        await alert(ALERT_TITLE.ACCESS, ALERT_CONTENT.NOTHING_STORY);
+        alert(ALERT_TITLE.ACCESS, ALERT_CONTENT.NOTHING_STORY);
         Router.push("/");
         return;
       }
@@ -47,7 +47,7 @@ const Gallery = () => {
     const getExpImageData = async () => {
       const storageImage = window.localStorage.getItem("image");
       if (!storageImage) {
-        await alert(ALERT_TITLE.ACCESS, ALERT_CONTENT.NOTHING_STORY);
+        alert(ALERT_TITLE.ACCESS, ALERT_CONTENT.NOTHING_STORY);
         Router.push("/");
         return;
       }
