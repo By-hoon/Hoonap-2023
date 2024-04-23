@@ -144,28 +144,36 @@ const UserDetail = () => {
       case "gallery": {
         return (
           <div ref={sizeRef} className="flex flex-wrap mt-[10px]">
-            {images.map((image) =>
-              image.urls.map((imageUrl) => (
-                <Link
-                  key={imageUrl}
-                  href={{
-                    pathname: "/user/story",
-                    query: { storyId: image.storyId, stories: JSON.stringify(stories) },
-                  }}
-                  className="cursor-pointer mx-[5px] mb-[10px]"
-                  style={{
-                    width: `${cardSize}px`,
-                    height: `${cardSize}px`,
-                  }}
-                  as="/user/story"
-                >
-                  <BasicImage
-                    style={"relative w-full h-full rounded-[10px] bg-black overflow-hidden"}
-                    url={imageUrl}
-                    alt={"user-story-image"}
-                  />
-                </Link>
-              ))
+            {images.length === 0 ? (
+              <div className="w-full md:text-[17px] mobile:text-[15px] text-center mt-[10px]">
+                스토리가 없습니다.
+              </div>
+            ) : (
+              <>
+                {images.map((image) =>
+                  image.urls.map((imageUrl) => (
+                    <Link
+                      key={imageUrl}
+                      href={{
+                        pathname: "/user/story",
+                        query: { storyId: image.storyId, stories: JSON.stringify(stories) },
+                      }}
+                      className="cursor-pointer mx-[5px] mb-[10px]"
+                      style={{
+                        width: `${cardSize}px`,
+                        height: `${cardSize}px`,
+                      }}
+                      as="/user/story"
+                    >
+                      <BasicImage
+                        style={"relative w-full h-full rounded-[10px] bg-black overflow-hidden"}
+                        url={imageUrl}
+                        alt={"user-story-image"}
+                      />
+                    </Link>
+                  ))
+                )}
+              </>
             )}
           </div>
         );
