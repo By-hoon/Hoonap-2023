@@ -182,45 +182,53 @@ const UserDetail = () => {
         return (
           <div ref={mapRef} className="main-relative">
             <div className="main-absolute">
-              {paths[0][0] ? (
-                <Map location={{ latitude: paths[0][0].latitude, longitude: paths[0][0].longitude }}>
-                  <MapOption
-                    paths={paths.map((path, index) => ({ pathArray: path, storyId: storyIds[index] }))}
-                    clickMap={clickMap}
-                  />
-                  {curPolygonNumber !== undefined ? (
-                    <Link
-                      href={{
-                        pathname: "/user/story",
-                        query: {
-                          storyId: stories[curPolygonNumber].storyId,
-                          stories: JSON.stringify(stories),
-                        },
-                      }}
-                      as="/user/story"
-                    >
-                      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[300px] h-[140px] bg-white rounded-[10px] shadow-basic pt-[10px] pb-[5px]">
-                        <div className="h-[105px] grid grid-cols-[100px_1fr] px-[10px]">
-                          <BasicImage
-                            style={"relative w-full h-[100px] bg-black rounded-[5px]"}
-                            url={stories[curPolygonNumber].images[0]}
-                            alt={"user-story-image"}
-                          />
-                          <div className="text-semibold ml-[5px] break-all">
-                            {stories[curPolygonNumber].title}
-                            <span className="text-[12px] text-zinc-400 ml-[3px]">
-                              {getElapsedTime(stories[curPolygonNumber].createdAt)}
-                            </span>
+              <Map
+                location={
+                  paths[0][0]
+                    ? { latitude: paths[0][0].latitude, longitude: paths[0][0].longitude }
+                    : undefined
+                }
+              >
+                {paths[0][0] ? (
+                  <>
+                    <MapOption
+                      paths={paths.map((path, index) => ({ pathArray: path, storyId: storyIds[index] }))}
+                      clickMap={clickMap}
+                    />
+                    {curPolygonNumber !== undefined ? (
+                      <Link
+                        href={{
+                          pathname: "/user/story",
+                          query: {
+                            storyId: stories[curPolygonNumber].storyId,
+                            stories: JSON.stringify(stories),
+                          },
+                        }}
+                        as="/user/story"
+                      >
+                        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[300px] h-[140px] bg-white rounded-[10px] shadow-basic pt-[10px] pb-[5px]">
+                          <div className="h-[105px] grid grid-cols-[100px_1fr] px-[10px]">
+                            <BasicImage
+                              style={"relative w-full h-[100px] bg-black rounded-[5px]"}
+                              url={stories[curPolygonNumber].images[0]}
+                              alt={"user-story-image"}
+                            />
+                            <div className="text-semibold ml-[5px] break-all">
+                              {stories[curPolygonNumber].title}
+                              <span className="text-[12px] text-zinc-400 ml-[3px]">
+                                {getElapsedTime(stories[curPolygonNumber].createdAt)}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="h-[20px] text-[12px] text-center text-zinc-400 px-[10px]">
+                            스토리를 자세히 보려면 클릭하세요
                           </div>
                         </div>
-                        <div className="h-[20px] text-[12px] text-center text-zinc-400 px-[10px]">
-                          스토리를 자세히 보려면 클릭하세요
-                        </div>
-                      </div>
-                    </Link>
-                  ) : null}
-                </Map>
-              ) : null}
+                      </Link>
+                    ) : null}
+                  </>
+                ) : null}
+              </Map>
             </div>
           </div>
         );
