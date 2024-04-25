@@ -210,7 +210,7 @@ const List = () => {
         </div>
       </div>
       <div
-        className="fixed flex md:top-[50%] md:left-[5px] lg:left-[10%] md:-translate-y-1/2 md:justify-center md:w-[100px] text-[14px] md:border md:rounded-[5px] md:shadow-basic
+        className="fixed flex flex-wrap md:top-[50%] md:left-[5px] lg:left-[10%] md:-translate-y-1/2 md:justify-center md:w-[100px] text-[14px] md:border md:rounded-[5px] md:shadow-basic
       mobile:top-[45px] mobile:left-0 mobile:items-center mobile:w-full mobile:h-[65px] mobile:border-b mobile:z-[30] p-[5px] bg-white"
       >
         {regulars.length !== 0 ? (
@@ -233,7 +233,9 @@ const List = () => {
                 nickname={regularUser.nickname}
                 style={"w-[40px] h-[40px] mobile:w-[32px] mobile:h-[32px] text-[14px] mx-auto md:my-[5px]"}
               />
-              <div className="text-[12px] mobile:text-[10px] break-all">{regularUser.nickname}</div>
+              <div className="text-[12px] mobile:text-[10px] md:w-[70px] mobile:w-[60px] whitespace-nowrap break-all text-ellipsis overflow-hidden">
+                {regularUser.nickname}
+              </div>
             </div>
           ))
         ) : (
