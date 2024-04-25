@@ -33,46 +33,6 @@ const Search = () => {
     setKeyword(e.target.value);
   }, []);
 
-  const getSearchResult = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (keyword === "") {
-      alert(ALERT_TITLE.INPUT, ALERT_CONTENT.REQUIRE_VALUE);
-      setTargets(undefined);
-      return;
-    }
-
-    const keywordValid = new RegExp(/^[가-힣0-9a-zA-Z]+$/);
-
-    let filteredKeyword = keyword
-      .split("")
-      .map((str) => {
-        if (keywordValid.test(str)) return str;
-      })
-      .join("");
-
-    if (!filteredKeyword) {
-      setTargets([]);
-      return;
-    }
-
-    const result = await getCollection("users");
-    if (!result || result.empty) return;
-
-    const newTargets: { nickname: string; profileImage: string; userId: string }[] = [];
-
-    result.docs.forEach((doc) => {
-      const curNickname = doc.data().nickname;
-      const curUserId = doc.id;
-      const curUserProfileImage = doc.data().profileImage;
-      if (!curNickname.includes(filteredKeyword)) return;
-
-      newTargets.push({ nickname: curNickname, profileImage: curUserProfileImage, userId: curUserId });
-    });
-
-    setTargets(newTargets);
-  };
-
   useEffect(() => {
     if (!user) return;
 
@@ -84,6 +44,44 @@ const Search = () => {
   }, [alert, user]);
 
   useEffect(() => {
+    if (keyword === "") return;
+
+    const getSearchResult = async () => {
+      const keywordValid = new RegExp(/^[가-힣0-9a-zA-Z]+$/);
+
+      let filteredKeyword = keyword
+        .split("")
+        .map((str) => {
+          if (keywordValid.test(str)) return str;
+        })
+        .join("");
+
+      if (!filteredKeyword) {
+        setTargets([]);
+        return;
+      }
+
+      const result = await getCollection("users");
+      if (!result || result.empty) return;
+
+      const newTargets: { nickname: string; profileImage: string; userId: string }[] = [];
+
+      result.docs.forEach((doc) => {
+        const curNickname = doc.data().nickname;
+        const curUserId = doc.id;
+        const curUserProfileImage = doc.data().profileImage;
+        if (!curNickname.includes(filteredKeyword)) return;
+
+        newTargets.push({ nickname: curNickname, profileImage: curUserProfileImage, userId: curUserId });
+      });
+
+      setTargets(newTargets);
+    };
+
+    getSearchResult();
+  }, [keyword]);
+
+  useEffect(() => {
     document.addEventListener("click", onClickOutSide);
     return () => {
       document.removeEventListener("click", onClickOutSide);
@@ -93,11 +91,10 @@ const Search = () => {
   return (
     <Layout>
       <div className="p-[10px] pt-[25px]">
-        <form
+        <div
           className={`flex-middle w-[80%] min-w-[200px] max-w-[700px] mx-auto pl-[15px] pr-[10px] pb-[10px] rounded-[10px] ${
             focus ? "bg-bcvl" : ""
           }`}
-          onSubmit={getSearchResult}
         >
           <Icon
             className={`md:text-[28px] mobile:text-[20px] ${focus ? "text-bcd" : ""}`}
@@ -117,7 +114,7 @@ const Search = () => {
             }}
             placeholder="사용자 검색"
           />
-        </form>
+        </div>
         {targets ? (
           <div className="mt-[10px]">
             {targets.map(({ nickname, profileImage, userId }) => (
