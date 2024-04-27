@@ -1,6 +1,6 @@
 import { convertToLatLng } from "@/utils/util";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Listener, Marker, Polygon, useNavermaps } from "react-naver-maps";
 
 type PathType = { latitude: number; longitude: number };
@@ -15,6 +15,7 @@ interface MapOptionProps {
 export default function MapOption({ paths, clickMap, addPaths, deletePaths }: MapOptionProps) {
   const [curHoverPolygon, setcurHoverPolygon] = useState<number | undefined>();
   const [curClickPolygon, setCurClickPolygon] = useState<number | undefined>();
+  const [keyword, setKeyword] = useState("");
 
   const navermaps = useNavermaps();
 
@@ -30,12 +31,44 @@ export default function MapOption({ paths, clickMap, addPaths, deletePaths }: Ma
     setCurClickPolygon(cur);
   };
 
+  const onChangeKeyword = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyword(e.target.value);
+  }, []);
+
+  const searchMap = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (keyword === "") return;
+
+    navermaps.Service.geocode({ query: keyword }, (status, res) => {
+      if (res.v2.addresses.length === 0) return;
+
+      const resAddress = res.v2.addresses[0];
+      const x = Number(resAddress.x);
+      const y = Number(resAddress.y);
+
+      console.log(x, y);
+    });
+  };
+
   const mapOptionRender = () => {
     switch (router.pathname) {
       case "/create":
       case "/story/edit":
         return (
           <>
+            <div className="absolute top-0 left-0">
+              <form onSubmit={searchMap}>
+                <input
+                  className=""
+                  type="text"
+                  value={keyword}
+                  placeholder="검색어를 입력해 주세요."
+                  onChange={onChangeKeyword}
+                  required
+                />
+              </form>
+            </div>
             <Listener
               type="click"
               listener={(e) =>
