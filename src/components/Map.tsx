@@ -1,5 +1,6 @@
 import { Container as MapDiv, NaverMap, useNavermaps } from "react-naver-maps";
 import useMyLocation from "@/hooks/useMyLocation";
+import { useCallback, useEffect, useState } from "react";
 
 interface MapProps {
   children: React.ReactNode;
@@ -7,20 +8,63 @@ interface MapProps {
 }
 
 export default function Map({ children, location }: MapProps) {
+  const [center, setCenter] = useState<{ latitude: number; longitude: number }>({
+    latitude: 37.5666805,
+    longitude: 126.9784147,
+  });
+  const [keyword, setKeyword] = useState("");
+
   const { myLocation } = useMyLocation();
   const navermaps = useNavermaps();
+
+  const onChangeKeyword = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyword(e.target.value);
+  }, []);
+
+  const searchMap = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (keyword === "") return;
+
+    navermaps.Service.geocode({ query: keyword }, (status, res) => {
+      if (res.v2.addresses.length === 0) return;
+
+      const resAddress = res.v2.addresses[0];
+      const x = Number(resAddress.x);
+      const y = Number(resAddress.y);
+
+      setCenter({ latitude: y, longitude: x });
+    });
+  };
+
+  useEffect(() => {
+    if (location) {
+      setCenter({ latitude: location.latitude, longitude: location.longitude });
+      return;
+    }
+
+    if (typeof myLocation !== "string") {
+      setCenter({ latitude: myLocation.latitude, longitude: myLocation.longitude });
+      return;
+    }
+  }, [myLocation]);
 
   return (
     <MapDiv id="map" className="w-[100%] h-[100%]">
       {typeof myLocation !== "string" ? (
-        <NaverMap
-          defaultCenter={
-            location
-              ? new navermaps.LatLng(location.latitude, location.longitude)
-              : new navermaps.LatLng(myLocation.latitude, myLocation.longitude)
-          }
-          defaultZoom={15}
-        >
+        <NaverMap defaultZoom={15} center={new navermaps.LatLng(center.latitude, center.longitude)}>
+          <div className="absolute top-0 left-0">
+            <form onSubmit={searchMap}>
+              <input
+                className=""
+                type="text"
+                value={keyword}
+                placeholder="검색어를 입력해 주세요."
+                onChange={onChangeKeyword}
+                required
+              />
+            </form>
+          </div>
           {children}
         </NaverMap>
       ) : null}
