@@ -44,7 +44,10 @@ const Search = () => {
   }, [alert, user]);
 
   useEffect(() => {
-    if (keyword === "") return;
+    if (keyword === "") {
+      setTargets(undefined);
+      return;
+    }
 
     const getSearchResult = async () => {
       const keywordValid = new RegExp(/^[가-힣0-9a-zA-Z]+$/);
