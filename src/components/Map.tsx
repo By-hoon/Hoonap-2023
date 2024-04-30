@@ -1,6 +1,8 @@
 import { Container as MapDiv, NaverMap, useNavermaps } from "react-naver-maps";
 import useMyLocation from "@/hooks/useMyLocation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { PopUpContext } from "@/context/popUpProvider";
+import { ALERT_CONTENT, ALERT_TITLE } from "@/shared/constants";
 
 interface MapProps {
   children: React.ReactNode;
@@ -17,6 +19,8 @@ export default function Map({ children, location }: MapProps) {
   const { myLocation } = useMyLocation();
   const navermaps = useNavermaps();
 
+  const { alert } = useContext(PopUpContext);
+
   const onChangeKeyword = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
   }, []);
@@ -27,7 +31,10 @@ export default function Map({ children, location }: MapProps) {
     if (keyword === "") return;
 
     navermaps.Service.geocode({ query: keyword }, (status, res) => {
-      if (res.v2.addresses.length === 0) return;
+      if (res.v2.addresses.length === 0) {
+        alert(ALERT_TITLE.SEARCH, ALERT_CONTENT.INVALID_ADDRESS);
+        return;
+      }
 
       const resAddress = res.v2.addresses[0];
       const x = Number(resAddress.x);
