@@ -7,9 +7,10 @@ import { ALERT_CONTENT, ALERT_TITLE } from "@/shared/constants";
 interface MapProps {
   children: React.ReactNode;
   location?: { latitude: number; longitude: number };
+  isSearchable?: boolean;
 }
 
-export default function Map({ children, location }: MapProps) {
+export default function Map({ children, location, isSearchable = false }: MapProps) {
   const [center, setCenter] = useState<{ latitude: number; longitude: number }>({
     latitude: 37.5666805,
     longitude: 126.9784147,
@@ -60,18 +61,20 @@ export default function Map({ children, location }: MapProps) {
     <MapDiv id="map" className="w-[100%] h-[100%]">
       {typeof myLocation !== "string" ? (
         <NaverMap defaultZoom={15} center={new navermaps.LatLng(center.latitude, center.longitude)}>
-          <div className="absolute top-0 left-0">
-            <form onSubmit={searchMap}>
-              <input
-                className=""
-                type="text"
-                value={keyword}
-                placeholder="검색어를 입력해 주세요."
-                onChange={onChangeKeyword}
-                required
-              />
-            </form>
-          </div>
+          {isSearchable ? (
+            <div className="absolute top-0 left-0">
+              <form onSubmit={searchMap}>
+                <input
+                  className=""
+                  type="text"
+                  value={keyword}
+                  placeholder="검색어를 입력해 주세요."
+                  onChange={onChangeKeyword}
+                  required
+                />
+              </form>
+            </div>
+          ) : null}
           {children}
         </NaverMap>
       ) : null}
