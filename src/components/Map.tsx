@@ -16,6 +16,7 @@ export default function Map({ children, location, isSearchable = false }: MapPro
     longitude: 126.9784147,
   });
   const [keyword, setKeyword] = useState("");
+  const [isShowSearch, setIsShowSearch] = useState(true);
 
   const { myLocation } = useMyLocation();
   const navermaps = useNavermaps();
@@ -62,13 +63,13 @@ export default function Map({ children, location, isSearchable = false }: MapPro
       {typeof myLocation !== "string" ? (
         <NaverMap defaultZoom={15} center={new navermaps.LatLng(center.latitude, center.longitude)}>
           {isSearchable ? (
-            <div className="absolute top-0 left-0">
+            <div className="md:w-[50%] mobile:w-[80%] absolute top-0 left-0">
               <form onSubmit={searchMap}>
                 <input
-                  className=""
+                  className="w-full mobile:text-[14px] ml-[5px] mt-[5px] px-[8px] py-[10px] mobile:px-[6px] mobile:py-[8px] rounded-[10px] shadow-basic"
                   type="text"
                   value={keyword}
-                  placeholder="검색어를 입력해 주세요."
+                  placeholder="검색할 주소를 입력해 주세요."
                   onChange={onChangeKeyword}
                   required
                 />
