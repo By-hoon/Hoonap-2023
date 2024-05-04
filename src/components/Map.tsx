@@ -3,6 +3,7 @@ import useMyLocation from "@/hooks/useMyLocation";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { PopUpContext } from "@/context/popUpProvider";
 import { ALERT_CONTENT, ALERT_TITLE } from "@/shared/constants";
+import { Icon } from "@iconify/react";
 
 interface MapProps {
   children: React.ReactNode;
@@ -16,7 +17,7 @@ export default function Map({ children, location, isSearchable = false }: MapPro
     longitude: 126.9784147,
   });
   const [keyword, setKeyword] = useState("");
-  const [isShowSearch, setIsShowSearch] = useState(true);
+  const [addresses, setAddresses] = useState<{ roadAddress: string; x: string; y: string }[]>([]);
 
   const { myLocation } = useMyLocation();
   const navermaps = useNavermaps();
@@ -38,12 +39,19 @@ export default function Map({ children, location, isSearchable = false }: MapPro
         return;
       }
 
-      const resAddress = res.v2.addresses[0];
-      const x = Number(resAddress.x);
-      const y = Number(resAddress.y);
+      const newAddresses: { roadAddress: string; x: string; y: string }[] = [];
+      res.v2.addresses.forEach((address) => {
+        newAddresses.push({ roadAddress: address.roadAddress, x: address.x, y: address.y });
+      });
 
-      setCenter({ latitude: y, longitude: x });
+      setAddresses(newAddresses);
     });
+  };
+
+  const moveCenter = (x: string, y: string) => {
+    setCenter({ latitude: Number(y), longitude: Number(x) });
+
+    setAddresses([]);
   };
 
   useEffect(() => {
@@ -77,6 +85,30 @@ export default function Map({ children, location, isSearchable = false }: MapPro
             </div>
           ) : null}
           {children}
+          {addresses.length !== 0 ? (
+            <div className="absolute top-[55px] left-[5px] md:w-[50%] mobile:w-[80%]">
+              <div className="h-[200px] bg-white rounded-[10px] overflow-y-scroll scrollbar-hide">
+                {addresses.map((address) => (
+                  <div
+                    key={address.roadAddress}
+                    className="cursor-pointer w-full text-[17px] mobile:text-[15px] border-b p-[6px] mobile:p-[5px] break-keep"
+                    onClick={() => moveCenter(address.x, address.y)}
+                  >
+                    {address.roadAddress}
+                  </div>
+                ))}
+              </div>
+              <div className="flex-middle mt-[6px]">
+                <Icon
+                  icon="fluent-mdl2:cancel"
+                  className="cursor-pointer text-[24px]"
+                  onClick={() => {
+                    setAddresses([]);
+                  }}
+                />
+              </div>
+            </div>
+          ) : null}
         </NaverMap>
       ) : null}
     </MapDiv>
