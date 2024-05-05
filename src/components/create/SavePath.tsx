@@ -36,7 +36,7 @@ const SavePath = ({ paths, setPaths }: SavePathProps) => {
 
   return (
     <div className="main-absolute">
-      <Map>
+      <Map isSearchable={true}>
         <MapOption paths={[{ pathArray: paths }]} addPaths={addPaths} deletePaths={deletePaths} />
         {paths.length ? (
           <div
