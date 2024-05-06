@@ -28,8 +28,8 @@ const Confirm = ({ title, content, onClickOK, onClickCancel }: ConfirmProps) => 
       }}
     >
       <div className="text-center break-all p-[25px]">
-        <div className="text-[16px] mobile:text-[14px] font-semibold">{title}</div>
-        <div className="text-[14px] mobile:text-[12px] text-neutral-400 mt-[5px]">{content}</div>
+        <div className="text-[16px] mobile:text-[14px] font-semibold break-keep">{title}</div>
+        <div className="text-[14px] mobile:text-[12px] text-neutral-400 mt-[5px] break-keep">{content}</div>
       </div>
       <div className="flex text-center text-[16px]">
         <button
