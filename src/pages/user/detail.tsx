@@ -77,6 +77,30 @@ const UserDetail = () => {
     setCurPolygonNumber(polygonNumber);
   };
 
+  const moveNextPolygon = () => {
+    if (curPolygonNumber === undefined) return;
+
+    const pathsLength = paths.length;
+
+    if (curPolygonNumber + 1 > pathsLength - 1) {
+      setCurPolygonNumber(0);
+      return;
+    }
+
+    setCurPolygonNumber(curPolygonNumber + 1);
+  };
+  const movePreviousPolygon = () => {
+    if (curPolygonNumber === undefined) return;
+
+    const pathsLength = paths.length;
+
+    if (curPolygonNumber - 1 < 0) {
+      setCurPolygonNumber(pathsLength - 1);
+      return;
+    }
+    setCurPolygonNumber(curPolygonNumber - 1);
+  };
+
   const registerRegular = async () => {
     const curDate = Date.now();
 
@@ -185,7 +209,10 @@ const UserDetail = () => {
               <Map
                 location={
                   paths[0][0]
-                    ? { latitude: paths[0][0].latitude, longitude: paths[0][0].longitude }
+                    ? {
+                        latitude: paths[curPolygonNumber ? curPolygonNumber : 0][0].latitude,
+                        longitude: paths[curPolygonNumber ? curPolygonNumber : 0][0].longitude,
+                      }
                     : undefined
                 }
               >
@@ -194,37 +221,55 @@ const UserDetail = () => {
                     <MapOption
                       paths={paths.map((path, index) => ({ pathArray: path, storyId: storyIds[index] }))}
                       clickMap={clickMap}
+                      curPolygonNumber={curPolygonNumber}
                     />
                     {curPolygonNumber !== undefined ? (
-                      <Link
-                        href={{
-                          pathname: "/user/story",
-                          query: {
-                            storyId: stories[curPolygonNumber].storyId,
-                            stories: JSON.stringify(stories),
-                          },
-                        }}
-                        as="/user/story"
-                      >
-                        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[300px] h-[140px] bg-white rounded-[10px] shadow-basic pt-[10px] pb-[5px]">
-                          <div className="h-[105px] grid grid-cols-[100px_1fr] px-[10px]">
-                            <BasicImage
-                              style={"relative w-full h-[100px] bg-black rounded-[5px]"}
-                              url={stories[curPolygonNumber].images[0]}
-                              alt={"user-story-image"}
-                            />
-                            <div className="text-semibold ml-[5px] break-all">
-                              {stories[curPolygonNumber].title}
-                              <span className="text-[12px] text-zinc-400 ml-[3px]">
-                                {getElapsedTime(stories[curPolygonNumber].createdAt)}
-                              </span>
-                            </div>
+                      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[320px] h-[140px] bg-white rounded-[10px] shadow-basic">
+                        <div className="flex w-full h-full">
+                          <div
+                            className="cursor-pointer h-full hover:bg-zinc-200 flex-middle"
+                            onClick={movePreviousPolygon}
+                          >
+                            <Icon icon="ant-design:left-outlined" />
                           </div>
-                          <div className="h-[20px] text-[12px] text-center text-zinc-400 px-[10px]">
-                            스토리를 자세히 보려면 클릭하세요
+                          <Link
+                            href={{
+                              pathname: "/user/story",
+                              query: {
+                                storyId: stories[curPolygonNumber].storyId,
+                                stories: JSON.stringify(stories),
+                              },
+                            }}
+                            as="/user/story"
+                            className="w-full"
+                          >
+                            <div className="grid grid-rows-[1fr_20px]">
+                              <div className="h-[105px] grid grid-cols-[100px_1fr] mt-[10px]">
+                                <BasicImage
+                                  style={"relative w-full h-[100px] bg-black rounded-[5px]"}
+                                  url={stories[curPolygonNumber].images[0]}
+                                  alt={"user-story-image"}
+                                />
+                                <div className="text-semibold ml-[5px] break-all">
+                                  {stories[curPolygonNumber].title}
+                                  <span className="text-[12px] text-zinc-400 ml-[3px]">
+                                    {getElapsedTime(stories[curPolygonNumber].createdAt)}
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="text-[12px] text-center text-zinc-400 px-[10px] mb-[5px]">
+                                스토리를 자세히 보려면 클릭하세요
+                              </div>
+                            </div>
+                          </Link>
+                          <div
+                            className="cursor-pointer h-full hover:bg-zinc-200 flex-middle"
+                            onClick={moveNextPolygon}
+                          >
+                            <Icon icon="ant-design:right-outlined" />
                           </div>
                         </div>
-                      </Link>
+                      </div>
                     ) : null}
                   </>
                 ) : null}

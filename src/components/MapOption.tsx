@@ -10,11 +10,17 @@ interface MapOptionProps {
   clickMap?: (polygonNumber?: number) => void;
   addPaths?: (path: PathType) => void;
   deletePaths?: (index: number) => void;
+  curPolygonNumber?: number;
 }
 
-export default function MapOption({ paths, clickMap, addPaths, deletePaths }: MapOptionProps) {
+export default function MapOption({
+  paths,
+  clickMap,
+  addPaths,
+  deletePaths,
+  curPolygonNumber,
+}: MapOptionProps) {
   const [curHoverPolygon, setcurHoverPolygon] = useState<number | undefined>();
-  const [curClickPolygon, setCurClickPolygon] = useState<number | undefined>();
 
   const navermaps = useNavermaps();
 
@@ -27,7 +33,6 @@ export default function MapOption({ paths, clickMap, addPaths, deletePaths }: Ma
   const clickPolygon = (cur: number | undefined) => {
     if (!clickMap) return;
     clickMap(cur);
-    setCurClickPolygon(cur);
   };
 
   const mapOptionRender = () => {
@@ -69,9 +74,9 @@ export default function MapOption({ paths, clickMap, addPaths, deletePaths }: Ma
               <Polygon
                 key={index}
                 paths={[convertToLatLng(navermaps, path.pathArray)]}
-                fillColor={index === curHoverPolygon || index === curClickPolygon ? "#0086cc" : "#ff0000"}
+                fillColor={index === curHoverPolygon || index === curPolygonNumber ? "#0086cc" : "#ff0000"}
                 fillOpacity={0.3}
-                strokeColor={index === curHoverPolygon || index === curClickPolygon ? "#0086cc" : "#ff0000"}
+                strokeColor={index === curHoverPolygon || index === curPolygonNumber ? "#0086cc" : "#ff0000"}
                 strokeOpacity={0.6}
                 strokeWeight={2}
                 clickable
