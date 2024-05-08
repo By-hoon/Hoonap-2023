@@ -3,13 +3,13 @@ import Button from "@/components/common/Button";
 import Layout from "@/components/common/Layout";
 import withHead from "@/components/hoc/withHead";
 import MenuButton from "@/components/story/MenuButton";
+import NicknameForm from "@/components/user/NicknameForm";
 import ProfileImage from "@/components/user/ProfileImage";
 import { PopUpContext } from "@/context/popUpProvider";
 import updateField from "@/firebase/firestore/updateField";
 import { addFile } from "@/firebase/storage/add";
 import { deleteFile } from "@/firebase/storage/delete";
 import useClickOutside from "@/hooks/useClickOutside";
-import useUser from "@/hooks/useUser";
 import {
   ALERT_TITLE,
   ALERT_CONTENT,
@@ -17,9 +17,7 @@ import {
   CONFIRM_CONTENT,
   HEAD_TITLE,
   HEAD_DESCRIPTION,
-  NICKNAME_INFO,
 } from "@/shared/constants";
-import { checkNickname } from "@/utils/util";
 import Router, { useRouter } from "next/router";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 
@@ -28,11 +26,12 @@ const UserEdit = () => {
   const [previewImage, setPreviewImage] = useState<string>();
   const [isDeleted, setIsDeleted] = useState(false);
   const [isPassNickname, setIsPassNickname] = useState(true);
+  const [nickname, setNickname] = useState("");
+  const [profileImage, setProfileImage] = useState("");
 
   const router = useRouter();
-  const { userId } = router.query;
+  const { userId, nickname: previousNickname, profileImage: previousProfileImage } = router.query;
 
-  const { nickname, setNickname, profileImage } = useUser(userId as string);
   const { show: editMenu, ref: editMenuRef, onClickTarget: onClickEditMenu } = useClickOutside();
   const { alert, confirm } = useContext(PopUpContext);
 
@@ -61,37 +60,6 @@ const UserEdit = () => {
     setIsDeleted(true);
   };
 
-  const changeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const target = e.target.value;
-
-    const checkResult = checkNickname(target);
-
-    switch (checkResult[0]) {
-      case "nicknameLength": {
-        alert(ALERT_TITLE.NICKNAME, ALERT_CONTENT.NICKNAME_LENGTH);
-        return;
-      }
-
-      case "nicknameValid": {
-        setIsPassNickname(false);
-        setNickname(target);
-        return;
-      }
-
-      case "filtering": {
-        setIsPassNickname(false);
-        setNickname(target);
-        alert(ALERT_TITLE.NICKNAME, `${ALERT_CONTENT.NICKNAME_FILTER} '${checkResult[1]}'`);
-        return;
-      }
-
-      default: {
-        setIsPassNickname(true);
-        setNickname(target);
-      }
-    }
-  };
-
   const editUser = async () => {
     const curUser = userId as string;
     if (nickname === "") {
@@ -109,12 +77,12 @@ const UserEdit = () => {
     if (fileData) {
       const fileUrl = await addFile(fileData, curUser, "profile-image");
       await updateField("users", curUser, "profileImage", fileUrl);
-      await deleteFile(profileImage);
+      await deleteFile(profileImage as string);
     }
 
     if (isDeleted) {
       await updateField("users", curUser, "profileImage", "");
-      await deleteFile(profileImage);
+      await deleteFile(profileImage as string);
     }
 
     Router.push(
@@ -134,6 +102,13 @@ const UserEdit = () => {
     }
   }, [alert, userId]);
 
+  useEffect(() => {
+    if (!previousNickname || !previousProfileImage) return;
+
+    setNickname(previousNickname as string);
+    setProfileImage(previousProfileImage as string);
+  }, [previousNickname, previousProfileImage]);
+
   return (
     <Layout>
       <div className="max-w-[425px] min-w-[320px] mx-auto p-[5px] pt-[30px]">
@@ -152,8 +127,8 @@ const UserEdit = () => {
                   />
                 ) : (
                   <ProfileImage
-                    imageUrl={isDeleted ? "" : profileImage}
-                    nickname={nickname}
+                    imageUrl={isDeleted ? "" : (profileImage as string)}
+                    nickname={nickname as string}
                     style={"w-full h-full text-[36px]"}
                   />
                 )}
@@ -192,19 +167,12 @@ const UserEdit = () => {
           </div>
         </div>
         <div className="mt-[10px] px-[10px]">
-          <input
-            className={`input-templete ${
-              isPassNickname
-                ? "focus:border-bc focus:bg-bcvl"
-                : "border-red-400 focus:border-red-400 focus:bg-red-50"
-            }`}
-            type="text"
-            value={nickname}
-            placeholder="닉네임을 입력해 주세요"
-            onChange={changeNickname}
-            required
+          <NicknameForm
+            nickname={nickname}
+            setNickname={setNickname}
+            isPassNickname={isPassNickname}
+            setIsPassNickname={setIsPassNickname}
           />
-          <div className="text-[12px] text-zinc-400">{NICKNAME_INFO}</div>
         </div>
         <div className="w-[100%] text-center mt-[20px]">
           <Button

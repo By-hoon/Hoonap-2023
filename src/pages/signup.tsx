@@ -1,11 +1,11 @@
 import Button from "@/components/common/Button";
 import withHead from "@/components/hoc/withHead";
+import NicknameForm from "@/components/user/NicknameForm";
 import { PopUpContext } from "@/context/popUpProvider";
 import signUp from "@/firebase/auth/signUp";
 import setData from "@/firebase/firestore/setData";
 import Alerts from "@/shared/alerts";
 import { ALERT_TITLE, ALERT_CONTENT, HEAD_DESCRIPTION, HEAD_TITLE, NICKNAME_INFO } from "@/shared/constants";
-import { checkNickname } from "@/utils/util";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 
@@ -24,36 +24,6 @@ const Signup = () => {
   };
   const changePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
-  };
-  const changeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const target = e.target.value;
-
-    const checkResult = checkNickname(target);
-
-    switch (checkResult[0]) {
-      case "nicknameLength": {
-        alert(ALERT_TITLE.NICKNAME, ALERT_CONTENT.NICKNAME_LENGTH);
-        return;
-      }
-
-      case "nicknameValid": {
-        setIsPassNickname(false);
-        setNickname(target);
-        return;
-      }
-
-      case "filtering": {
-        setIsPassNickname(false);
-        setNickname(target);
-        alert(ALERT_TITLE.NICKNAME, `${ALERT_CONTENT.NICKNAME_FILTER} '${checkResult[1]}'`);
-        return;
-      }
-
-      default: {
-        setIsPassNickname(true);
-        setNickname(target);
-      }
-    }
   };
 
   const trySignUp = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -115,19 +85,12 @@ const Signup = () => {
         </div>
         <div className="mb-[20px] px-[10px]">
           <div className="text-[20px]">닉네임</div>
-          <input
-            className={`input-templete ${
-              isPassNickname
-                ? "focus:border-bc focus:bg-bcvl"
-                : "border-red-400 focus:border-red-400 focus:bg-red-50"
-            }`}
-            type="text"
-            value={nickname}
-            placeholder="닉네임을 입력해 주세요"
-            onChange={changeNickname}
-            required
+          <NicknameForm
+            nickname={nickname}
+            setNickname={setNickname}
+            isPassNickname={isPassNickname}
+            setIsPassNickname={setIsPassNickname}
           />
-          <div className="text-[12px] text-zinc-400">{NICKNAME_INFO}</div>
         </div>
         <div className="text-center">
           <Button text="가입" style="submit-button py-[7px]" type="submit" />

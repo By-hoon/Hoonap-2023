@@ -21,7 +21,7 @@ const useUser = (userId: string | undefined) => {
     getUserData();
   }, [userId]);
 
-  return { nickname, setNickname, profileImage };
+  return { nickname, profileImage };
 };
 
 export default useUser;

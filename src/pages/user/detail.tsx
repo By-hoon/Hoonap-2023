@@ -1,6 +1,5 @@
 import getDocument from "@/firebase/firestore/getDocument";
 import Link from "next/link";
-import useUser from "@/hooks/useUser";
 import Layout from "@/components/common/Layout";
 import { useContext, useEffect, useRef, useState } from "react";
 import Router, { useRouter } from "next/router";
@@ -454,7 +453,7 @@ const UserDetail = () => {
                       Router.push(
                         {
                           pathname: "/user/edit",
-                          query: { userId },
+                          query: { userId, nickname, profileImage },
                         },
                         "/user/edit"
                       );
