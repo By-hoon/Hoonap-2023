@@ -1,5 +1,3 @@
-import { MAX_NICKNAME_LENGTH, NICKNAME_FILTERS } from "@/shared/constants";
-
 export const convertToLatLng = (
   navermaps: typeof naver.maps,
   target: { latitude: number; longitude: number }[]
@@ -30,58 +28,6 @@ export const getElapsedTime = (time: number) => {
     }
   }
   return "방금 전";
-};
-
-export const checkNickname = (nickname: string) => {
-  const filteringResult = filteringNickname(nickname);
-  if (typeof filteringResult === "string") return ["filtering", filteringResult];
-
-  if (!checkNicknameLength(nickname)) return ["nicknameLength"];
-  if (!checkNicknameValid(nickname)) return ["nicknameValid"];
-
-  return [true];
-};
-
-const checkNicknameLength = (nickname: string) => {
-  const engReg = new RegExp(/[a-zA-Z]/g);
-  const korReg = new RegExp(/[가-힣]/g);
-  const korSubReg = new RegExp(/[ㄱ-ㅎ]/g);
-  const numReg = new RegExp(/[0-9]/g);
-
-  const engMatch = nickname.match(engReg) || [];
-  const korMatch = nickname.match(korReg) || [];
-  const korSubMatch = nickname.match(korSubReg) || [];
-  const numMatch = nickname.match(numReg) || [];
-
-  const totalLength = engMatch.length + korMatch.length * 2 + korSubMatch.length + numMatch.length;
-
-  if (totalLength > MAX_NICKNAME_LENGTH) return false;
-
-  return true;
-};
-
-const checkNicknameValid = (nickname: string) => {
-  const nicknameValid = new RegExp(/^[가-힣0-9a-zA-Z]+$/);
-
-  if (!nicknameValid.test(nickname)) return false;
-
-  return true;
-};
-
-const filteringNickname = (nickname: string) => {
-  let error = "";
-
-  for (var i = 0; i < NICKNAME_FILTERS.length; i++) {
-    for (var j = 0; j < nickname.length; j++) {
-      const curString = nickname.substring(j, j + NICKNAME_FILTERS[i].length);
-      if (NICKNAME_FILTERS[i] == curString.toLowerCase()) {
-        error = curString;
-        break;
-      }
-    }
-  }
-
-  return error === "" ? true : error;
 };
 
 const cardColumn = (curWidth: number) => {

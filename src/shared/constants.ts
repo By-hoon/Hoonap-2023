@@ -89,6 +89,7 @@ export const ALERT_CONTENT = {
   INVALID_NICKNAME: "닉네임 형식을 확인해 주세요.",
   NICKNAME_LENGTH: "더 길게 닉네임을 설정할 수 없습니다.",
   NICKNAME_FILTER: "사용할 수 없는 단어가 포함되어 있습니다.",
+  NICKNAME_DUPLICATE: "이미 사용된 닉네임입니다.",
   INVALID_ADDRESS: "검색된 주소가 없습니다.",
 };
 

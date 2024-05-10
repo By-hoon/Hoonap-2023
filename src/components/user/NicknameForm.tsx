@@ -1,7 +1,13 @@
 import { PopUpContext } from "@/context/popUpProvider";
-import { ALERT_CONTENT, ALERT_TITLE, NICKNAME_INFO } from "@/shared/constants";
-import { checkNickname } from "@/utils/util";
-import { Dispatch, SetStateAction, useContext, useState } from "react";
+import getCollection from "@/firebase/firestore/getCollection";
+import {
+  ALERT_CONTENT,
+  ALERT_TITLE,
+  MAX_NICKNAME_LENGTH,
+  NICKNAME_FILTERS,
+  NICKNAME_INFO,
+} from "@/shared/constants";
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 
 interface NicknameFormProps {
   nickname: string;
@@ -11,38 +17,109 @@ interface NicknameFormProps {
 }
 
 const NicknameForm = ({ nickname, setNickname, isPassNickname, setIsPassNickname }: NicknameFormProps) => {
+  const [otherNicknames, setOtherNicknames] = useState<string[]>([]);
+
   const { alert } = useContext(PopUpContext);
+
+  const checkNicknameLength = (target: string) => {
+    const engReg = new RegExp(/[a-zA-Z]/g);
+    const korReg = new RegExp(/[가-힣]/g);
+    const korSubReg = new RegExp(/[ㄱ-ㅎ]/g);
+    const numReg = new RegExp(/[0-9]/g);
+
+    const engMatch = target.match(engReg) || [];
+    const korMatch = target.match(korReg) || [];
+    const korSubMatch = target.match(korSubReg) || [];
+    const numMatch = target.match(numReg) || [];
+
+    const totalLength = engMatch.length + korMatch.length * 2 + korSubMatch.length + numMatch.length;
+
+    if (totalLength > MAX_NICKNAME_LENGTH) return false;
+
+    return true;
+  };
+
+  const checkNicknameValid = (target: string) => {
+    const nicknameValid = new RegExp(/^[가-힣0-9a-zA-Z]+$/);
+
+    if (!nicknameValid.test(target)) return false;
+
+    return true;
+  };
+
+  const filteringNickname = (target: string) => {
+    let error = "";
+
+    for (var i = 0; i < NICKNAME_FILTERS.length; i++) {
+      for (var j = 0; j < target.length; j++) {
+        const curString = target.substring(j, j + NICKNAME_FILTERS[i].length);
+        if (NICKNAME_FILTERS[i] == curString.toLowerCase()) {
+          error = curString;
+          break;
+        }
+      }
+    }
+
+    return error === "" ? true : error;
+  };
+
+  const duplicateNickname = (target: string) => {
+    let isDuplicate = false;
+
+    otherNicknames.forEach((otherNickname) => {
+      if (target === otherNickname) {
+        isDuplicate = true;
+        return;
+      }
+    });
+
+    return isDuplicate;
+  };
 
   const changeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target.value;
 
-    const checkResult = checkNickname(target);
+    const filteringResult = filteringNickname(target);
 
-    switch (checkResult[0]) {
-      case "nicknameLength": {
-        alert(ALERT_TITLE.NICKNAME, ALERT_CONTENT.NICKNAME_LENGTH);
-        return;
-      }
-
-      case "nicknameValid": {
-        setIsPassNickname(false);
-        setNickname(target);
-        return;
-      }
-
-      case "filtering": {
-        setIsPassNickname(false);
-        setNickname(target);
-        alert(ALERT_TITLE.NICKNAME, `${ALERT_CONTENT.NICKNAME_FILTER} '${checkResult[1]}'`);
-        return;
-      }
-
-      default: {
-        setIsPassNickname(true);
-        setNickname(target);
-      }
+    if (typeof filteringResult === "string") {
+      setIsPassNickname(false);
+      setNickname(target);
+      alert(ALERT_TITLE.NICKNAME, `${ALERT_CONTENT.NICKNAME_FILTER} '${filteringResult}'`);
+      return;
     }
+
+    if (!checkNicknameLength(target)) {
+      alert(ALERT_TITLE.NICKNAME, ALERT_CONTENT.NICKNAME_LENGTH);
+      return;
+    }
+
+    if (!checkNicknameValid(target)) {
+      setIsPassNickname(false);
+      setNickname(target);
+      return;
+    }
+
+    if (duplicateNickname(target)) {
+      alert(ALERT_TITLE.NICKNAME, ALERT_CONTENT.NICKNAME_DUPLICATE);
+      setIsPassNickname(false);
+      setNickname(target);
+      return;
+    }
+
+    setIsPassNickname(true);
+    setNickname(target);
   };
+
+  useEffect(() => {
+    const getOtherNicknames = async () => {
+      const result = await getCollection("users");
+      if (!result || result.empty) return;
+
+      setOtherNicknames(result.docs.map((doc) => doc.data().nickname));
+    };
+
+    getOtherNicknames();
+  }, []);
 
   return (
     <div>
