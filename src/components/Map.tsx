@@ -64,7 +64,7 @@ export default function Map({ children, location, isSearchable = false }: MapPro
       setCenter({ latitude: myLocation.latitude, longitude: myLocation.longitude });
       return;
     }
-  }, [myLocation]);
+  }, [location, myLocation]);
 
   return (
     <MapDiv id="map" className="w-[100%] h-[100%]">
