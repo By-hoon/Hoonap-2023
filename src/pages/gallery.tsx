@@ -96,7 +96,7 @@ const Gallery = () => {
   return (
     <Layout>
       <div className="p-[10px]">
-        <CurrentImage current={current} setCurrent={setCurrent} images={images} />
+        <CurrentImage current={current} setCurrent={setCurrent} images={images} isLike={true} />
         <div ref={sizeRef} className={`flex flex-wrap items-center`}>
           {images.map((imageObj, index) => (
             <div

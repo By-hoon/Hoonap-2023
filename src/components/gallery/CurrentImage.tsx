@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import BasicImage from "../common/BasicImage";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
@@ -11,9 +11,12 @@ interface CurrentImageProps {
     userId: string;
     id: string;
   }[];
+  isLike: boolean;
 }
 
-const CurrentImage = ({ current, setCurrent, images }: CurrentImageProps) => {
+const CurrentImage = ({ current, setCurrent, images, isLike }: CurrentImageProps) => {
+  const [curLike, setCurLike] = useState(isLike);
+
   const preImage = () => {
     if (current === undefined) return;
 
@@ -58,6 +61,21 @@ const CurrentImage = ({ current, setCurrent, images }: CurrentImageProps) => {
                 </figcaption>
               </div>
               <div>
+                <div className="absolute bottom-0 left-[20px] mobile:left-[10px] h-[80px] mobile:h-[60px] flex items-center z-20">
+                  {curLike ? (
+                    <Icon
+                      icon="ph:heart-fill"
+                      className="cursor-pointer text-[36px] mobile:text-[28px] text-red-600"
+                      onClick={() => setCurLike(false)}
+                    />
+                  ) : (
+                    <Icon
+                      icon="ph:heart"
+                      className="cursor-pointer text-[36px] mobile:text-[28px] text-white"
+                      onClick={() => setCurLike(true)}
+                    />
+                  )}
+                </div>
                 <div className="absolute bottom-0 left-0 w-full h-[80px] mobile:h-[60px] flex-middle bg-black bg-opacity-30">
                   <Link
                     className="w-[210px] h-[50px] text-white text-[24px] text-center mobile:w-[180px] mobile:h-[40px] mobile:text-[20px] border rounded-[10px] px-[10px] py-[5px]"
