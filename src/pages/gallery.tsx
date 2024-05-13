@@ -12,7 +12,7 @@ import CurrentImage from "@/components/gallery/CurrentImage";
 
 const Gallery = () => {
   const [images, setImages] = useState<{ url: string; userId: string; id: string }[]>([]);
-  const [current, setCurrent] = useState<{ url: string; userId: string; id: string }>();
+  const [current, setCurrent] = useState<number>();
 
   const [cardSize, setCardSize] = useState(0);
 
@@ -96,14 +96,14 @@ const Gallery = () => {
   return (
     <Layout>
       <div className="p-[10px]">
-        <CurrentImage current={current} setCurrent={setCurrent} />
+        <CurrentImage current={current} setCurrent={setCurrent} images={images} />
         <div ref={sizeRef} className={`flex flex-wrap items-center`}>
           {images.map((imageObj, index) => (
             <div
               key={index}
               className="mx-[5px]"
               onClick={() => {
-                setCurrent(imageObj);
+                setCurrent(index);
               }}
             >
               <ImageCard url={imageObj.url} cardSize={cardSize} />
