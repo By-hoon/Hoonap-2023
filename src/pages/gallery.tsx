@@ -9,9 +9,12 @@ import { ALERT_TITLE, ALERT_CONTENT, HEAD_TITLE, HEAD_DESCRIPTION } from "@/shar
 import { PopUpContext } from "@/context/popUpProvider";
 import ImageCard from "@/components/gallery/ImageCard";
 import CurrentImage from "@/components/gallery/CurrentImage";
+import getDocument from "@/firebase/firestore/getDocument";
 
 const Gallery = () => {
+  const [curUserId, setCurUserId] = useState("");
   const [images, setImages] = useState<{ url: string; userId: string; id: string }[]>([]);
+  const [likes, setLikes] = useState<{ [key: string]: boolean }>({});
   const [current, setCurrent] = useState<number>();
 
   const [cardSize, setCardSize] = useState(0);
@@ -25,6 +28,8 @@ const Gallery = () => {
   useEffect(() => {
     if (!user) return;
     const userId = user.uid;
+
+    setCurUserId(userId);
 
     const getImageData = async () => {
       const result = await getCollection("images");
@@ -63,11 +68,24 @@ const Gallery = () => {
       setImages(imageObjects);
     };
 
+    const getLikeData = async () => {
+      const result = await getDocument("likes", userId);
+      if (!result || result.empty) return;
+
+      const newLikes: { [key: string]: boolean } = {};
+      Object.keys(result).forEach((imageId) => {
+        newLikes[imageId] = true;
+      });
+
+      setLikes(newLikes);
+    };
+
     if (isExp(userId)) {
       getExpImageData();
       return;
     }
     getImageData();
+    getLikeData();
   }, [user, alert]);
 
   useEffect(() => {
@@ -96,7 +114,14 @@ const Gallery = () => {
   return (
     <Layout>
       <div className="p-[10px]">
-        <CurrentImage current={current} setCurrent={setCurrent} images={images} isLike={true} />
+        <CurrentImage
+          current={current}
+          setCurrent={setCurrent}
+          images={images}
+          likes={likes}
+          setLikes={setLikes}
+          userId={curUserId}
+        />
         <div ref={sizeRef} className={`flex flex-wrap items-center`}>
           {images.map((imageObj, index) => (
             <div

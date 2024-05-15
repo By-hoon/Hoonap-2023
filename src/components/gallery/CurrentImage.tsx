@@ -1,7 +1,10 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import BasicImage from "../common/BasicImage";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
+import updateField from "@/firebase/firestore/updateField";
+import { getImageId } from "@/utils/util";
+import deleteFieldFunc from "@/firebase/firestore/deleteField";
 
 interface CurrentImageProps {
   current: number | undefined;
@@ -11,11 +14,44 @@ interface CurrentImageProps {
     userId: string;
     id: string;
   }[];
-  isLike: boolean;
+  likes: { [key: string]: boolean };
+  setLikes: Dispatch<SetStateAction<{ [key: string]: boolean }>>;
+  userId: string;
 }
 
-const CurrentImage = ({ current, setCurrent, images, isLike }: CurrentImageProps) => {
-  const [curLike, setCurLike] = useState(isLike);
+const CurrentImage = ({ current, setCurrent, images, likes, setLikes, userId }: CurrentImageProps) => {
+  const [curLike, setCurLike] = useState(false);
+
+  const onChangeLike = (isLike: boolean) => {
+    if (current === undefined) return;
+
+    const curImageId = getImageId(images[current].url);
+
+    const newLikes = JSON.parse(JSON.stringify(likes));
+
+    if (isLike) {
+      doLike(curImageId, newLikes);
+      return;
+    }
+
+    doUnLike(curImageId, newLikes);
+  };
+
+  const doLike = async (curImageId: string, newLikes: { [key: string]: boolean }) => {
+    newLikes[curImageId] = true;
+
+    await updateField("likes", userId, curImageId, {});
+    setCurLike(true);
+    setLikes(newLikes);
+  };
+
+  const doUnLike = async (curImageId: string, newLikes: { [key: string]: boolean }) => {
+    delete newLikes[curImageId];
+
+    await deleteFieldFunc("likes", userId, curImageId);
+    setCurLike(false);
+    setLikes(newLikes);
+  };
 
   const preImage = () => {
     if (current === undefined) return;
@@ -35,6 +71,19 @@ const CurrentImage = ({ current, setCurrent, images, isLike }: CurrentImageProps
     }
     setCurrent(current + 1);
   };
+
+  useEffect(() => {
+    if (current === undefined) return;
+
+    const curImageId = getImageId(images[current].url);
+
+    if (likes[curImageId]) {
+      setCurLike(true);
+      return;
+    }
+
+    setCurLike(false);
+  }, [current]);
 
   return (
     <>
@@ -66,13 +115,13 @@ const CurrentImage = ({ current, setCurrent, images, isLike }: CurrentImageProps
                     <Icon
                       icon="ph:heart-fill"
                       className="cursor-pointer text-[36px] mobile:text-[28px] text-red-600"
-                      onClick={() => setCurLike(false)}
+                      onClick={() => onChangeLike(false)}
                     />
                   ) : (
                     <Icon
                       icon="ph:heart"
                       className="cursor-pointer text-[36px] mobile:text-[28px] text-white"
-                      onClick={() => setCurLike(true)}
+                      onClick={() => onChangeLike(true)}
                     />
                   )}
                 </div>
