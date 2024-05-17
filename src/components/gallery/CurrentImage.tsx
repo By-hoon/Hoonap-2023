@@ -5,6 +5,8 @@ import { Icon } from "@iconify/react";
 import updateField from "@/firebase/firestore/updateField";
 import { getImageId } from "@/utils/util";
 import deleteFieldFunc from "@/firebase/firestore/deleteField";
+import getDocument from "@/firebase/firestore/getDocument";
+import setData from "@/firebase/firestore/setData";
 
 interface CurrentImageProps {
   current: number | undefined;
@@ -20,37 +22,41 @@ interface CurrentImageProps {
 }
 
 const CurrentImage = ({ current, setCurrent, images, likes, setLikes, userId }: CurrentImageProps) => {
+  const [imageId, setImageId] = useState("");
   const [curLike, setCurLike] = useState(false);
+  const [likeNum, setLikeNum] = useState(0);
 
   const onChangeLike = (isLike: boolean) => {
     if (current === undefined) return;
 
-    const curImageId = getImageId(images[current].url);
-
     const newLikes = JSON.parse(JSON.stringify(likes));
 
     if (isLike) {
-      doLike(curImageId, newLikes);
+      doLike(newLikes);
       return;
     }
 
-    doUnLike(curImageId, newLikes);
+    doUnLike(newLikes);
   };
 
-  const doLike = async (curImageId: string, newLikes: { [key: string]: boolean }) => {
-    newLikes[curImageId] = true;
+  const doLike = async (newLikes: { [key: string]: boolean }) => {
+    newLikes[imageId] = true;
 
-    await updateField("likes", userId, curImageId, {});
+    await updateField("likes", userId, imageId, {});
+    await updateField("likes-calc", imageId, userId, {});
     setCurLike(true);
     setLikes(newLikes);
+    setLikeNum(likeNum + 1);
   };
 
-  const doUnLike = async (curImageId: string, newLikes: { [key: string]: boolean }) => {
-    delete newLikes[curImageId];
+  const doUnLike = async (newLikes: { [key: string]: boolean }) => {
+    delete newLikes[imageId];
 
-    await deleteFieldFunc("likes", userId, curImageId);
+    await deleteFieldFunc("likes", userId, imageId);
+    await deleteFieldFunc("likes-calc", imageId, userId);
     setCurLike(false);
     setLikes(newLikes);
+    setLikeNum(likeNum - 1);
   };
 
   const preImage = () => {
@@ -77,6 +83,8 @@ const CurrentImage = ({ current, setCurrent, images, likes, setLikes, userId }: 
 
     const curImageId = getImageId(images[current].url);
 
+    setImageId(curImageId);
+
     if (likes[curImageId]) {
       setCurLike(true);
       return;
@@ -84,6 +92,23 @@ const CurrentImage = ({ current, setCurrent, images, likes, setLikes, userId }: 
 
     setCurLike(false);
   }, [current]);
+
+  useEffect(() => {
+    if (imageId === "") return;
+
+    const getLikesCalcData = async () => {
+      const result = await getDocument("likes-calc", imageId);
+      if (!result || result.empty) {
+        const likesNumResult = await setData("likes-calc", imageId, {});
+        setLikeNum(0);
+        return;
+      }
+
+      setLikeNum(Object.keys(result).length);
+    };
+
+    getLikesCalcData();
+  }, [imageId]);
 
   return (
     <>
@@ -124,10 +149,11 @@ const CurrentImage = ({ current, setCurrent, images, likes, setLikes, userId }: 
                       onClick={() => onChangeLike(true)}
                     />
                   )}
+                  <div className="md:text-[16px] text-white ml-[5px]">{likeNum}</div>
                 </div>
                 <div className="absolute bottom-0 left-0 w-full h-[80px] mobile:h-[60px] flex-middle bg-black bg-opacity-30">
                   <Link
-                    className="w-[210px] h-[50px] text-white text-[24px] text-center mobile:w-[180px] mobile:h-[40px] mobile:text-[20px] border rounded-[10px] px-[10px] py-[5px]"
+                    className="w-[210px] h-[50px] text-white text-[24px] text-center mobile:w-[150px] mobile:h-[35px] mobile:text-[16px] border rounded-[10px] px-[10px] py-[5px]"
                     href={{
                       pathname: "/story/detail",
                       query: { storyId: images[current].id },
