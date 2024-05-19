@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import BasicImage from "../common/BasicImage";
 import { Icon } from "@iconify/react";
+import { useAuth } from "@/context/authProvider";
+import Like from "../common/Like";
+import { getImageId } from "@/utils/util";
+import getDocument from "@/firebase/firestore/getDocument";
 
 interface StoryImagesProps {
   images: string[];
@@ -10,6 +14,10 @@ interface StoryImagesProps {
 
 const StoryImages = ({ images, size, style = "" }: StoryImagesProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [likes, setLikes] = useState<{ [key: string]: boolean }>({});
+  const [imageId, setImageId] = useState("");
+
+  const { user } = useAuth();
 
   const preImage = () => {
     if (currentIndex === 0) {
@@ -25,6 +33,30 @@ const StoryImages = ({ images, size, style = "" }: StoryImagesProps) => {
     }
     setCurrentIndex((c) => c + 1);
   };
+
+  useEffect(() => {
+    if (!user) return;
+
+    const getLikeData = async () => {
+      const result = await getDocument("likes", user.uid);
+      if (!result || result.empty) return;
+
+      const newLikes: { [key: string]: boolean } = {};
+      Object.keys(result).forEach((imageId) => {
+        newLikes[imageId] = true;
+      });
+
+      setLikes(newLikes);
+    };
+
+    getLikeData();
+  }, [user]);
+
+  useEffect(() => {
+    const curImageId = getImageId(images[currentIndex]);
+
+    setImageId(curImageId);
+  }, [currentIndex]);
 
   return (
     <BasicImage
@@ -51,6 +83,11 @@ const StoryImages = ({ images, size, style = "" }: StoryImagesProps) => {
               />
             ))}
           </div>
+        </div>
+      ) : null}
+      {user ? (
+        <div className="absolute bottom-0 left-0 mobile:left-[10px] h-[60px] mobile:h-[40px] flex items-center w-full bg-black bg-opacity-30 pl-[5px] z-20">
+          <Like imageId={imageId} userId={user.uid} likes={likes} setLikes={setLikes} />
         </div>
       ) : null}
     </BasicImage>

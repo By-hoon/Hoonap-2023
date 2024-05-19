@@ -32,7 +32,6 @@ const Like = ({ imageId, userId, likes, setLikes }: LikeProps) => {
 
     await updateField("likes", userId, imageId, {});
     await updateField("likes-calc", imageId, userId, {});
-    setCurLike(true);
     setLikes(newLikes);
     setLikeNum(likeNum + 1);
   };
@@ -42,7 +41,6 @@ const Like = ({ imageId, userId, likes, setLikes }: LikeProps) => {
 
     await deleteFieldFunc("likes", userId, imageId);
     await deleteFieldFunc("likes-calc", imageId, userId);
-    setCurLike(false);
     setLikes(newLikes);
     setLikeNum(likeNum - 1);
   };
@@ -73,7 +71,7 @@ const Like = ({ imageId, userId, likes, setLikes }: LikeProps) => {
     }
 
     setCurLike(false);
-  }, [imageId]);
+  }, [imageId, likes]);
 
   return (
     <>
