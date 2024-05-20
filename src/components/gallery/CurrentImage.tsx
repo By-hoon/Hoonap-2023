@@ -1,7 +1,9 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import BasicImage from "../common/BasicImage";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
+import { getImageId } from "@/utils/util";
+import Like from "../common/Like";
 
 interface CurrentImageProps {
   current: number | undefined;
@@ -11,9 +13,14 @@ interface CurrentImageProps {
     userId: string;
     id: string;
   }[];
+  likes: { [key: string]: boolean };
+  setLikes: Dispatch<SetStateAction<{ [key: string]: boolean }>>;
+  userId: string;
 }
 
-const CurrentImage = ({ current, setCurrent, images }: CurrentImageProps) => {
+const CurrentImage = ({ current, setCurrent, images, likes, setLikes, userId }: CurrentImageProps) => {
+  const [imageId, setImageId] = useState("");
+
   const preImage = () => {
     if (current === undefined) return;
 
@@ -32,6 +39,14 @@ const CurrentImage = ({ current, setCurrent, images }: CurrentImageProps) => {
     }
     setCurrent(current + 1);
   };
+
+  useEffect(() => {
+    if (current === undefined) return;
+
+    const curImageId = getImageId(images[current].url);
+
+    setImageId(curImageId);
+  }, [current]);
 
   return (
     <>
@@ -58,9 +73,12 @@ const CurrentImage = ({ current, setCurrent, images }: CurrentImageProps) => {
                 </figcaption>
               </div>
               <div>
+                <div className="absolute bottom-0 left-[20px] mobile:left-[10px] h-[80px] mobile:h-[60px] flex items-center z-20">
+                  <Like imageId={imageId} userId={userId} likes={likes} setLikes={setLikes} />
+                </div>
                 <div className="absolute bottom-0 left-0 w-full h-[80px] mobile:h-[60px] flex-middle bg-black bg-opacity-30">
                   <Link
-                    className="w-[210px] h-[50px] text-white text-[24px] text-center mobile:w-[180px] mobile:h-[40px] mobile:text-[20px] border rounded-[10px] px-[10px] py-[5px]"
+                    className="w-[210px] h-[50px] text-white text-[24px] text-center mobile:w-[150px] mobile:h-[35px] mobile:text-[16px] border rounded-[10px] px-[10px] py-[5px]"
                     href={{
                       pathname: "/story/detail",
                       query: { storyId: images[current].id },

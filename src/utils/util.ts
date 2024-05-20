@@ -41,3 +41,7 @@ const cardColumn = (curWidth: number) => {
 export const cardSizeCalculator = (curWidth: number) => {
   return Math.floor(curWidth / cardColumn(curWidth)) - 10;
 };
+
+export const getImageId = (imageUrl: string) => {
+  return imageUrl.split("story%2F")[1].split("?alt")[0];
+};
