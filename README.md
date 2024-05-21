@@ -77,6 +77,7 @@ Vercel 배포: https://hoonap-2023.vercel.app/
   - 스토리 위치 확인
   - 스토리 수정
   - 스토리 삭제
+  - 이미지 좋아요(Like)
 
 - 댓글
 
@@ -101,6 +102,7 @@ src
 │   │   ├── Confirm.tsx
 │   │   ├── Header.tsx
 │   │   ├── Layout.tsx
+│   │   ├── Like.tsx
 │   │   ├── Loading.tsx
 │   │   └── Title.tsx
 │   ├── create
@@ -126,6 +128,7 @@ src
 │   │   ├── StoryHeader.tsx
 │   │   └── StoryImages.tsx
 │   ├── user
+│   │   ├── NicknameForm.tsx
 │   │   ├── ProfileImage.tsx
 │   │   └── UserCard.tsx
 │   ├── Map.tsx
