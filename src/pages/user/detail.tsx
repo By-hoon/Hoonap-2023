@@ -448,7 +448,7 @@ const UserDetail = () => {
                 <>
                   <Button
                     text={"내 정보 수정"}
-                    style={"bg-zinc-200 hover:bg-zinc-300 rounded-[15px] px-[10px] py-[6px]"}
+                    style={"bg-zinc-200 hover:bg-zinc-300 rounded-[15px] my-[3px] px-[10px] py-[6px]"}
                     onClick={() => {
                       Router.push(
                         {
@@ -461,9 +461,26 @@ const UserDetail = () => {
                   />
                   <Button
                     text={"단골 관리"}
-                    style={"bg-zinc-200 hover:bg-zinc-300 rounded-[15px] px-[10px] py-[6px] ml-[5px]"}
+                    style={
+                      "bg-zinc-200 hover:bg-zinc-300 rounded-[15px] my-[3px] ml-[5px] px-[10px] py-[6px]"
+                    }
                     onClick={() => {
                       onClickRegularManagement();
+                    }}
+                  />
+                  <Button
+                    text={"활동 로그"}
+                    style={
+                      "bg-zinc-200 hover:bg-zinc-300 rounded-[15px] my-[3px] ml-[5px] px-[10px] py-[6px]"
+                    }
+                    onClick={() => {
+                      Router.push(
+                        {
+                          pathname: "/user/log",
+                          query: { userId },
+                        },
+                        "/user/log"
+                      );
                     }}
                   />
                 </>
