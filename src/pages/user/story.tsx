@@ -98,7 +98,7 @@ const Story = () => {
                   pathname: "/user/story",
                   query: { storyId: restStory.storyId, stories },
                 },
-                "/story/detail"
+                "/user/story"
               );
             }}
           >
