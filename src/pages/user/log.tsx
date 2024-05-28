@@ -1,17 +1,21 @@
 import BasicImage from "@/components/common/BasicImage";
 import Layout from "@/components/common/Layout";
+import { PopUpContext } from "@/context/popUpProvider";
 import deleteFieldFunc from "@/firebase/firestore/deleteField";
 import getDocument from "@/firebase/firestore/getDocument";
+import { ALERT_CONTENT, ALERT_TITLE, CONFIRM_CONTENT, CONFIRM_TITLE } from "@/shared/constants";
 import { cardSizeCalculator } from "@/utils/util";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 
 const Log = () => {
   const [likes, setLikes] = useState<{ imageId: string; imageUrl: string; storyId: string }[]>([]);
   const [cardSize, setCardSize] = useState(0);
   const [isEdit, setIsEdit] = useState(false);
   const [selectedLike, setSelectedLike] = useState<{ [key: string]: boolean }>({});
+
+  const { alert, confirm } = useContext(PopUpContext);
 
   const sizeRef = useRef<HTMLDivElement>(null);
 
@@ -49,8 +53,12 @@ const Log = () => {
   const deleteLikes = async () => {
     if (Object.keys(selectedLike).length === 0) {
       setIsEdit(false);
+      alert(ALERT_TITLE.DELETE, ALERT_CONTENT.UNSELECTED);
       return;
     }
+
+    const result = await confirm(CONFIRM_TITLE.DELETE_LIKES, CONFIRM_CONTENT.DELETE_LIKES);
+    if (!result) return;
 
     const promise = Object.keys(selectedLike).map(async (selectedId) => {
       await deleteFieldFunc("likes", userId as string, selectedId);
