@@ -14,6 +14,7 @@ const Log = () => {
   const [cardSize, setCardSize] = useState(0);
   const [isEdit, setIsEdit] = useState(false);
   const [selectedLike, setSelectedLike] = useState<{ [key: string]: boolean }>({});
+  const [isOpenLikes, setIsOpenLikes] = useState(false);
 
   const { alert, confirm } = useContext(PopUpContext);
 
@@ -28,6 +29,7 @@ const Log = () => {
   };
 
   const endEdit = () => {
+    setSelectedLike({});
     setIsEdit(false);
   };
 
@@ -127,7 +129,7 @@ const Log = () => {
               </div>
             )}
           </div>
-          <div ref={sizeRef} className="flex flex-wrap">
+          <div ref={sizeRef}>
             {isEdit ? (
               <div className="w-full flex justify-between text-[15px] mobile:text-[14px] my-[5px] px-[10px]">
                 <div className="cursor-pointer" onClick={selectAll}>
@@ -138,48 +140,79 @@ const Log = () => {
                 </div>
               </div>
             ) : null}
-            {likes.map((like) => (
-              <div
-                key={like.imageId}
-                className="relative cursor-pointer text-[18px] mobile:text-[14px] m-[5px]"
-                style={{
-                  width: `${cardSize}px`,
-                  height: `${cardSize}px`,
-                }}
-              >
+            <div
+              className={`flex flex-wrap ${
+                isOpenLikes ? "" : "h-[300px] mobile:h-[250px] overflow-y-scroll scrollbar-hide"
+              }`}
+            >
+              {likes.map((like) => (
                 <div
-                  className="w-full h-full"
-                  onClick={() => {
-                    router.push(
-                      {
-                        pathname: "/story/detail",
-                        query: { storyId: like.storyId },
-                      },
-                      "/story/detail"
-                    );
+                  key={like.imageId}
+                  className="relative cursor-pointer text-[18px] mobile:text-[14px] m-[5px]"
+                  style={{
+                    width: `${cardSize}px`,
+                    height: `${cardSize}px`,
                   }}
                 >
-                  <BasicImage
-                    style={"relative w-full h-full rounded-[10px] bg-black overflow-hidden"}
-                    url={like.imageUrl}
-                    alt={"user-story-image"}
-                  />
-                </div>
-                {isEdit ? (
                   <div
-                    className="absolute top-0 left-0 w-full h-full flex-middle bg-black bg-opacity-30 rounded-[10px] z-30"
-                    onClick={() => selectLike(like.imageId)}
+                    className="w-full h-full"
+                    onClick={() => {
+                      router.push(
+                        {
+                          pathname: "/story/detail",
+                          query: { storyId: like.storyId },
+                        },
+                        "/story/detail"
+                      );
+                    }}
                   >
-                    <Icon
-                      icon="material-symbols:check-box-outline"
-                      className={`text-[68px] mobile:text-[52px] ${
-                        selectedLike[like.imageId] ? "text-green-400" : "text-zinc-300"
-                      }`}
+                    <BasicImage
+                      style={"relative w-full h-full rounded-[10px] bg-black overflow-hidden"}
+                      url={like.imageUrl}
+                      alt={"user-story-image"}
                     />
                   </div>
-                ) : null}
-              </div>
-            ))}
+                  {isEdit ? (
+                    <div
+                      className="absolute top-0 left-0 w-full h-full flex-middle bg-black bg-opacity-30 rounded-[10px] z-30"
+                      onClick={() => selectLike(like.imageId)}
+                    >
+                      <Icon
+                        icon="material-symbols:check-box-outline"
+                        className={`text-[68px] mobile:text-[52px] ${
+                          selectedLike[like.imageId] ? "text-green-400" : "text-zinc-300"
+                        }`}
+                      />
+                    </div>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+            <div className="cursor-pointer w-full text-zinc-400 hover:bg-zinc-400 hover:bg-opacity-20 rounded-[10px] my-[5px]">
+              {isOpenLikes ? (
+                <div
+                  className="flex-middle"
+                  onClick={() => {
+                    setIsOpenLikes(false);
+                  }}
+                >
+                  <Icon icon="bx:chevrons-up" className="text-[24px]" />
+                  <div className="text-[14px]">접기</div>
+                  <Icon icon="bx:chevrons-up" className="text-[24px]" />
+                </div>
+              ) : (
+                <div
+                  className="flex-middle"
+                  onClick={() => {
+                    setIsOpenLikes(true);
+                  }}
+                >
+                  <Icon icon="bx:chevrons-down" className="text-[24px]" />
+                  <div className="text-[14px]">펼치기</div>
+                  <Icon icon="bx:chevrons-down" className="text-[24px]" />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
