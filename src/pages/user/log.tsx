@@ -1,4 +1,5 @@
 import BasicImage from "@/components/common/BasicImage";
+import Folding from "@/components/common/Folding";
 import Layout from "@/components/common/Layout";
 import { PopUpContext } from "@/context/popUpProvider";
 import deleteFieldFunc from "@/firebase/firestore/deleteField";
@@ -14,7 +15,6 @@ const Log = () => {
   const [cardSize, setCardSize] = useState(0);
   const [isEdit, setIsEdit] = useState(false);
   const [selectedLike, setSelectedLike] = useState<{ [key: string]: boolean }>({});
-  const [isOpenLikes, setIsOpenLikes] = useState(false);
 
   const { alert, confirm } = useContext(PopUpContext);
 
@@ -140,11 +140,7 @@ const Log = () => {
                 </div>
               </div>
             ) : null}
-            <div
-              className={`flex flex-wrap ${
-                isOpenLikes ? "" : "h-[300px] mobile:h-[250px] overflow-y-scroll scrollbar-hide"
-              }`}
-            >
+            <Folding>
               {likes.map((like) => (
                 <div
                   key={like.imageId}
@@ -187,32 +183,7 @@ const Log = () => {
                   ) : null}
                 </div>
               ))}
-            </div>
-            <div className="cursor-pointer w-full text-zinc-400 hover:bg-zinc-400 hover:bg-opacity-20 rounded-[10px] my-[5px]">
-              {isOpenLikes ? (
-                <div
-                  className="flex-middle"
-                  onClick={() => {
-                    setIsOpenLikes(false);
-                  }}
-                >
-                  <Icon icon="bx:chevrons-up" className="text-[24px]" />
-                  <div className="text-[14px]">접기</div>
-                  <Icon icon="bx:chevrons-up" className="text-[24px]" />
-                </div>
-              ) : (
-                <div
-                  className="flex-middle"
-                  onClick={() => {
-                    setIsOpenLikes(true);
-                  }}
-                >
-                  <Icon icon="bx:chevrons-down" className="text-[24px]" />
-                  <div className="text-[14px]">펼치기</div>
-                  <Icon icon="bx:chevrons-down" className="text-[24px]" />
-                </div>
-              )}
-            </div>
+            </Folding>
           </div>
         </div>
       </div>
