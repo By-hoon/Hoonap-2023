@@ -25,7 +25,7 @@ const CommentInput = ({ storyId }: { storyId: string }) => {
     const writerId = user?.uid || "unknown";
 
     const commentData: { [key: string]: {} } = {};
-    commentData[`${Date.now()} ${writerId}`] = { comment, writedAt: Date.now(), writedBy: writerId };
+    commentData[`${Date.now()} ${writerId}`] = { comment, writedAt: Date.now(), writedBy: writerId, storyId };
 
     if (isExp(writerId)) {
       await alert(ALERT_TITLE.EXP, ALERT_CONTENT.INVALID_EXP);
@@ -33,6 +33,7 @@ const CommentInput = ({ storyId }: { storyId: string }) => {
     }
 
     const commentsResulut = await setData("comments", storyId, commentData);
+    const commentsUserResulut = await setData("comments-user", writerId, commentData);
   };
 
   return (
