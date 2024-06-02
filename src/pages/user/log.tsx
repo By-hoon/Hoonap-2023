@@ -12,6 +12,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 
 const Log = () => {
   const [likes, setLikes] = useState<{ imageId: string; imageUrl: string; storyId: string }[]>([]);
+  const [comments, setComments] = useState<{ comment: string; writedAt: number; storyId: string }[]>([]);
   const [cardSize, setCardSize] = useState(0);
   const [isEdit, setIsEdit] = useState(false);
   const [selectedLike, setSelectedLike] = useState<{ [key: string]: boolean }>({});
@@ -81,9 +82,9 @@ const Log = () => {
   useEffect(() => {
     if (!userId) return;
 
-    const newLikes: { imageId: string; imageUrl: string; storyId: string }[] = [];
-
     const getUserLikes = async () => {
+      const newLikes: { imageId: string; imageUrl: string; storyId: string }[] = [];
+
       const likesResult = await getDocument("likes", userId as string);
       if (!likesResult || likesResult.empty) return;
 
@@ -94,7 +95,25 @@ const Log = () => {
       setLikes(newLikes);
     };
 
+    const getUserComments = async () => {
+      const newComments: { comment: string; writedAt: number; storyId: string }[] = [];
+
+      const commentsResult = await getDocument("comments-user", userId as string);
+      if (!commentsResult || commentsResult.empty) return;
+
+      Object.keys(commentsResult).forEach((commentId) => {
+        newComments.push({
+          comment: commentsResult[commentId].comment,
+          writedAt: commentsResult[commentId].writedAt,
+          storyId: commentsResult[commentId].storyId,
+        });
+      });
+
+      setComments(newComments);
+    };
+
     getUserLikes();
+    getUserComments();
   }, [userId]);
 
   useEffect(() => {
