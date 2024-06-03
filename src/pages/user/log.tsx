@@ -5,7 +5,7 @@ import { PopUpContext } from "@/context/popUpProvider";
 import deleteFieldFunc from "@/firebase/firestore/deleteField";
 import getDocument from "@/firebase/firestore/getDocument";
 import { ALERT_CONTENT, ALERT_TITLE, CONFIRM_CONTENT, CONFIRM_TITLE } from "@/shared/constants";
-import { cardSizeCalculator } from "@/utils/util";
+import { cardSizeCalculator, getElapsedTime } from "@/utils/util";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -14,7 +14,8 @@ const Log = () => {
   const [likes, setLikes] = useState<{ imageId: string; imageUrl: string; storyId: string }[]>([]);
   const [comments, setComments] = useState<{ comment: string; writedAt: number; storyId: string }[]>([]);
   const [cardSize, setCardSize] = useState(0);
-  const [isEdit, setIsEdit] = useState(false);
+  const [isLikeEdit, setIsLikeEdit] = useState(false);
+  const [isCommentsEdit, setIsCommentsEdit] = useState(false);
   const [selectedLike, setSelectedLike] = useState<{ [key: string]: boolean }>({});
 
   const { alert, confirm } = useContext(PopUpContext);
@@ -25,13 +26,13 @@ const Log = () => {
 
   const { userId } = router.query;
 
-  const startEdit = () => {
-    setIsEdit(true);
+  const startLikesEdit = () => {
+    setIsLikeEdit(true);
   };
 
-  const endEdit = () => {
+  const endLikesEdit = () => {
     setSelectedLike({});
-    setIsEdit(false);
+    setIsLikeEdit(false);
   };
 
   const selectLike = (id: string) => {
@@ -43,7 +44,7 @@ const Log = () => {
     setSelectedLike(newSelectedLike);
   };
 
-  const selectAll = () => {
+  const selectAllLikes = () => {
     const newSelectedLike: { [key: string]: boolean } = {};
 
     likes.forEach((like) => {
@@ -55,7 +56,7 @@ const Log = () => {
 
   const deleteLikes = async () => {
     if (Object.keys(selectedLike).length === 0) {
-      setIsEdit(false);
+      setIsLikeEdit(false);
       alert(ALERT_TITLE.DELETE, ALERT_CONTENT.UNSELECTED);
       return;
     }
@@ -76,7 +77,7 @@ const Log = () => {
 
     setLikes(newLikes);
     setSelectedLike({});
-    setIsEdit(false);
+    setIsLikeEdit(false);
   };
 
   useEffect(() => {
@@ -138,27 +139,27 @@ const Log = () => {
         <div>
           <div className="w-full flex justify-between items-end my-[5px] px-[10px] pb-[10px] outline-0 border-b border-bs">
             <div className="text-[18px] mobile:text-[16px] font-semibold">좋아요를 표시한 사진들</div>
-            {isEdit ? (
-              <div className="cursor-pointer text-[15px] mobile:text-[14px]" onClick={endEdit}>
+            {isLikeEdit ? (
+              <div className="cursor-pointer text-[15px] mobile:text-[14px]" onClick={endLikesEdit}>
                 취소
               </div>
             ) : (
-              <div className="cursor-pointer text-[15px] mobile:text-[14px] text-bc" onClick={startEdit}>
+              <div className="cursor-pointer text-[15px] mobile:text-[14px] text-bc" onClick={startLikesEdit}>
                 편집
               </div>
             )}
           </div>
-          <div ref={sizeRef}>
-            {isEdit ? (
-              <div className="w-full flex justify-between text-[15px] mobile:text-[14px] my-[5px] px-[10px]">
-                <div className="cursor-pointer" onClick={selectAll}>
-                  전체 선택
-                </div>
-                <div className="cursor-pointer text-red-400" onClick={deleteLikes}>
-                  삭제
-                </div>
+          {isLikeEdit ? (
+            <div className="w-full flex justify-between text-[15px] mobile:text-[14px] my-[5px] px-[10px]">
+              <div className="cursor-pointer" onClick={selectAllLikes}>
+                전체 선택
               </div>
-            ) : null}
+              <div className="cursor-pointer text-red-400" onClick={deleteLikes}>
+                삭제
+              </div>
+            </div>
+          ) : null}
+          <div ref={sizeRef}>
             <Folding>
               {likes.map((like) => (
                 <div
@@ -187,7 +188,7 @@ const Log = () => {
                       alt={"user-story-image"}
                     />
                   </div>
-                  {isEdit ? (
+                  {isLikeEdit ? (
                     <div
                       className="absolute top-0 left-0 w-full h-full flex-middle bg-black bg-opacity-30 rounded-[10px] z-30"
                       onClick={() => selectLike(like.imageId)}
@@ -204,6 +205,31 @@ const Log = () => {
               ))}
             </Folding>
           </div>
+          <div className="w-full flex justify-between items-end mt-[10px] mb-[5px] px-[10px] pb-[10px] outline-0 border-b border-bs">
+            <div className="text-[18px] mobile:text-[16px] font-semibold">작성한 댓글들</div>
+          </div>
+          <Folding>
+            {comments.map((comment, index) => (
+              <div
+                key={index}
+                className="cursor-pointer border md:w-[47%] mobile:w-full h-[74px] grid md:grid-cols-[1fr_100px] mobile:grid-cols-[5fr_2fr] mx-[10px] my-[8px] rounded-[10px] shadow-basic"
+                onClick={() => {
+                  router.push(
+                    {
+                      pathname: "/story/detail",
+                      query: { storyId: comment.storyId },
+                    },
+                    "/story/detail"
+                  );
+                }}
+              >
+                <div className="text-[14px] text-center p-[5px] text-overflow-3">{comment.comment}</div>
+                <div className="text-[14px] text-zinc-400 flex-middle">
+                  {getElapsedTime(comment.writedAt)}
+                </div>
+              </div>
+            ))}
+          </Folding>
         </div>
       </div>
     </Layout>

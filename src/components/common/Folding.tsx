@@ -8,7 +8,7 @@ const Folding = ({ children }: { children: React.ReactNode }) => {
     <div>
       <div
         className={`flex flex-wrap ${
-          isOpenLikes ? "" : "h-[300px] mobile:h-[250px] overflow-y-scroll scrollbar-hide"
+          isOpenLikes ? "" : "max-h-[300px] mobile:max-h-[250px] overflow-y-scroll scrollbar-hide"
         }`}
       >
         {children}
