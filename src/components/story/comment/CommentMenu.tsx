@@ -30,11 +30,22 @@ const CommentMenu = ({ commentId, comment, writedAt, writedBy, storyId }: Commen
 
   const updateComment = async (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
+
+    if (!user) return;
+
     await updateField("comments", storyId, commentId, {
       comment: newComment,
       writedAt,
-      writedBy: user?.uid,
+      writedBy: user.uid,
+      storyId,
     });
+    await updateField("comments-user", user.uid, commentId, {
+      comment: newComment,
+      writedAt,
+      writedBy: user.uid,
+      storyId,
+    });
+
     onClickTarget();
   };
 
