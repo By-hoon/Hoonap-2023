@@ -12,11 +12,14 @@ import { useContext, useEffect, useRef, useState } from "react";
 
 const Log = () => {
   const [likes, setLikes] = useState<{ imageId: string; imageUrl: string; storyId: string }[]>([]);
-  const [comments, setComments] = useState<{ comment: string; writedAt: number; storyId: string }[]>([]);
+  const [comments, setComments] = useState<
+    { commentId: string; comment: string; writedAt: number; storyId: string }[]
+  >([]);
   const [cardSize, setCardSize] = useState(0);
   const [isLikeEdit, setIsLikeEdit] = useState(false);
   const [isCommentsEdit, setIsCommentsEdit] = useState(false);
   const [selectedLike, setSelectedLike] = useState<{ [key: string]: boolean }>({});
+  const [selectedComment, setSelectedComment] = useState<{ [key: string]: string }>({});
 
   const { alert, confirm } = useContext(PopUpContext);
 
@@ -80,6 +83,59 @@ const Log = () => {
     setIsLikeEdit(false);
   };
 
+  const startCommentsEdit = () => {
+    setIsCommentsEdit(true);
+  };
+
+  const endCommentsEdit = () => {
+    setSelectedComment({});
+    setIsCommentsEdit(false);
+  };
+
+  const selectComment = (commentId: string, storyId: string) => {
+    const newSelectedComment = JSON.parse(JSON.stringify(selectedComment));
+
+    if (newSelectedComment[commentId]) delete newSelectedComment[commentId];
+    else newSelectedComment[commentId] = storyId;
+
+    setSelectedComment(newSelectedComment);
+  };
+
+  const selectAllComments = () => {
+    const newSelectedComment: { [key: string]: string } = {};
+
+    comments.forEach((comment) => {
+      newSelectedComment[comment.commentId] = comment.storyId;
+    });
+
+    setSelectedComment(newSelectedComment);
+  };
+
+  const deleteComments = async () => {
+    if (Object.keys(selectedComment).length === 0) {
+      setIsCommentsEdit(false);
+      alert(ALERT_TITLE.DELETE, ALERT_CONTENT.UNSELECTED);
+      return;
+    }
+
+    const result = await confirm(CONFIRM_TITLE.DELETE_COMMENTS, CONFIRM_CONTENT.DELETE_COMMENTS);
+    if (!result) return;
+
+    const promise = Object.keys(selectedComment).map(async (selectedId) => {
+      await deleteFieldFunc("comments", selectedComment[selectedId], selectedId);
+      await deleteFieldFunc("comments-user", userId as string, selectedId);
+    });
+
+    await Promise.all(promise);
+
+    const newComments: { commentId: string; comment: string; writedAt: number; storyId: string }[] =
+      comments.filter(({ commentId }) => !selectedComment[commentId]);
+
+    setComments(newComments);
+    setSelectedComment({});
+    setIsCommentsEdit(false);
+  };
+
   useEffect(() => {
     if (!userId) return;
 
@@ -97,13 +153,14 @@ const Log = () => {
     };
 
     const getUserComments = async () => {
-      const newComments: { comment: string; writedAt: number; storyId: string }[] = [];
+      const newComments: { commentId: string; comment: string; writedAt: number; storyId: string }[] = [];
 
       const commentsResult = await getDocument("comments-user", userId as string);
       if (!commentsResult || commentsResult.empty) return;
 
       Object.keys(commentsResult).forEach((commentId) => {
         newComments.push({
+          commentId,
           comment: commentsResult[commentId].comment,
           writedAt: commentsResult[commentId].writedAt,
           storyId: commentsResult[commentId].storyId,
@@ -207,26 +264,65 @@ const Log = () => {
           </div>
           <div className="w-full flex justify-between items-end mt-[10px] mb-[5px] px-[10px] pb-[10px] outline-0 border-b border-bs">
             <div className="text-[18px] mobile:text-[16px] font-semibold">작성한 댓글들</div>
+            {isCommentsEdit ? (
+              <div className="cursor-pointer text-[15px] mobile:text-[14px]" onClick={endCommentsEdit}>
+                취소
+              </div>
+            ) : (
+              <div
+                className="cursor-pointer text-[15px] mobile:text-[14px] text-bc"
+                onClick={startCommentsEdit}
+              >
+                편집
+              </div>
+            )}
           </div>
+          {isCommentsEdit ? (
+            <div className="w-full flex justify-between text-[15px] mobile:text-[14px] my-[5px] px-[10px]">
+              <div className="cursor-pointer" onClick={selectAllComments}>
+                전체 선택
+              </div>
+              <div className="cursor-pointer text-red-400" onClick={deleteComments}>
+                삭제
+              </div>
+            </div>
+          ) : null}
           <Folding>
             {comments.map((comment, index) => (
               <div
                 key={index}
-                className="cursor-pointer border md:w-[47%] mobile:w-full h-[74px] grid md:grid-cols-[1fr_100px] mobile:grid-cols-[5fr_2fr] mx-[10px] my-[8px] rounded-[10px] shadow-basic"
-                onClick={() => {
-                  router.push(
-                    {
-                      pathname: "/story/detail",
-                      query: { storyId: comment.storyId },
-                    },
-                    "/story/detail"
-                  );
-                }}
+                className="cursor-pointer relative border md:w-[47%] mobile:w-full h-[74px] mx-[10px] my-[8px] rounded-[10px] shadow-basic"
               >
-                <div className="text-[14px] text-center p-[5px] text-overflow-3">{comment.comment}</div>
-                <div className="text-[14px] text-zinc-400 flex-middle">
-                  {getElapsedTime(comment.writedAt)}
+                <div
+                  className="w-full h-full grid md:grid-cols-[1fr_100px] mobile:grid-cols-[5fr_2fr]"
+                  onClick={() => {
+                    router.push(
+                      {
+                        pathname: "/story/detail",
+                        query: { storyId: comment.storyId },
+                      },
+                      "/story/detail"
+                    );
+                  }}
+                >
+                  <div className="text-[14px] text-center p-[5px] text-overflow-3">{comment.comment}</div>
+                  <div className="text-[14px] text-zinc-400 flex-middle">
+                    {getElapsedTime(comment.writedAt)}
+                  </div>
                 </div>
+                {isCommentsEdit ? (
+                  <div
+                    className="absolute top-0 left-0 w-full h-full flex-middle bg-black bg-opacity-30 rounded-[10px] z-30"
+                    onClick={() => selectComment(comment.commentId, comment.storyId)}
+                  >
+                    <Icon
+                      icon="material-symbols:check-box-outline"
+                      className={`text-[52px] mobile:text-[42px] ${
+                        selectedComment[comment.commentId] ? "text-green-400" : "text-zinc-300"
+                      }`}
+                    />
+                  </div>
+                ) : null}
               </div>
             ))}
           </Folding>

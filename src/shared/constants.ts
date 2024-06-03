@@ -106,6 +106,7 @@ export const CONFIRM_TITLE = {
   DELETE_REGULAR_ME: "나를 등록한 단골을 삭제하시겠습니까?",
   DELETE_PROFILE_IMAGE: "현재 프로필 사진을 삭제하시겠습니까?",
   DELETE_LIKES: "선택한 좋아요를 삭제하시겠습니까?",
+  DELETE_COMMENTS: "선택한 댓글을 삭제하시겠습니까?",
 };
 
 export const CONFIRM_CONTENT = {
@@ -119,6 +120,7 @@ export const CONFIRM_CONTENT = {
   DELETE_REGULAR_ME: "삭제 대상",
   DELETE_PROFILE_IMAGE: "삭제된 사진은 다시 복구할 수 없습니다.",
   DELETE_LIKES: "삭제된 좋아요는 다시 복구할 수 없습니다.",
+  DELETE_COMMENTS: "삭제된 댓글은 다시 복구할 수 없습니다.",
 };
 
 export const EXP_INFO = [
