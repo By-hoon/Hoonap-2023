@@ -63,6 +63,7 @@ export const ALERT_TITLE = {
   CREATE: "생성 오류",
   EDIT: "수정 오류",
   INPUT: "입력 오류",
+  DELETE: "삭제 오류",
   NICKNAME: "닉네임 오류",
   SEARCH: "검색 오류",
 };
@@ -91,6 +92,7 @@ export const ALERT_CONTENT = {
   NICKNAME_FILTER: "사용할 수 없는 단어가 포함되어 있습니다.",
   NICKNAME_DUPLICATE: "이미 사용된 닉네임입니다.",
   INVALID_ADDRESS: "검색된 주소가 없습니다.",
+  UNSELECTED: "선택된 항목이 없습니다.",
 };
 
 export const CONFIRM_TITLE = {
@@ -103,6 +105,8 @@ export const CONFIRM_TITLE = {
   DELETE_REGULAR_MY: "내가 등록한 단골을 취소하시겠습니까?",
   DELETE_REGULAR_ME: "나를 등록한 단골을 삭제하시겠습니까?",
   DELETE_PROFILE_IMAGE: "현재 프로필 사진을 삭제하시겠습니까?",
+  DELETE_LIKES: "선택한 좋아요를 삭제하시겠습니까?",
+  DELETE_COMMENTS: "선택한 댓글을 삭제하시겠습니까?",
 };
 
 export const CONFIRM_CONTENT = {
@@ -115,6 +119,8 @@ export const CONFIRM_CONTENT = {
   DELETE_REGULAR_MY: "취소 대상",
   DELETE_REGULAR_ME: "삭제 대상",
   DELETE_PROFILE_IMAGE: "삭제된 사진은 다시 복구할 수 없습니다.",
+  DELETE_LIKES: "삭제된 좋아요는 다시 복구할 수 없습니다.",
+  DELETE_COMMENTS: "삭제된 댓글은 다시 복구할 수 없습니다.",
 };
 
 export const EXP_INFO = [

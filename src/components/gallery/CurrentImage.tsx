@@ -74,7 +74,12 @@ const CurrentImage = ({ current, setCurrent, images, likes, setLikes, userId }: 
               </div>
               <div>
                 <div className="absolute bottom-0 left-[20px] mobile:left-[10px] h-[80px] mobile:h-[60px] flex items-center z-20">
-                  <Like imageId={imageId} userId={userId} likes={likes} setLikes={setLikes} />
+                  <Like
+                    image={{ url: images[current].url, imageId, storyId: images[current].id }}
+                    userId={userId}
+                    likes={likes}
+                    setLikes={setLikes}
+                  />
                 </div>
                 <div className="absolute bottom-0 left-0 w-full h-[80px] mobile:h-[60px] flex-middle bg-black bg-opacity-30">
                   <Link

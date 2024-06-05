@@ -7,7 +7,7 @@ import { getImageId } from "@/utils/util";
 import getDocument from "@/firebase/firestore/getDocument";
 
 interface StoryImagesProps {
-  images: string[];
+  images: { url: string; storyId: string }[];
   size: string;
   style?: string;
 }
@@ -53,7 +53,7 @@ const StoryImages = ({ images, size, style = "" }: StoryImagesProps) => {
   }, [user]);
 
   useEffect(() => {
-    const curImageId = getImageId(images[currentIndex]);
+    const curImageId = getImageId(images[currentIndex].url);
 
     setImageId(curImageId);
   }, [currentIndex]);
@@ -61,7 +61,7 @@ const StoryImages = ({ images, size, style = "" }: StoryImagesProps) => {
   return (
     <BasicImage
       style={`relative ${size} bg-black rounded-[5px] ${style}`}
-      url={images[currentIndex]}
+      url={images[currentIndex].url}
       alt={"detail-image"}
     >
       {images.length > 1 ? (
@@ -77,7 +77,7 @@ const StoryImages = ({ images, size, style = "" }: StoryImagesProps) => {
           <div className="absolute bottom-[10px] left-0 w-full z-20 flex justify-center">
             {images.map((image, index) => (
               <div
-                key={image}
+                key={image.url}
                 className={`w-[8px] h-[8px] bg-white rounded-[50%] mx-[2px]
                 ${currentIndex === index ? "opacity-100" : "opacity-40"}`}
               />
@@ -87,7 +87,12 @@ const StoryImages = ({ images, size, style = "" }: StoryImagesProps) => {
       ) : null}
       {user ? (
         <div className="absolute bottom-0 left-0 mobile:left-[10px] h-[60px] mobile:h-[40px] flex items-center w-full bg-black bg-opacity-30 pl-[5px] z-20">
-          <Like imageId={imageId} userId={user.uid} likes={likes} setLikes={setLikes} />
+          <Like
+            image={{ url: images[currentIndex].url, imageId, storyId: images[currentIndex].storyId }}
+            userId={user.uid}
+            likes={likes}
+            setLikes={setLikes}
+          />
         </div>
       ) : null}
     </BasicImage>

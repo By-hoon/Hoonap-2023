@@ -14,7 +14,10 @@ const Preview = ({ story, regular, setRegular }: PreviewProps) => {
   return (
     <div className="w-[468px] mobile:w-[300px] border-b-2 mx-auto pb-[15px]">
       <StoryHeader story={story} regular={regular} setRegular={setRegular} style="h-[50px]" />
-      <StoryImages images={story.images} size="w-full h-[468px] mobile:h-[300px]" />
+      <StoryImages
+        images={story.images.map((url) => ({ url: url, storyId: story.storyId }))}
+        size="w-full h-[468px] mobile:h-[300px]"
+      />
       <StoryContents
         title={story.title}
         story={story.story}

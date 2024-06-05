@@ -15,7 +15,10 @@ const DetailView = ({ story, regular, setRegular }: DetailViewProps) => {
     <div className="relative md:grid md:grid-cols-[1fr_300px] min-w-[300px] max-w-[964px] md:mt-[30px] md:mx-[30px] lg:mx-auto border rounded-[5px] overflow-hidden">
       <div className="main-relative">
         <figure className="main-absolute p-0 bg-black">
-          <StoryImages images={story.images} size="w-full h-full" />
+          <StoryImages
+            images={story.images.map((url) => ({ url: url, storyId: story.storyId }))}
+            size="w-full h-full"
+          />
         </figure>
       </div>
       <div className="px-[15px] md:grid md:grid-rows-[60px_1fr]">
