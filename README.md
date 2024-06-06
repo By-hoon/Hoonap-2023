@@ -63,6 +63,9 @@ Vercel 배포: https://hoonap-2023.vercel.app/
   - 사용자 스토리맵
   - 사용자 스토리(이미지) 목록
   - 내 정보 수정
+  - 활동 로그
+    - 좋아요를 누른 사진들
+    - 작성한 댓글들
   - 사용자 검색
 
 - 스토리
@@ -100,6 +103,7 @@ src
 │   │   ├── BasicImage.tsx
 │   │   ├── Button.tsx
 │   │   ├── Confirm.tsx
+│   │   ├── Folding.tsx
 │   │   ├── Header.tsx
 │   │   ├── Layout.tsx
 │   │   ├── Like.tsx
@@ -165,13 +169,14 @@ src
 │   └── useUser.ts
 ├── pages
 │   ├── story
-│   │   ├── detail.ts
-│   │   ├── edit.ts
+│   │   ├── detail.tsx
+│   │   ├── edit.tsx
 │   │   └── list.tsx
 │   ├── user
-│   │   ├── detail.ts
-│   │   ├── edit.ts
-│   │   ├── search.ts
+│   │   ├── detail.tsx
+│   │   ├── edit.tsx
+│   │   ├── log.tsx
+│   │   ├── search.tsx
 │   │   └── story.tsx
 │   ├── _app.tsx
 │   ├── _document.tsx
