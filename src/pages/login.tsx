@@ -5,7 +5,7 @@ import signIn from "@/firebase/auth/signIn";
 import Alerts from "@/shared/alerts";
 import { HEAD_TITLE, HEAD_DESCRIPTION } from "@/shared/constants";
 import { useRouter } from "next/router";
-import { useContext, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -15,12 +15,12 @@ const Login = () => {
 
   const { alert } = useContext(PopUpContext);
 
-  const changeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const changeEmail = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
-  };
-  const changePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+  }, []);
+  const changePassword = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
-  };
+  }, []);
 
   const tryLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

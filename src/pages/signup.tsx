@@ -7,7 +7,7 @@ import setData from "@/firebase/firestore/setData";
 import Alerts from "@/shared/alerts";
 import { ALERT_TITLE, ALERT_CONTENT, HEAD_DESCRIPTION, HEAD_TITLE, NICKNAME_INFO } from "@/shared/constants";
 import { useRouter } from "next/router";
-import { useContext, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -19,12 +19,13 @@ const Signup = () => {
 
   const { alert } = useContext(PopUpContext);
 
-  const changeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const changeEmail = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
-  };
-  const changePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+  }, []);
+
+  const changePassword = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
-  };
+  }, []);
 
   const trySignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
