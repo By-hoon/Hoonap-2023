@@ -1,10 +1,18 @@
 import BasicImage from "@/components/common/BasicImage";
 import Folding from "@/components/common/Folding";
 import Layout from "@/components/common/Layout";
+import withHead from "@/components/hoc/withHead";
 import { PopUpContext } from "@/context/popUpProvider";
 import deleteFieldFunc from "@/firebase/firestore/deleteField";
 import getDocument from "@/firebase/firestore/getDocument";
-import { ALERT_CONTENT, ALERT_TITLE, CONFIRM_CONTENT, CONFIRM_TITLE } from "@/shared/constants";
+import {
+  ALERT_CONTENT,
+  ALERT_TITLE,
+  CONFIRM_CONTENT,
+  CONFIRM_TITLE,
+  HEAD_DESCRIPTION,
+  HEAD_TITLE,
+} from "@/shared/constants";
 import { cardSizeCalculator, getElapsedTime } from "@/utils/util";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/router";
@@ -332,4 +340,4 @@ const Log = () => {
   );
 };
 
-export default Log;
+export default withHead(Log, HEAD_TITLE.LOG, HEAD_DESCRIPTION.LOG);

@@ -25,6 +25,7 @@ export const HEAD_TITLE = {
   LOGIN: "로그인",
   SIGNUP: "회원가입",
   WELCOME: "환영합니다!",
+  LOG: "내 활동 로그",
 };
 
 export const HEAD_DESCRIPTION = {
@@ -41,6 +42,7 @@ export const HEAD_DESCRIPTION = {
   LOGIN: "로그인 페이지입니다.",
   SIGNUP: "회원가입 페이지입니다.",
   WELCOME: "환영 페이지입니다.",
+  LOG: "내 활동 로그 페이지입니다.",
 };
 
 export const COMMENT_SORT_TYPES = [
