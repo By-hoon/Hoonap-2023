@@ -7,7 +7,7 @@ import {
   NICKNAME_FILTERS,
   NICKNAME_INFO,
 } from "@/shared/constants";
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useContext, useEffect, useState } from "react";
 
 interface NicknameFormProps {
   nickname: string;
@@ -21,7 +21,7 @@ const NicknameForm = ({ nickname, setNickname, isPassNickname, setIsPassNickname
 
   const { alert } = useContext(PopUpContext);
 
-  const checkNicknameLength = (target: string) => {
+  const checkNicknameLength = useCallback((target: string) => {
     const engReg = new RegExp(/[a-zA-Z]/g);
     const korReg = new RegExp(/[가-힣]/g);
     const korSubReg = new RegExp(/[ㄱ-ㅎ]/g);
@@ -37,17 +37,17 @@ const NicknameForm = ({ nickname, setNickname, isPassNickname, setIsPassNickname
     if (totalLength > MAX_NICKNAME_LENGTH) return false;
 
     return true;
-  };
+  }, []);
 
-  const checkNicknameValid = (target: string) => {
+  const checkNicknameValid = useCallback((target: string) => {
     const nicknameValid = new RegExp(/^[가-힣0-9a-zA-Z]+$/);
 
     if (!nicknameValid.test(target)) return false;
 
     return true;
-  };
+  }, []);
 
-  const filteringNickname = (target: string) => {
+  const filteringNickname = useCallback((target: string) => {
     let error = "";
 
     for (var i = 0; i < NICKNAME_FILTERS.length; i++) {
@@ -61,54 +61,68 @@ const NicknameForm = ({ nickname, setNickname, isPassNickname, setIsPassNickname
     }
 
     return error === "" ? true : error;
-  };
+  }, []);
 
-  const duplicateNickname = (target: string) => {
-    let isDuplicate = false;
+  const duplicateNickname = useCallback(
+    (target: string) => {
+      let isDuplicate = false;
 
-    otherNicknames.forEach((otherNickname) => {
-      if (target === otherNickname) {
-        isDuplicate = true;
+      otherNicknames.forEach((otherNickname) => {
+        if (target === otherNickname) {
+          isDuplicate = true;
+          return;
+        }
+      });
+
+      return isDuplicate;
+    },
+    [otherNicknames]
+  );
+
+  const changeNickname = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const target = e.target.value;
+
+      const filteringResult = filteringNickname(target);
+
+      if (typeof filteringResult === "string") {
+        setIsPassNickname(false);
+        setNickname(target);
+        alert(ALERT_TITLE.NICKNAME, `${ALERT_CONTENT.NICKNAME_FILTER} '${filteringResult}'`);
         return;
       }
-    });
 
-    return isDuplicate;
-  };
+      if (!checkNicknameLength(target)) {
+        alert(ALERT_TITLE.NICKNAME, ALERT_CONTENT.NICKNAME_LENGTH);
+        return;
+      }
 
-  const changeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const target = e.target.value;
+      if (!checkNicknameValid(target)) {
+        setIsPassNickname(false);
+        setNickname(target);
+        return;
+      }
 
-    const filteringResult = filteringNickname(target);
+      if (duplicateNickname(target)) {
+        alert(ALERT_TITLE.NICKNAME, ALERT_CONTENT.NICKNAME_DUPLICATE);
+        setIsPassNickname(false);
+        setNickname(target);
+        return;
+      }
 
-    if (typeof filteringResult === "string") {
-      setIsPassNickname(false);
+      setIsPassNickname(true);
       setNickname(target);
-      alert(ALERT_TITLE.NICKNAME, `${ALERT_CONTENT.NICKNAME_FILTER} '${filteringResult}'`);
-      return;
-    }
-
-    if (!checkNicknameLength(target)) {
-      alert(ALERT_TITLE.NICKNAME, ALERT_CONTENT.NICKNAME_LENGTH);
-      return;
-    }
-
-    if (!checkNicknameValid(target)) {
-      setIsPassNickname(false);
-      setNickname(target);
-      return;
-    }
-
-    if (duplicateNickname(target)) {
-      alert(ALERT_TITLE.NICKNAME, ALERT_CONTENT.NICKNAME_DUPLICATE);
-      setIsPassNickname(false);
-      setNickname(target);
-      return;
-    }
-
-    setIsPassNickname(true);
-    setNickname(target);
-  };
+    },
+    [
+      alert,
+      checkNicknameLength,
+      checkNicknameValid,
+      duplicateNickname,
+      filteringNickname,
+      setIsPassNickname,
+      setNickname,
+    ]
+  );
 
   useEffect(() => {
     const getOtherNicknames = async () => {
