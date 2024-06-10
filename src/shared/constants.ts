@@ -9,6 +9,8 @@ export const TITLE = {
   USER: "사용자 정보",
   USER_STORY: "사용자 스토리",
   USER_EDIT: "사용자 정보 수정",
+  USER_SEARCH: "사용자 검색",
+  USER_LOG: "활동 로그",
 };
 
 export const HEAD_TITLE = {
