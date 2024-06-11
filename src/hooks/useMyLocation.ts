@@ -1,7 +1,11 @@
-import { useEffect, useState } from "react";
+import { PopUpContext } from "@/context/popUpProvider";
+import { ALERT_CONTENT } from "@/shared/constants";
+import { useContext, useEffect, useState } from "react";
 
 const useMyLocation = () => {
   const [myLocation, setMyLocation] = useState<{ latitude: number; longitude: number } | string>("");
+
+  const { alert } = useContext(PopUpContext);
 
   useEffect(() => {
     const success = (position: GeolocationPosition) => {
@@ -12,7 +16,7 @@ const useMyLocation = () => {
     };
 
     const error = () => {
-      window.alert("현재 위치를 알 수 없습니다. 기본 위치로 지정합니다.");
+      alert("", ALERT_CONTENT.MY_LOCATION_ERROR);
       setMyLocation({
         latitude: 37.4862618,
         longitude: 127.1222903,

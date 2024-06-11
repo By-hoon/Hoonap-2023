@@ -97,6 +97,7 @@ export const ALERT_CONTENT = {
   NICKNAME_DUPLICATE: "이미 사용된 닉네임입니다.",
   INVALID_ADDRESS: "검색된 주소가 없습니다.",
   UNSELECTED: "선택된 항목이 없습니다.",
+  MY_LOCATION_ERROR: "현재 위치를 알 수 없습니다. 기본 위치로 지정합니다.",
 };
 
 export const CONFIRM_TITLE = {
