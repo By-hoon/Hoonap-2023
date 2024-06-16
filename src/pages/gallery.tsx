@@ -46,6 +46,7 @@ const Gallery = () => {
           newData.push({ url, userId, id: doc.id });
         });
       });
+
       setImages(newData);
     };
 
@@ -84,6 +85,7 @@ const Gallery = () => {
       getExpImageData();
       return;
     }
+
     getImageData();
     getLikeData();
   }, [user, alert]);
@@ -91,6 +93,7 @@ const Gallery = () => {
   useEffect(() => {
     const handleResize = () => {
       if (!sizeRef.current) return;
+
       const curWidth = sizeRef.current?.offsetWidth - 1;
 
       const curSize = cardSizeCalculator(curWidth);
@@ -102,7 +105,7 @@ const Gallery = () => {
     window.addEventListener("resize", handleResize);
 
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [images]);
 
   if (!user)
     return (
