@@ -15,7 +15,7 @@ import {
 } from "@/shared/constants";
 import { cardSizeCalculator, getElapsedTime } from "@/utils/util";
 import { Icon } from "@iconify/react";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import { useContext, useEffect, useRef, useState } from "react";
 
 const Log = () => {
@@ -145,7 +145,11 @@ const Log = () => {
   };
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId) {
+      alert(ALERT_TITLE.ACCESS, ALERT_CONTENT.NO_USER);
+      Router.push("/");
+      return;
+    }
 
     const getUserLikes = async () => {
       const newLikes: { imageId: string; imageUrl: string; storyId: string }[] = [];
