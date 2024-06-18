@@ -3,7 +3,7 @@ import SaveImage from "@/components/create/SaveImage";
 import SavePath from "@/components/create/SavePath";
 import updateField from "@/firebase/firestore/updateField";
 import { addFiles } from "@/firebase/storage/add";
-import { isExp } from "@/utils/util";
+import { getImageId, isExp } from "@/utils/util";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { StoryProps } from "./detail";
@@ -19,6 +19,8 @@ import {
   HEAD_DESCRIPTION,
 } from "@/shared/constants";
 import withHead from "@/components/hoc/withHead";
+import deleteDocument from "@/firebase/firestore/deleteDocument";
+import setData from "@/firebase/firestore/setData";
 
 const StoryEdit = () => {
   const router = useRouter();
@@ -109,7 +111,10 @@ const StoryEdit = () => {
           break;
         }
       }
-      if (isDelete) deleteFile(oldImages[i]);
+      if (isDelete) {
+        deleteFile(oldImages[i]);
+        await deleteDocument("images", getImageId(oldImages[i]));
+      }
     }
 
     if (images) {
@@ -125,11 +130,19 @@ const StoryEdit = () => {
       editExpStory(imageData);
     } else {
       await updateField("paths", curStoryId, "paths", paths);
-      await updateField("images", curStoryId, "fileUrls", imageData);
       await updateField("stories", curStoryId, "paths", paths);
       await updateField("stories", curStoryId, "images", imageData);
       await updateField("stories", curStoryId, "title", title);
       await updateField("stories", curStoryId, "story", story);
+
+      imageData.forEach(async (url) => {
+        const imageResult = await setData("images", getImageId(url), {
+          url,
+          userId: curUserId,
+          storyId: curStoryId,
+        });
+      });
+      await updateField("images", curStoryId, "fileUrls", imageData);
     }
 
     router.push("/story/list");

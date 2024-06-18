@@ -12,7 +12,7 @@ import deleteDocument from "@/firebase/firestore/deleteDocument";
 import getDocument from "@/firebase/firestore/getDocument";
 import updateField from "@/firebase/firestore/updateField";
 import { deleteFile } from "@/firebase/storage/delete";
-import { isExp } from "@/utils/util";
+import { getImageId, isExp } from "@/utils/util";
 import { CONFIRM_TITLE, CONFIRM_CONTENT } from "@/shared/constants";
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
@@ -60,6 +60,7 @@ const MoreMenu = ({ title, story, images, paths, createdAt, storyId, userId }: S
 
     for (let i = 0; i < images.length; i++) {
       await deleteFile(images[i]);
+      await deleteDocument("images", getImageId(images[i]));
     }
 
     if (isExp(user?.uid as string)) {
@@ -70,7 +71,6 @@ const MoreMenu = ({ title, story, images, paths, createdAt, storyId, userId }: S
 
     await deleteDocument("stories", storyId);
     await deleteDocument("paths", storyId);
-    await deleteDocument("images", storyId);
     await deleteDocument("comments", storyId);
 
     updateUserStoryIds(storyId, userId);

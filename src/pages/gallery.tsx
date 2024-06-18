@@ -41,10 +41,8 @@ const Gallery = () => {
 
       const newData: { url: string; userId: string; id: string }[] = [];
       result.docs.forEach((doc) => {
-        const userId = doc.data().userId;
-        doc.data().fileUrls.forEach((url: string) => {
-          newData.push({ url, userId, id: doc.id });
-        });
+        const curData = doc.data();
+        newData.push({ url: curData.url, userId: curData.userId, id: curData.storyId });
       });
 
       setImages(newData);

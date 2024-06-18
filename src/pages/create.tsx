@@ -7,7 +7,7 @@ import { GetServerSidePropsContext } from "next/types";
 import checkUser from "@/firebase/auth/checkUser";
 import { useRouter } from "next/router";
 import Layout from "@/components/common/Layout";
-import { cardSizeCalculator, isExp } from "@/utils/util";
+import { cardSizeCalculator, getImageId, isExp } from "@/utils/util";
 import { addFiles } from "@/firebase/storage/add";
 import { deleteFiles } from "@/firebase/storage/delete";
 import Button from "@/components/common/Button";
@@ -160,7 +160,12 @@ const Create = ({ uid }: { uid: string }) => {
 
     const storyResult = await setData("stories", storyId, storyData);
     const pathResult = await setData("paths", storyId, { paths, userId: uid });
-    const imageResult = await setData("images", storyId, { fileUrls, userId: uid });
+
+    let imageResult = true;
+
+    fileUrls.forEach(async (fileUrl) => {
+      imageResult = await setData("images", getImageId(fileUrl), { url: fileUrl, userId: uid, storyId });
+    });
 
     if (!storyResult || !pathResult || !imageResult) {
       await deleteFiles(fileUrls);
