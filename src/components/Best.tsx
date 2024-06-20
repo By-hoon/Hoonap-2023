@@ -1,8 +1,11 @@
 import getCollection from "@/firebase/firestore/getCollection";
 import getDocument from "@/firebase/firestore/getDocument";
 import { useEffect, useState } from "react";
+import BasicImage from "./common/BasicImage";
+import Link from "next/link";
+import { Icon } from "@iconify/react";
 
-type BestLike = {
+type BestImage = {
   imageId: string;
   imageUrl: string;
   likeCount: number;
@@ -11,14 +14,14 @@ type BestLike = {
 };
 
 const Best = () => {
-  const [bestLikes, setBestLikes] = useState<BestLike[]>([]);
+  const [bestImages, setBestImages] = useState<BestImage[]>([]);
 
   useEffect(() => {
     const getLikesData = async () => {
       const likeResult = await getCollection("likes-calc");
       if (!likeResult || likeResult.empty) return;
 
-      const LikesData: BestLike[] = [];
+      const LikesData: BestImage[] = [];
 
       const promise = likeResult.docs.map(async (doc) => {
         const curData = doc.data();
@@ -41,15 +44,15 @@ const Best = () => {
 
       await Promise.all(promise);
 
-      setBestLikes(getBestLikes(LikesData));
+      setBestImages(getBestImages(LikesData));
     };
 
-    const getBestLikes = (likesData: BestLike[]) => {
-      const newBestLikes: BestLike[] = [...likesData];
+    const getBestImages = (likesData: BestImage[]) => {
+      const newBestImages: BestImage[] = [...likesData];
 
-      newBestLikes.sort((a, b) => b.likeCount - a.likeCount);
+      newBestImages.sort((a, b) => b.likeCount - a.likeCount);
 
-      return newBestLikes.slice(0, 3);
+      return newBestImages.slice(0, 3);
     };
 
     getLikesData();
@@ -59,7 +62,37 @@ const Best = () => {
     <div>
       <div>
         <div>인기있는 사진들</div>
-        {bestLikes.length === 0 ? <div>준비중입니다</div> : <div></div>}
+        {bestImages.length === 0 ? (
+          <div>준비중입니다</div>
+        ) : (
+          <div className="flex">
+            {bestImages.map((bestImage) => (
+              <div key={bestImage.imageId} className="w-[200px] h-[200px] mx-[5px]">
+                <Link
+                  href={{
+                    pathname: "/story/detail",
+                    query: { storyId: bestImage.storyId },
+                  }}
+                  as="/story/detail"
+                >
+                  <BasicImage
+                    style={"relative w-full h-full bg-black rounded-[5px]"}
+                    url={bestImage.imageUrl}
+                    alt={"best-image"}
+                  >
+                    <div className="absolute bottom-[3px] left-[3px] flex-middle">
+                      <Icon
+                        icon="ph:heart-fill"
+                        className="cursor-pointer text-[36px] mobile:text-[28px] text-red-600"
+                      />
+                      <div className="md:text-[16px] text-white ml-[5px]">{bestImage.likeCount}</div>
+                    </div>
+                  </BasicImage>
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
