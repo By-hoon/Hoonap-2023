@@ -18,9 +18,9 @@ const Best = () => {
       const likeResult = await getCollection("likes-calc");
       if (!likeResult || likeResult.empty) return;
 
-      const newBestLikes: BestLike[] = [];
+      const LikesData: BestLike[] = [];
 
-      likeResult.docs.forEach(async (doc) => {
+      const promise = likeResult.docs.map(async (doc) => {
         const curData = doc.data();
 
         const curLikeCount = Object.keys(curData).length;
@@ -30,7 +30,7 @@ const Best = () => {
 
         if (!imageResult || imageResult.empty) return;
 
-        newBestLikes.push({
+        LikesData.push({
           imageId: doc.id,
           imageUrl: imageResult.url,
           likeCount: curLikeCount,
@@ -39,7 +39,17 @@ const Best = () => {
         });
       });
 
-      setBestLikes(newBestLikes);
+      await Promise.all(promise);
+
+      setBestLikes(getBestLikes(LikesData));
+    };
+
+    const getBestLikes = (likesData: BestLike[]) => {
+      const newBestLikes: BestLike[] = [...likesData];
+
+      newBestLikes.sort((a, b) => b.likeCount - a.likeCount);
+
+      return newBestLikes.slice(0, 3);
     };
 
     getLikesData();
@@ -49,7 +59,7 @@ const Best = () => {
     <div>
       <div>
         <div>인기있는 사진들</div>
-        {bestLikes.length === 0 ? <div>준비중입니다</div> : <div>{bestLikes[0].imageId}</div>}
+        {bestLikes.length === 0 ? <div>준비중입니다</div> : <div></div>}
       </div>
     </div>
   );
