@@ -52,6 +52,12 @@ export const COMMENT_SORT_TYPES = [
   { CODE: "earliest", NAME: "오래된 댓글" },
 ];
 
+export const IMAGE_GRADE = [
+  "fluent-emoji-flat:1st-place-medal",
+  "fluent-emoji-flat:2nd-place-medal",
+  "fluent-emoji-flat:3rd-place-medal",
+];
+
 export const MAX_NICKNAME_LENGTH = 20;
 export const NICKNAME_INFO = "영문·숫자 20자, 한글 10자 제한";
 

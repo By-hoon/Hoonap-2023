@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import BasicImage from "./common/BasicImage";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
+import { IMAGE_GRADE } from "@/shared/constants";
 
 type BestImage = {
   imageId: string;
@@ -61,12 +62,11 @@ const Best = () => {
   return (
     <div>
       <div>
-        <div>인기있는 사진들</div>
         {bestImages.length === 0 ? (
           <div>준비중입니다</div>
         ) : (
           <div className="flex">
-            {bestImages.map((bestImage) => (
+            {bestImages.map((bestImage, index) => (
               <div key={bestImage.imageId} className="w-[200px] h-[200px] mx-[5px]">
                 <Link
                   href={{
@@ -80,11 +80,11 @@ const Best = () => {
                     url={bestImage.imageUrl}
                     alt={"best-image"}
                   >
+                    <div className="absolute top-0 left-0 flex-middle">
+                      <Icon icon={`${IMAGE_GRADE[index]}`} className="text-[42px] mobile:text-[28px]" />
+                    </div>
                     <div className="absolute bottom-[3px] left-[3px] flex-middle">
-                      <Icon
-                        icon="ph:heart-fill"
-                        className="cursor-pointer text-[36px] mobile:text-[28px] text-red-600"
-                      />
+                      <Icon icon="ph:heart-fill" className="text-[36px] mobile:text-[28px] text-red-600" />
                       <div className="md:text-[16px] text-white ml-[5px]">{bestImage.likeCount}</div>
                     </div>
                   </BasicImage>
