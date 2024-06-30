@@ -62,12 +62,18 @@ const Best = () => {
   return (
     <div>
       <div>
+        <div className="text-[22px] mobile:text-[18px] text-semibold text-center mb-[8px]">
+          현재 인기있는 사진 Top3
+        </div>
         {bestImages.length === 0 ? (
           <div>준비중입니다</div>
         ) : (
-          <div className="flex">
+          <div className="flex-middle flex-wrap">
             {bestImages.map((bestImage, index) => (
-              <div key={bestImage.imageId} className="w-[200px] h-[200px] mx-[5px]">
+              <div
+                key={bestImage.imageId}
+                className="w-[220px] h-[360px] mobile:w-[200px] mobile:h-[200px] m-[5px]"
+              >
                 <Link
                   href={{
                     pathname: "/story/detail",
@@ -80,12 +86,12 @@ const Best = () => {
                     url={bestImage.imageUrl}
                     alt={"best-image"}
                   >
-                    <div className="absolute top-0 left-0 flex-middle">
-                      <Icon icon={`${IMAGE_GRADE[index]}`} className="text-[42px] mobile:text-[28px]" />
-                    </div>
-                    <div className="absolute bottom-[3px] left-[3px] flex-middle">
+                    <div className="absolute top-[3px] left-[5px] flex-middle">
                       <Icon icon="ph:heart-fill" className="text-[36px] mobile:text-[28px] text-red-600" />
                       <div className="md:text-[16px] text-white ml-[5px]">{bestImage.likeCount}</div>
+                    </div>
+                    <div className="absolute top-0 right-0 flex-middle">
+                      <Icon icon={`${IMAGE_GRADE[index]}`} className="text-[42px] mobile:text-[32px]" />
                     </div>
                   </BasicImage>
                 </Link>
