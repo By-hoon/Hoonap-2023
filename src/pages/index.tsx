@@ -3,6 +3,7 @@ import { isExp } from "@/utils/util";
 import { ADD_INFO, EXP_INFO, HEAD_TITLE, HEAD_DESCRIPTION } from "@/shared/constants";
 import { useAuth } from "@/context/authProvider";
 import withHead from "@/components/hoc/withHead";
+import Best from "@/components/Best";
 
 const Home = () => {
   const { user } = useAuth();
@@ -35,7 +36,13 @@ const Home = () => {
       </Layout>
     );
 
-  return <Layout>Home</Layout>;
+  return (
+    <Layout>
+      <div className="p-[10px]">
+        <Best />
+      </div>
+    </Layout>
+  );
 };
 
 export default withHead(Home, HEAD_TITLE.MAIN, HEAD_DESCRIPTION.MAIN);
