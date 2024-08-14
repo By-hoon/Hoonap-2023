@@ -62,8 +62,16 @@ const Best = () => {
   return (
     <div>
       <div>
-        <div className="text-[22px] mobile:text-[18px] text-semibold text-center mb-[8px]">
-          현재 인기있는 사진 Top3
+        <div className="text-center">
+          <div className="text-[28px] mobile:text-[22px] font-semibold mt-[20px] mb-[8px]">
+            현재 인기있는 사진
+          </div>
+          <div className="flex-middle mb-[8px]">
+            <Icon icon="radix-icons:divider-horizontal" />
+          </div>
+          <div className="text-[16px] break-keep mb-[20px]">
+            현재까지 받은 좋아요의 개수로 집계된 순위입니다
+          </div>
         </div>
         {bestImages.length === 0 ? (
           <div>준비중입니다</div>
