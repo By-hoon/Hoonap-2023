@@ -2,7 +2,9 @@
 
 ### 개발 기간
 
-    2023.05. ~ 진행중
+    2023.05. ~ 2024.05
+
+    현재는 필요한 부분이 있다면, 리팩토링·업데이트
 
 ### 배포 주소
 
@@ -81,6 +83,7 @@ Vercel 배포: https://hoonap-2023.vercel.app/
   - 스토리 수정
   - 스토리 삭제
   - 이미지 좋아요(Like)
+  - 이미지 순위
 
 - 댓글
 
@@ -135,6 +138,7 @@ src
 │   │   ├── NicknameForm.tsx
 │   │   ├── ProfileImage.tsx
 │   │   └── UserCard.tsx
+│   ├── Best.tsx
 │   ├── Map.tsx
 │   └── MapOption.tsx
 └── context
